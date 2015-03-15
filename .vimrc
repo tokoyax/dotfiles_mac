@@ -102,6 +102,18 @@ let g:user_emmet_settings = {
   \ }}
 " }}}
 NeoBundle 'tpope/vim-rails'
+NeoBundle 'junegunn/vim-easy-align'
+" vim-easy-align {{{
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" }}}
+NeoBundle 'Yggdroot/indentLine'
+" indentLine {{{
+let g:indentLine_faster = 1
+nmap <silent><Leader>i :<C-u>IndentLinesToggle<CR>
+" }}}
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
 NeoBundleCheck
@@ -140,9 +152,7 @@ set nowrap
 "datetime
 inoremap <Leader>c <C-R>=strftime('%Y-%m-%dT%H:%M:%S+09:00')<CR>
 
-"insert mode hjkl
-imap <c-h> <Left>
-imap <c-j> <Down>
-imap <c-k> <Up>
-imap <c-l> <Right>
-
+"backup, swap, undo files
+set directory=~/.vim/tmp
+set backupdir=~/.vim/tmp
+set undodir=~/.vim/tmp
