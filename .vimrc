@@ -20,12 +20,12 @@ NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'Shougo/unite.vim'
 " unite {{{
 let g:unite_enable_start_insert=1
-nmap <silent> <C-u><C-b> :<C-u>Unite buffer<CR>
-nmap <silent> <C-u><C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nmap <silent> <C-u><C-r> :<C-u>Unite -buffer-name=register register<CR>
-nmap <silent> <C-u><C-m> :<C-u>Unite file_mru<CR>
-nmap <silent> <C-u><C-u> :<C-u>Unite buffer file_mru<CR>
-nmap <silent> <C-u><C-a> :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+"nmap <silent> <C-u><C-b> :<C-u>Unite buffer<CR>
+"nmap <silent> <C-u><C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+"nmap <silent> <C-u><C-r> :<C-u>Unite -buffer-name=register register<CR>
+"nmap <silent> <C-u><C-m> :<C-u>Unite file_mru<CR>
+"nmap <silent> <C-u><C-u> :<C-u>Unite buffer file_mru<CR>
+"nmap <silent> <C-u><C-a> :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 au FileType unite nmap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 au FileType unite imap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 au FileType unite nmap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
@@ -44,24 +44,24 @@ NeoBundle 'Shougo/vimproc', {
   \     'unix' : 'make -f make_unix.mak',
   \    },
   \ }
-if has('lua')
-   NeoBundleLazy 'Shougo/neocomplete.vim', {
-       \ 'depends' : 'Shougo/vimproc',
-       \ 'autoload' : { 'insert' : 1,}
-       \ }
-endif
-" neocomplete {{{
-let g:neocomplete#enable_at_startup               = 1
-let g:neocomplete#auto_completion_start_length    = 3
-let g:neocomplete#enable_ignore_case              = 1
-let g:neocomplete#enable_smart_case               = 1
-let g:neocomplete#enable_camel_case               = 1
-let g:neocomplete#use_vimproc                     = 1
-let g:neocomplete#sources#buffer#cache_limit_size = 1000000
-let g:neocomplete#sources#tags#cache_limit_size   = 30000000
-let g:neocomplete#enable_fuzzy_completion         = 1
-let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
-" }}}
+"if has('lua')
+"   NeoBundleLazy 'Shougo/neocomplete.vim', {
+"       \ 'depends' : 'Shougo/vimproc',
+"       \ 'autoload' : { 'insert' : 1,}
+"       \ }
+"endif
+"" neocomplete {{{
+"let g:neocomplete#enable_at_startup               = 1
+"let g:neocomplete#auto_completion_start_length    = 3
+"let g:neocomplete#enable_ignore_case              = 1
+"let g:neocomplete#enable_smart_case               = 1
+"let g:neocomplete#enable_camel_case               = 1
+"let g:neocomplete#use_vimproc                     = 1
+"let g:neocomplete#sources#buffer#cache_limit_size = 1000000
+"let g:neocomplete#sources#tags#cache_limit_size   = 30000000
+"let g:neocomplete#enable_fuzzy_completion         = 1
+"let g:neocomplete#lock_buffer_name_pattern        = '\*ku\*'
+"" }}}
 NeoBundleLazy 'Shougo/vimshell', {
   \ 'depends' : 'Shougo/vimproc',
   \ 'autoload' : {
@@ -114,6 +114,20 @@ NeoBundle 'Yggdroot/indentLine'
 let g:indentLine_faster = 1
 nmap <silent><Leader>i :<C-u>IndentLinesToggle<CR>
 " }}}
+NeoBundle 'thinca/vim-quickrun'
+" vim-quickrun {{{
+let g:quickrun_config = {'*': {'hook/time/enable': '1'},}
+"}}}
+NeoBundle 'rcmdnk/vim-markdown'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
+" open-browser {{{
+au BufRead,BufNewFile *.md set filetype=markdown
+let g:previm_open_cmd = 'open -a Safari'
+"}}}
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'moznion/hateblo.vim'
+
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
 NeoBundleCheck
