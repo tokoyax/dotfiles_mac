@@ -19,19 +19,27 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'Shougo/unite.vim'
 " unite {{{
-let g:unite_enable_start_insert=1
-"nmap <silent> <C-u><C-b> :<C-u>Unite buffer<CR>
-"nmap <silent> <C-u><C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-"nmap <silent> <C-u><C-r> :<C-u>Unite -buffer-name=register register<CR>
-"nmap <silent> <C-u><C-m> :<C-u>Unite file_mru<CR>
-"nmap <silent> <C-u><C-u> :<C-u>Unite buffer file_mru<CR>
-"nmap <silent> <C-u><C-a> :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
-au FileType unite nmap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-au FileType unite imap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-au FileType unite nmap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite imap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite nmap <silent> <buffer> <ESC><ESC> q
-au FileType unite imap <silent> <buffer> <ESC><ESC> <ESC>q
+let g:unite_enable_start_insert = 1
+let g:unite_enable_split_vertically = 0
+let g:unite_winwidth = 40
+nnoremap <silent> ,uf :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
+nnoremap <silent> ,um :<C-u>Unite  file_mru <CR>
+nnoremap <silent> ,urc :<C-u>Unite file_rec/async:app/controllers/ <CR>
+nnoremap <silent> ,urfc :<C-u>Unite file file/new -input=app/controllers/ <CR>
+nnoremap <silent> ,urm :<C-u>Unite file_rec/async:app/models/ <CR>
+nnoremap <silent> ,urfm :<C-u>Unite file file/new -input=app/models/ <CR>
+nnoremap <silent> ,urv :<C-u>Unite file_rec/async:app/views/ <CR>
+nnoremap <silent> ,urfv :<C-u>Unite file file/new -input=app/views/ <CR>
+nnoremap <silent> ,urs :<C-u>Unite file_rec/async:app/assets/stylesheets/ <CR>
+nnoremap <silent> ,urfs :<C-u>Unite file file/new -input=app/assets/stylesheets/ <CR>
+nnoremap <silent> ,urj :<C-u>Unite file_rec/async:app/assets/javascripts/ <CR>
+nnoremap <silent> ,urfj :<C-u>Unite file file/new -input=app/assets/javascripts/ <CR>
+nnoremap <silent> ,uro :<C-u>Unite file_rec/async:config/ <CR>
+nnoremap <silent> ,urfo :<C-u>Unite file file/new -input=config/ <CR>
+nnoremap <silent> ,url :<C-u>Unite file_rec/async:lib/ <CR>
+nnoremap <silent> ,urfl :<C-u>Unite file file/new -input=lib/ <CR>
+nnoremap <silent> ,urr :<C-u>Unite file_rec/async:spec/ <CR>
+nnoremap <silent> ,urfr :<C-u>Unite file file/new -input=spec/ <CR>
 " }}} unite
 NeoBundle 'Shougo/neomru.vim', {
   \ 'depends' : 'Shougo/unite.vim'
