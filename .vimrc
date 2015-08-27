@@ -109,7 +109,6 @@ let g:user_emmet_settings = {
   \   'indentation' : '  '
   \ }}
 " }}}
-NeoBundle 'tpope/vim-rails'
 NeoBundle 'junegunn/vim-easy-align'
 " vim-easy-align {{{
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
