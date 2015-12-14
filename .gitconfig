@@ -1,0 +1,23 @@
+[user]
+	name = tokoyax
+	email = getting.foolish@gmail.com
+[color]
+	ui = true
+[alias]
+	co = checkout
+[core]
+	excludesfile = /Users/Takuya/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[credential]
+	helper = cache --timeout=3600
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[init]
+	templatedir = ~/.git_template
