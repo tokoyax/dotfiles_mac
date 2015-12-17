@@ -16,7 +16,14 @@ call neobundle#begin(expand('~/.vim/bundle'))
 let g:neobundle_default_git_protocol='https'
 
 NeoBundleFetch 'Shougo/neobundle.vim'
+
 NeoBundle 'nanotech/jellybeans.vim'
+
+" vimfiler {{{
+NeoBundle 'Shougo/vimfiler.vim'
+let g:vimfiler_as_default_explorer = 1
+nnoremap <leader>e :VimFilerExplore -split -winwidth=20 -find -no-quit<Cr>
+" }}}
 
 " unite {{{
 NeoBundle 'Shougo/unite.vim'
@@ -64,16 +71,16 @@ NeoBundle 'Shougo/vimproc', {
 " }}}
 
 " vimshell {{{
-NeoBundleLazy 'Shougo/vimshell', {
-  \ 'depends' : 'Shougo/vimproc',
-  \ 'autoload' : {
-  \   'commands' : [{ 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
-  \                 'VimShellExecute', 'VimShellInteractive',
-  \                 'VimShellTerminal', 'VimShellPop'],
-  \   'mappings' : ['<Plug>(vimshell_switch)']
-  \ }}
-nmap <silent> vs :<C-u>VimShell<CR>
-nmap <silent> vp :<C-u>VimShellPop<CR>
+"NeoBundleLazy 'Shougo/vimshell', {
+"  \ 'depends' : 'Shougo/vimproc',
+"  \ 'autoload' : {
+"  \   'commands' : [{ 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
+"  \                 'VimShellExecute', 'VimShellInteractive',
+"  \                 'VimShellTerminal', 'VimShellPop'],
+"  \   'mappings' : ['<Plug>(vimshell_switch)']
+"  \ }}
+"nmap <silent> vs :<C-u>VimShell<CR>
+"nmap <silent> vp :<C-u>VimShellPop<CR>
 " }}}
 
 " yankround.vim {{{
@@ -85,17 +92,22 @@ nmap <C-n> <Plug>(yankround-next)
 let g:yankround_max_history = 100
 nnoremap <Leader><C-p> :<C-u>Unite yankround<CR>
 " }}}
+
 NeoBundle 'Townk/vim-autoclose'
+
 NeoBundleLazy 'tpope/vim-endwise', {
   \ 'autoload' : { 'insert' : 1,}}
+
 NeoBundle 'tpope/vim-surround'
+
 NeoBundle 'vim-scripts/matchit.zip'
+
+" emmet {{{
 NeoBundleLazy 'mattn/emmet-vim', {
   \ 'autoload' : {
   \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
   \   'commands' : ['<Plug>ZenCodingExpandNormal']
   \ }}
-" emmet {{{
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
   \ 'lang' : 'ja',
@@ -125,6 +137,7 @@ let g:quickrun_config = {'*': {'hook/time/enable': '1'},}
 "}}}
 
 NeoBundle 'rcmdnk/vim-markdown'
+
 NeoBundle 'kannokanno/previm'
 
 " open-browser {{{
@@ -134,7 +147,9 @@ let g:previm_open_cmd = 'open -a Safari'
 "}}}
 
 NeoBundle 'mattn/webapi-vim'
+
 NeoBundle 'moznion/hateblo.vim'
+
 NeoBundle "slim-template/vim-slim"
 
 " vim-ref {{{
