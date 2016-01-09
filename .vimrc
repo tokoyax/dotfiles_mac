@@ -1,4 +1,11 @@
+set modeline
+set modelines=3
+" vim: foldmethod=marker
+" vim: foldcolumn=3
+" vim: foldlevel=0
+
 " neobundle settings {{{
+
 if has('vim_starting')
   set nocompatible
     " neobundle をインストールしていない場合は自動インストール
@@ -22,11 +29,12 @@ NeoBundle 'nanotech/jellybeans.vim'
 " vimfiler {{{
 NeoBundle 'Shougo/vimfiler.vim'
 let g:vimfiler_as_default_explorer = 1
-nnoremap <leader>e :VimFilerExplore -split -winwidth=20 -find -no-quit<Cr>
+nnoremap <Space>e :VimFilerExplore -split -winwidth=30 -find -no-quit<Cr>
 " }}}
 
 " unite {{{
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/neomru.vim', {
   \ 'depends' : 'Shougo/unite.vim'
   \ }
@@ -35,29 +43,114 @@ let g:unite_enable_split_vertically = 0
 let g:unite_source_history_yank_enable =1
 let g:unite_source_file_mru_limit = 200
 let g:unite_winwidth = 30
-nnoremap <silent> ,uf :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
-nnoremap <silent> ,ub :<C-u>Unite buffer<CR>
-nnoremap <silent> ,um :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> ,ug :<C-u>Unite vimgrep<CR>
+nnoremap <silent> <Space>uf :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
+nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
+nnoremap <silent> <Space>uo :<C-u>Unite outline<CR>
+nnoremap <silent> <Space>um :<C-u>Unite file_mru buffer<CR>
+nnoremap <silent> <Space>ug :<C-u>Unite vimgrep<CR>
+nnoremap <silent> <Space>uy :<C-u>Unite history/yank<CR>
 
-" rails の設定
-nnoremap <silent> ,urc :<C-u>Unite file_rec/async:app/controllers/ <CR>
-nnoremap <silent> ,urfc :<C-u>Unite file file/new -input=app/controllers/ <CR>
-nnoremap <silent> ,urm :<C-u>Unite file_rec/async:app/models/ <CR>
-nnoremap <silent> ,urfm :<C-u>Unite file file/new -input=app/models/ <CR>
-nnoremap <silent> ,urv :<C-u>Unite file_rec/async:app/views/ <CR>
-nnoremap <silent> ,urfv :<C-u>Unite file file/new -input=app/views/ <CR>
-nnoremap <silent> ,urs :<C-u>Unite file_rec/async:app/assets/stylesheets/ <CR>
-nnoremap <silent> ,urfs :<C-u>Unite file file/new -input=app/assets/stylesheets/ <CR>
-nnoremap <silent> ,urj :<C-u>Unite file_rec/async:app/assets/javascripts/ <CR>
-nnoremap <silent> ,urfj :<C-u>Unite file file/new -input=app/assets/javascripts/ <CR>
-nnoremap <silent> ,uro :<C-u>Unite file_rec/async:config/ <CR>
-nnoremap <silent> ,urfo :<C-u>Unite file file/new -input=config/ <CR>
-nnoremap <silent> ,url :<C-u>Unite file_rec/async:lib/ <CR>
-nnoremap <silent> ,urfl :<C-u>Unite file file/new -input=lib/ <CR>
-nnoremap <silent> ,urr :<C-u>Unite file_rec/async:spec/ <CR>
-nnoremap <silent> ,urfr :<C-u>Unite file file/new -input=spec/ <CR>
+" rails の設定   
+nnoremap <silent> <Space>urc :<C-u>Unite file_rec/async:app/controllers/ <CR>
+nnoremap <silent> <Space>urfc :<C-u>Unite file file/new -input=app/controllers/ <CR>
+nnoremap <silent> <Space>urm :<C-u>Unite file_rec/async:app/models/ <CR>
+nnoremap <silent> <Space>urfm :<C-u>Unite file file/new -input=app/models/ <CR>
+nnoremap <silent> <Space>urv :<C-u>Unite file_rec/async:app/views/ <CR>
+nnoremap <silent> <Space>urfv :<C-u>Unite file file/new -input=app/views/ <CR>
+nnoremap <silent> <Space>urs :<C-u>Unite file_rec/async:app/assets/stylesheets/ <CR>
+nnoremap <silent> <Space>urfs :<C-u>Unite file file/new -input=app/assets/stylesheets/ <CR>
+nnoremap <silent> <Space>urj :<C-u>Unite file_rec/async:app/assets/javascripts/ <CR>
+nnoremap <silent> <Space>urfj :<C-u>Unite file file/new -input=app/assets/javascripts/ <CR>
+nnoremap <silent> <Space>uro :<C-u>Unite file_rec/async:config/ <CR>
+nnoremap <silent> <Space>urfo :<C-u>Unite file file/new -input=config/ <CR>
+nnoremap <silent> <Space>url :<C-u>Unite file_rec/async:lib/ <CR>
+nnoremap <silent> <Space>urfl :<C-u>Unite file file/new -input=lib/ <CR>
+nnoremap <silent> <Space>urr :<C-u>Unite file_rec/async:spec/ <CR>
+nnoremap <silent> <Space>urfr :<C-u>Unite file file/new -input=spec/ <CR>
 " }}} unite
+
+"neocomplete {{{
+NeoBundle 'Shougo/neocomplete.vim'
+ 
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+ 
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+                        \ 'default' : '',
+                        \ 'vimshell' : $HOME.'/.vimshell_hist',
+                        \ 'scheme' : $HOME.'/.gosh_completions'
+                        \ }
+ 
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+ 
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+ 
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+        return neocomplete#close_popup() . "\<CR>"
+        " For no inserting <CR> key.
+        "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+ 
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplete#enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplete#enable_insert_char_pre = 1
+ 
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+ 
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+ 
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"}}}
+
+" neosnippet {{{
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"}}}
 
 " vimproc {{{
 NeoBundle 'Shougo/vimproc', {
@@ -70,19 +163,6 @@ NeoBundle 'Shougo/vimproc', {
   \ }
 " }}}
 
-" vimshell {{{
-"NeoBundleLazy 'Shougo/vimshell', {
-"  \ 'depends' : 'Shougo/vimproc',
-"  \ 'autoload' : {
-"  \   'commands' : [{ 'name' : 'VimShell', 'complete' : 'customlist,vimshell#complete'},
-"  \                 'VimShellExecute', 'VimShellInteractive',
-"  \                 'VimShellTerminal', 'VimShellPop'],
-"  \   'mappings' : ['<Plug>(vimshell_switch)']
-"  \ }}
-"nmap <silent> vs :<C-u>VimShell<CR>
-"nmap <silent> vp :<C-u>VimShellPop<CR>
-" }}}
-
 " yankround.vim {{{
 NeoBundle 'LeafCage/yankround.vim'
 nmap p <Plug>(yankround-p)
@@ -90,7 +170,7 @@ nmap P <Plug>(yankround-P)
 nmap <C-p> <Plug>(yankround-prev)
 nmap <C-n> <Plug>(yankround-next)
 let g:yankround_max_history = 100
-nnoremap <Leader><C-p> :<C-u>Unite yankround<CR>
+nnoremap <Space><C-p> :<C-u>Unite yankround<CR>
 " }}}
 
 NeoBundle 'Townk/vim-autoclose'
@@ -102,10 +182,10 @@ NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'vim-scripts/matchit.zip'
 
-" emmet {{{
+" emmet-vim {{{
 NeoBundleLazy 'mattn/emmet-vim', {
   \ 'autoload' : {
-  \   'filetypes' : ['html', 'html5', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
+  \   'filetypes' : ['html', 'html5', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
   \   'commands' : ['<Plug>ZenCodingExpandNormal']
   \ }}
 let g:use_emmet_complete_tag = 1
@@ -184,37 +264,66 @@ filetype plugin indent on
 "}}}
 
 " ---------------------------------------------------------------------------
-"color
+
 set t_Co=256
-syntax on
+syntax enable
 colorscheme jellybeans
 
-"display
-set number
+set nonumber
 set title
 set showcmd
 set laststatus=2
-
-"sound
 set visualbell t_vb=
-
-"search
 set ignorecase
 set smartcase
-set smartindent
 
-"tab
+" インデント設定 
 set tabstop=2
-set shiftwidth=2
+
+augroup vimrc
+  autocmd! FileType perl setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType php  setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType css  setlocal shiftwidth=4 tabstop=4 softtabstop=4
+augroup END
+
+set autoindent
+set smartindent
 set expandtab
 set smarttab
+
 set shiftround
 set nowrap
+set hidden
+set history=2000
+set hlsearch
+set incsearch
+set ruler
+set cursorline
+set list
+set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
 
-"datetime
-inoremap <Leader>c <C-R>=strftime('%Y-%m-%dT%H:%M:%S+09:00')<CR>
+noremap <Space>h ^
+noremap <Space>l $
+nnoremap <Space>/ *<C-o>
+nnoremap g<Space>/ g*<C-o>
+nnoremap ;  :
+nnoremap :  ;
+vnoremap ;  :
+vnoremap :  ;
+nnoremap k   gk
+nnoremap j   gj
+vnoremap k   gk
+vnoremap j   gj
+nnoremap gk  k
+nnoremap gj  j
+vnoremap gk  k
+vnoremap gj  j
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q gq
 
-"backup, swap, undo files
 set directory=~/.vim/tmp
 set backupdir=~/.vim/tmp
 set undodir=~/.vim/tmp
