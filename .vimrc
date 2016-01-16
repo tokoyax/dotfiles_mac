@@ -148,8 +148,17 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 " neosnippet {{{
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+" Plugin key-mappings.
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 "}}}
 
 " vimproc {{{
@@ -185,7 +194,7 @@ NeoBundle 'vim-scripts/matchit.zip'
 " emmet-vim {{{
 NeoBundleLazy 'mattn/emmet-vim', {
   \ 'autoload' : {
-  \   'filetypes' : ['html', 'html5', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
+  \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
   \   'commands' : ['<Plug>ZenCodingExpandNormal']
   \ }}
 let g:use_emmet_complete_tag = 1
@@ -235,7 +244,7 @@ NeoBundle "slim-template/vim-slim"
 " vim-ref {{{
 NeoBundleLazy 'thinca/vim-ref', {'functions': 'ref#K'}
 let g:ref_no_default_key_mappings = 1
-inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
+"inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
 nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
 let s:hooks = neobundle#get_hooks('vim-ref')
 function! s:hooks.on_source(bundle) abort "{{{
@@ -323,20 +332,32 @@ vnoremap gj  j
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 nnoremap Q gq
+vnoremap  <Up>     <nop>
+vnoremap  <Down>   <nop>
+vnoremap  <Left>   <nop>
+vnoremap  <Right>  <nop>
+inoremap  <Up>     <nop>
+inoremap  <Down>   <nop>
+inoremap  <Left>   <nop>
+inoremap  <Right>  <nop>
+noremap   <Up>     <nop>
+noremap   <Down>   <nop>
+noremap   <Left>   <nop>
+noremap   <Right>  <nop>
 
 set directory=~/.vim/tmp
 set backupdir=~/.vim/tmp
 set undodir=~/.vim/tmp
 
 " PHP settings {{{
-let g:php_baselib       = 1
-let g:php_htmlInStrings = 1
-let g:php_noShortTags   = 1
-let g:php_sql_query     = 1
+let g:php_baselib=1
+let g:php_htmlInStrings=1
+let g:php_noShortTags=1
+let g:php_sql_query=1
 " }}}
 
 " SQL syntax setting
-let g:sql_type_default = 'mysql'
+let g:sql_type_default='mysql'
 
 " Update ctags when file has been saved
 autocmd BufWritePost *
