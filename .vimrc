@@ -4,9 +4,6 @@ set modelines=3
 " vim: foldcolumn=3
 " vim: foldlevel=0
 
-filetype off
-filetype plugin indent off
-
 " neobundle settings {{{
 
 if has('vim_starting')
@@ -380,5 +377,3 @@ autocmd BufWritePost *
   \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
   \   call system('"'.b:git_dir.'/hooks/ctags" &') |
   \ endif
-
-filetype off
