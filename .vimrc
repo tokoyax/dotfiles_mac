@@ -4,6 +4,9 @@ set modelines=3
 " vim: foldcolumn=3
 " vim: foldlevel=0
 
+filetype off
+filetype plugin indent off
+
 " neobundle settings {{{
 
 if has('vim_starting')
@@ -116,7 +119,7 @@ inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplete#close_popup()
 inoremap <expr><C-e>  neocomplete#cancel_popup()
 " Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
  
 " For cursor moving in insert mode(Not recommended)
 "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
@@ -172,14 +175,27 @@ NeoBundle 'Shougo/vimproc', {
   \ }
 " }}}
 
+" ctrlp.vim {{{
+NeoBundle 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+" }}}
+
+" auto-ctags {{{
+NeoBundle 'soramugi/auto-ctags.vim'
+let g:auto_ctags = 1
+let g:auto_ctags_directory_list = ['.git', '.svn']
+let g:auto_ctags_tags_args = '--tag-relative --recurse --sort=yes'
+" }}}
+
 " yankround.vim {{{
-NeoBundle 'LeafCage/yankround.vim'
-nmap p <Plug>(yankround-p)
-nmap P <Plug>(yankround-P)
-nmap <C-p> <Plug>(yankround-prev)
-nmap <C-n> <Plug>(yankround-next)
-let g:yankround_max_history = 100
-nnoremap <Space><C-p> :<C-u>Unite yankround<CR>
+"NeoBundle 'LeafCage/yankround.vim'
+"nmap p <Plug>(yankround-p)
+"nmap P <Plug>(yankround-P)
+"nmap <C-p> <Plug>(yankround-prev)
+"nmap <C-n> <Plug>(yankround-next)
+"let g:yankround_max_history = 100
+"nnoremap <Space><C-p> :<C-u>Unite yankround<CR>
 " }}}
 
 NeoBundle 'Townk/vim-autoclose'
@@ -364,3 +380,5 @@ autocmd BufWritePost *
   \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
   \   call system('"'.b:git_dir.'/hooks/ctags" &') |
   \ endif
+
+filetype off
