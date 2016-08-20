@@ -29,44 +29,36 @@ NeoBundle 'nanotech/jellybeans.vim'
 " vimfiler {{{
 NeoBundle 'Shougo/vimfiler.vim'
 let g:vimfiler_as_default_explorer = 1
-nnoremap <Space>e :VimFilerExplore -split -winwidth=30 -find -no-quit<Cr>
+nnoremap <Space>e :VimFilerExplore -split -winwidth=40 -find -no-quit<Cr>
 " }}}
 
 " unite {{{
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/neoyank.vim'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'hewes/unite-gtags'
 NeoBundle 'Shougo/neomru.vim', {
   \ 'depends' : 'Shougo/unite.vim'
   \ }
 let g:unite_enable_start_insert = 1
 let g:unite_enable_split_vertically = 0
-let g:unite_source_history_yank_enable =1
 let g:unite_source_file_mru_limit = 200
 let g:unite_winwidth = 30
 nnoremap <silent> <Space>uf :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
 nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
 nnoremap <silent> <Space>uo :<C-u>Unite outline<CR>
 nnoremap <silent> <Space>um :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> <Space>ug :<C-u>Unite vimgrep<CR>
 nnoremap <silent> <Space>uy :<C-u>Unite history/yank<CR>
+nnoremap <silent> <Space>ug :<C-u>Unite vimgrep -no-quit<CR>
 
-" rails の設定   
-nnoremap <silent> <Space>urc :<C-u>Unite file_rec/async:app/controllers/ <CR>
-nnoremap <silent> <Space>urfc :<C-u>Unite file file/new -input=app/controllers/ <CR>
-nnoremap <silent> <Space>urm :<C-u>Unite file_rec/async:app/models/ <CR>
-nnoremap <silent> <Space>urfm :<C-u>Unite file file/new -input=app/models/ <CR>
-nnoremap <silent> <Space>urv :<C-u>Unite file_rec/async:app/views/ <CR>
-nnoremap <silent> <Space>urfv :<C-u>Unite file file/new -input=app/views/ <CR>
-nnoremap <silent> <Space>urs :<C-u>Unite file_rec/async:app/assets/stylesheets/ <CR>
-nnoremap <silent> <Space>urfs :<C-u>Unite file file/new -input=app/assets/stylesheets/ <CR>
-nnoremap <silent> <Space>urj :<C-u>Unite file_rec/async:app/assets/javascripts/ <CR>
-nnoremap <silent> <Space>urfj :<C-u>Unite file file/new -input=app/assets/javascripts/ <CR>
-nnoremap <silent> <Space>uro :<C-u>Unite file_rec/async:config/ <CR>
-nnoremap <silent> <Space>urfo :<C-u>Unite file file/new -input=config/ <CR>
-nnoremap <silent> <Space>url :<C-u>Unite file_rec/async:lib/ <CR>
-nnoremap <silent> <Space>urfl :<C-u>Unite file file/new -input=lib/ <CR>
-nnoremap <silent> <Space>urr :<C-u>Unite file_rec/async:spec/ <CR>
-nnoremap <silent> <Space>urfr :<C-u>Unite file file/new -input=spec/ <CR>
+" unite-gtags.vim
+" grep設定用
+nmap <C-G><C-G> :Unite gtags/grep<CR>
+" 使用箇所-定義箇所を移動
+nmap <C-G><C-J> :Unite gtags/def<CR>
+" 定義箇所-使用箇所を移動
+nmap <C-G><C-K> :Unite gtags/ref<CR>
 " }}} unite
 
 "neocomplete {{{
@@ -104,9 +96,9 @@ inoremap <expr><C-l>     neocomplete#complete_common_string()
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-        return neocomplete#close_popup() . "\<CR>"
+        "return neocomplete#close_popup() . "\<CR>"
         " For no inserting <CR> key.
-        "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+        return pumvisible() ? neocomplete#close_popup() : "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -117,26 +109,7 @@ inoremap <expr><C-y>  neocomplete#close_popup()
 inoremap <expr><C-e>  neocomplete#cancel_popup()
 " Close popup by <Space>.
 inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
- 
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
- 
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
- 
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
- 
+
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -176,6 +149,12 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+" cpsm {{{
+" ctrlp の抹茶
+NeoBundle 'nixprime/cpsm'
+" }}}
 " }}}
 
 " auto-ctags {{{
@@ -185,14 +164,19 @@ let g:auto_ctags_directory_list = ['.git', '.svn']
 let g:auto_ctags_tags_args = '--tag-relative --recurse --sort=yes'
 " }}}
 
-" yankround.vim {{{
-"NeoBundle 'LeafCage/yankround.vim'
-"nmap p <Plug>(yankround-p)
-"nmap P <Plug>(yankround-P)
-"nmap <C-p> <Plug>(yankround-prev)
-"nmap <C-n> <Plug>(yankround-next)
-"let g:yankround_max_history = 100
-"nnoremap <Space><C-p> :<C-u>Unite yankround<CR>
+" gtags.vim {{{
+NeoBundle 'vim-scripts/gtags.vim'
+" ,gでタグファイルを生成する
+nnoremap ,g :!gtags<CR>
+nnoremap <C-g> :Gtags
+" カレントファイル内の関数一覧
+nnoremap <C-l> :Gtags -f %<CR>
+" カーソル上の関数の定義場所へジャンプ
+nnoremap <C-j> :GtagsCursor<CR>
+vnoremap <C-j> :GtagsCursor<CR>
+" Usagesを表示
+nnoremap <C-h> :Gtags -r <C-r><C-w><CR>
+vnoremap <C-h> :Gtags -r <C-r><C-w><CR>
 " }}}
 
 NeoBundle 'Townk/vim-autoclose'
@@ -226,16 +210,60 @@ vmap <Enter> <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " }}}
 
-NeoBundle 'nathanaelkane/vim-indent-guides'
-"NeoBundle 'Yggdroot/indentLine'
-"" indentLine {{{
-"let g:indentLine_faster = 1
-"nmap <silent><Leader>i :<C-u>IndentLinesToggle<CR>
-"" }}}
+" indentLine {{{
+NeoBundle 'Yggdroot/indentLine'
+let g:indentLine_faster = 1
+let g:indentLine_color_term = 239
+let g:indentLine_color_gui = '#708090'
+let g:indentLine_char = '|'
+" }}}
+
+NeoBundle "jceb/vim-hier"
 
 " vim-quickrun {{{
-NeoBundle 'thinca/vim-quickrun'
-let g:quickrun_config = {'*': {'hook/time/enable': '1'},}
+NeoBundle 'thinca/vim-quickrun', {'commands': 'QuickRun'}
+nnoremap <Leader>run :<C-u>QuickRun<CR>
+let g:quickrun_config = {
+\    '_': {
+\        'hook/close_buffer/enable_empty_data': 1,
+\        'hook/close_buffer/enable_failure':    1,
+\        'outputter':                           'multi:buffer:quickfix',
+\        'outputter/buffer/close_on_empty':     1,
+\        'outputter/buffer/split':              ':botright',
+\        'runner':                              'vimproc',
+\        'runner/vimproc/updatetime':           600},
+\    'watchdogs_checker/_': {
+\        'hook/close_quickfix/enable_exit':        1,
+\        'hook/back_window/enable_exit':           0,
+\        'hook/back_window/priority_exit':         1,
+\        'hook/qfstatusline_update/enable_exit':   1,
+\        'hook/qfstatusline_update/priority_exit': 2,
+\        'outputter/quickfix/open_cmd':            ''},
+\    'watchdogs_checker/php': {
+\        'command': 'php',
+\        'cmdopt':  '-l -d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d log_errors=0 -d xdebug.cli_color=0',
+\        'exec':    '%c %o %s:p',
+\        'errorformat': '%m\ in\ %f\ on\ line\ %l'},}
+"}}}
+
+NeoBundle "osyo-manga/shabadou.vim"
+
+" vim-watchdogs {{{
+NeoBundle 'osyo-manga/vim-watchdogs'
+let g:watchdogs_check_BufWritePost_enable  = 1
+let g:watchdogs_check_CursorHold_enable    = 1
+"}}}
+
+" vim-php-cs-fixer {{{
+NeoBundle 'stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'}
+nnoremap <Leader>php :<C-u>call<Space>PhpCsFixerFixFile()<CR>
+let g:php_cs_fixer_config                 = 'default'
+let g:php_cs_fixer_dry_run                = 0
+let g:php_cs_fixer_enable_default_mapping = 0
+let g:php_cs_fixer_fixers_list            = 'align_equals,align_double_arrow'
+let g:php_cs_fixer_level                  = 'symfony'
+let g:php_cs_fixer_php_path               = 'php'
+let g:php_cs_fixer_verbose                = 0
 "}}}
 
 NeoBundle 'rcmdnk/vim-markdown'
@@ -278,6 +306,22 @@ let g:lightline = {
 NeoBundle 'tpope/vim-fugitive'
 " }}}
 
+" vdebug {{{
+" ステップ実行用
+NeoBundle 'joonty/vdebug'
+let g:vdebug_options = {
+  \ 'path_maps': {"/opt/kanesue.co.jp/k_tuba": "/Users/Takuya/LocalDev/k_tuba/dev"},
+  \}
+"}}}
+
+" vim-javascript {{{
+NeoBundle 'pangloss/vim-javascript'
+" }}}
+
+" vim-coffee-script {{{
+NeoBundle 'kchmck/vim-coffee-script'
+" }}}
+
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
 NeoBundleCheck
 call neobundle#end()
@@ -289,6 +333,7 @@ filetype plugin indent on
 
 set t_Co=256
 syntax enable
+autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 colorscheme jellybeans
 
 set nonumber
@@ -301,13 +346,15 @@ set smartcase
 
 " インデント設定 
 set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 
 augroup vimrc
-  autocmd! FileType perl setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd! FileType php  setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd! FileType ruby setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd! FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd! FileType css  setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType perl  setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType php   setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType ruby  setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType html  setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType css   setlocal shiftwidth=4 tabstop=4 softtabstop=4
 augroup END
 
 set autoindent
@@ -372,8 +419,11 @@ let g:php_sql_query=1
 " SQL syntax setting
 let g:sql_type_default='mysql'
 
+" tagsジャンプの時に複数ある時は一覧表示
+nnoremap <C-]> g<C-]>
+
 " Update ctags when file has been saved
-autocmd BufWritePost *
-  \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
-  \   call system('"'.b:git_dir.'/hooks/ctags" &') |
-  \ endif
+"autocmd BufWritePost *
+"  \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
+"  \   call system('"'.b:git_dir.'/hooks/ctags" &') |
+"  \ endif
