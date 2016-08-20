@@ -4,7 +4,7 @@ set modelines=3
 " vim: foldcolumn=3
 " vim: foldlevel=0
 
-" neobundle settings {{{
+" Plugins {{{
 
 if has('vim_starting')
   set nocompatible
@@ -24,23 +24,126 @@ let g:neobundle_default_git_protocol='https'
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'nanotech/jellybeans.vim'
-
-" vimfiler {{{
-NeoBundle 'Shougo/vimfiler.vim'
-let g:vimfiler_as_default_explorer = 1
-nnoremap <Space>e :VimFilerExplore -split -winwidth=40 -find -no-quit<Cr>
-" }}}
-
+" Util {{{
+NeoBundle 'Shougo/vimproc', {
+  \ 'build' : {
+  \     'windows' : 'make -f make_mingw32.mak',
+  \     'cygwin' : 'make -f make_cygwin.mak',
+  \     'mac' : 'make -f make_mac.mak',
+  \     'unix' : 'make -f make_unix.mak',
+  \    },
+  \ }
 " unite {{{
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/neoyank.vim'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'hewes/unite-gtags'
-NeoBundle 'Shougo/neomru.vim', {
-  \ 'depends' : 'Shougo/unite.vim'
-  \ }
+" }}}
+" markdown の プレビュー
+NeoBundle 'kannokanno/previm'
+" URI 開いたり
+NeoBundle 'tyru/open-browser.vim'
+" API 叩く
+NeoBundle 'mattn/webapi-vim'
+" はてなブログ投稿
+NeoBundle 'moznion/hateblo.vim'
+" Document 見る
+NeoBundleLazy 'thinca/vim-ref', {'functions': 'ref#K'}
+" git
+NeoBundle 'tpope/vim-fugitive'
+" }}}
+" Filer {{{
+NeoBundle 'justinmk/vim-dirvish'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+" ctrlp の抹茶
+NeoBundle 'nixprime/cpsm'
+" }}}
+" Color {{{
+NeoBundle 'nanotech/jellybeans.vim'
+" }}}
+" Completion {{{
+"NeoBundle 'Shougo/neocomplete.vim'
+"NeoBundle 'Shougo/neosnippet'
+"NeoBundle 'Shougo/neosnippet-snippets'
+"}}}
+" Tags {{{
+NeoBundle 'soramugi/auto-ctags.vim'
+NeoBundle 'vim-scripts/gtags.vim'
+" }}}
+" Input {{{
+" 括弧自動閉じ
+NeoBundle "kana/vim-smartinput"
+NeoBundle "cohama/vim-smartinput-endwise"
+" 文字を囲んだり
+NeoBundle 'tpope/vim-surround'
+" HTMLタグを素早く書く
+NeoBundleLazy 'mattn/emmet-vim', {
+  \ 'autoload' : {
+  \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
+  \   'commands' : ['<Plug>ZenCodingExpandNormal']
+  \ }}
+" }}}
+" Move {{{
+" 対応する括弧に移動
+NeoBundle 'vim-scripts/matchit.zip'
+" }}}
+" Format {{{
+NeoBundle 'junegunn/vim-easy-align'
+" }}}
+" Appearance {{{
+" インデントわかりやすくするやつ
+NeoBundle 'Yggdroot/indentLine'
+" ハイライト
+NeoBundle "jceb/vim-hier"
+" ステータスライン変える
+NeoBundle 'itchyny/lightline.vim'
+" }}}
+" Execution {{{
+" プログラムをVimから実行して結果見る
+NeoBundle 'thinca/vim-quickrun', {'commands': 'QuickRun'}
+" vim-quickrun の 汎用的な quickrun-hook 集
+NeoBundle "osyo-manga/shabadou.vim"
+" ステップ実行
+NeoBundle 'joonty/vdebug'
+" }}}
+" Syntax {{{
+" 構文チェック
+NeoBundle 'osyo-manga/vim-watchdogs'
+" }}}
+"--------------------------------------------------------------
+" 言語別
+"--------------------------------------------------------------
+" php {{{
+" コーディング規約チェック
+NeoBundle 'stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'}
+" }}}
+" markdown {{{
+" markdown ハイライト
+NeoBundle 'rcmdnk/vim-markdown'
+" }}}
+" slim {{{
+NeoBundle "slim-template/vim-slim"
+" }}}
+" javascript {{{
+NeoBundle 'pangloss/vim-javascript'
+" }}}
+" coffeescript {{{
+NeoBundle 'kchmck/vim-coffee-script'
+" }}}
+
+" vimrc に記述されたプラグインでインストールされていないものがないかチェックする
+NeoBundleCheck
+call neobundle#end()
+
+filetype plugin indent on
+"}}}
+
+
+" ---------------------------------------------------------------------------
+"  ぷらぎんせってぃんぐ
+" ---------------------------------------------------------------------------
+" unite {{{
 let g:unite_enable_start_insert = 1
 let g:unite_enable_split_vertically = 0
 let g:unite_source_file_mru_limit = 200
@@ -51,124 +154,93 @@ nnoremap <silent> <Space>uo :<C-u>Unite outline<CR>
 nnoremap <silent> <Space>um :<C-u>Unite file_mru buffer<CR>
 nnoremap <silent> <Space>uy :<C-u>Unite history/yank<CR>
 nnoremap <silent> <Space>ug :<C-u>Unite vimgrep -no-quit<CR>
-
-" unite-gtags.vim
-" grep設定用
-nmap <C-G><C-G> :Unite gtags/grep<CR>
-" 使用箇所-定義箇所を移動
-nmap <C-G><C-J> :Unite gtags/def<CR>
-" 定義箇所-使用箇所を移動
-nmap <C-G><C-K> :Unite gtags/ref<CR>
-" }}} unite
-
-"neocomplete {{{
-NeoBundle 'Shougo/neocomplete.vim'
- 
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
- 
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-                        \ 'default' : '',
-                        \ 'vimshell' : $HOME.'/.vimshell_hist',
-                        \ 'scheme' : $HOME.'/.gosh_completions'
-                        \ }
- 
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-        let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
- 
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
- 
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-        "return neocomplete#close_popup() . "\<CR>"
-        " For no inserting <CR> key.
-        return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"}}}
-
-" neosnippet {{{
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-" Plugin key-mappings.
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-"}}}
-
-" vimproc {{{
-NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-  \     'windows' : 'make -f make_mingw32.mak',
-  \     'cygwin' : 'make -f make_cygwin.mak',
-  \     'mac' : 'make -f make_mac.mak',
-  \     'unix' : 'make -f make_unix.mak',
-  \    },
-  \ }
 " }}}
 
+" neocomplete {{{
+""Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+"" Disable AutoComplPop.
+"let g:acp_enableAtStartup = 0
+"" Use neocomplete.
+"let g:neocomplete#enable_at_startup = 1
+"" Use smartcase.
+"let g:neocomplete#enable_smart_case = 1
+"" Set minimum syntax keyword length.
+"let g:neocomplete#sources#syntax#min_keyword_length = 3
+"let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+" 
+"" Define dictionary.
+"let g:neocomplete#sources#dictionary#dictionaries = {
+"                        \ 'default' : '',
+"                        \ 'vimshell' : $HOME.'/.vimshell_hist',
+"                        \ 'scheme' : $HOME.'/.gosh_completions'
+"                        \ }
+" 
+"" Define keyword.
+"if !exists('g:neocomplete#keyword_patterns')
+"        let g:neocomplete#keyword_patterns = {}
+"endif
+"let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+" 
+"" Plugin key-mappings.
+"inoremap <expr><C-g>     neocomplete#undo_completion()
+"inoremap <expr><C-l>     neocomplete#complete_common_string()
+" 
+"" Recommended key-mappings.
+"" <CR>: close popup and save indent.
+"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"function! s:my_cr_function()
+"        "return neocomplete#close_popup() . "\<CR>"
+"        " For no inserting <CR> key.
+"        return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+"endfunction
+"" <TAB>: completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"" <C-h>, <BS>: close popup and delete backword char.
+"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><C-y>  neocomplete#close_popup()
+"inoremap <expr><C-e>  neocomplete#cancel_popup()
+"" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+"
+"" Enable omni completion.
+"autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" }}}
+
+" neosnippet {{{
+"" Plugin key-mappings.
+"imap <C-k> <Plug>(neosnippet_expand_or_jump)
+"smap <C-k> <Plug>(neosnippet_expand_or_jump)
+"xmap <C-k> <Plug>(neosnippet_expand_target)
+"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+"
+"" For conceal markers.
+"if has('conceal')
+"  set conceallevel=2 concealcursor=niv
+"endif
+"}}}
+
 " ctrlp.vim {{{
-NeoBundle 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
-" cpsm {{{
-" ctrlp の抹茶
-NeoBundle 'nixprime/cpsm'
-" }}}
 " }}}
 
 " auto-ctags {{{
-NeoBundle 'soramugi/auto-ctags.vim'
 let g:auto_ctags = 1
 let g:auto_ctags_directory_list = ['.git', '.svn']
 let g:auto_ctags_tags_args = '--tag-relative --recurse --sort=yes'
 " }}}
 
 " gtags.vim {{{
-NeoBundle 'vim-scripts/gtags.vim'
 " ,gでタグファイルを生成する
 nnoremap ,g :!gtags<CR>
-nnoremap <C-g> :Gtags
 " カレントファイル内の関数一覧
 nnoremap <C-l> :Gtags -f %<CR>
 " カーソル上の関数の定義場所へジャンプ
@@ -179,21 +251,11 @@ nnoremap <C-h> :Gtags -r <C-r><C-w><CR>
 vnoremap <C-h> :Gtags -r <C-r><C-w><CR>
 " }}}
 
-NeoBundle 'Townk/vim-autoclose'
-
-NeoBundleLazy 'tpope/vim-endwise', {
-  \ 'autoload' : { 'insert' : 1,}}
-
-NeoBundle 'tpope/vim-surround'
-
-NeoBundle 'vim-scripts/matchit.zip'
+" vim-smartinput-endwise {{{
+call smartinput_endwise#define_default_rules()
+"}}}
 
 " emmet-vim {{{
-NeoBundleLazy 'mattn/emmet-vim', {
-  \ 'autoload' : {
-  \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
-  \   'commands' : ['<Plug>ZenCodingExpandNormal']
-  \ }}
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
   \ 'lang' : 'ja',
@@ -203,7 +265,6 @@ let g:user_emmet_settings = {
 " }}}
 
 " vim-easy-align {{{
-NeoBundle 'junegunn/vim-easy-align'
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -211,17 +272,13 @@ nmap ga <Plug>(EasyAlign)
 " }}}
 
 " indentLine {{{
-NeoBundle 'Yggdroot/indentLine'
 let g:indentLine_faster = 1
 let g:indentLine_color_term = 239
 let g:indentLine_color_gui = '#708090'
 let g:indentLine_char = '|'
 " }}}
 
-NeoBundle "jceb/vim-hier"
-
 " vim-quickrun {{{
-NeoBundle 'thinca/vim-quickrun', {'commands': 'QuickRun'}
 nnoremap <Leader>run :<C-u>QuickRun<CR>
 let g:quickrun_config = {
 \    '_': {
@@ -246,16 +303,12 @@ let g:quickrun_config = {
 \        'errorformat': '%m\ in\ %f\ on\ line\ %l'},}
 "}}}
 
-NeoBundle "osyo-manga/shabadou.vim"
-
 " vim-watchdogs {{{
-NeoBundle 'osyo-manga/vim-watchdogs'
 let g:watchdogs_check_BufWritePost_enable  = 1
 let g:watchdogs_check_CursorHold_enable    = 1
 "}}}
 
 " vim-php-cs-fixer {{{
-NeoBundle 'stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'}
 nnoremap <Leader>php :<C-u>call<Space>PhpCsFixerFixFile()<CR>
 let g:php_cs_fixer_config                 = 'default'
 let g:php_cs_fixer_dry_run                = 0
@@ -266,24 +319,12 @@ let g:php_cs_fixer_php_path               = 'php'
 let g:php_cs_fixer_verbose                = 0
 "}}}
 
-NeoBundle 'rcmdnk/vim-markdown'
-
-NeoBundle 'kannokanno/previm'
-
-" open-browser {{{
-NeoBundle 'tyru/open-browser.vim'
+" previm {{{
 au BufRead,BufNewFile *.md set filetype=markdown
 let g:previm_open_cmd = 'open -a Safari'
 "}}}
 
-NeoBundle 'mattn/webapi-vim'
-
-NeoBundle 'moznion/hateblo.vim'
-
-NeoBundle "slim-template/vim-slim"
-
 " vim-ref {{{
-NeoBundleLazy 'thinca/vim-ref', {'functions': 'ref#K'}
 let g:ref_no_default_key_mappings = 1
 "inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
 nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
@@ -295,42 +336,21 @@ endfunction "}}}
 "}}}
 
 " lightline {{{
-NeoBundle 'itchyny/lightline.vim'
 let g:lightline = {
 \ 'colorscheme': 'jellybeans'
 \}
 "}}}
 
-" fugitive {{{
-" vim で git する用
-NeoBundle 'tpope/vim-fugitive'
-" }}}
-
 " vdebug {{{
 " ステップ実行用
-NeoBundle 'joonty/vdebug'
 let g:vdebug_options = {
   \ 'path_maps': {"/opt/kanesue.co.jp/k_tuba": "/Users/Takuya/LocalDev/k_tuba/dev"},
   \}
 "}}}
 
-" vim-javascript {{{
-NeoBundle 'pangloss/vim-javascript'
-" }}}
-
-" vim-coffee-script {{{
-NeoBundle 'kchmck/vim-coffee-script'
-" }}}
-
-" vimrc に記述されたプラグインでインストールされていないものがないかチェックする
-NeoBundleCheck
-call neobundle#end()
-
-filetype plugin indent on
-"}}}
-
 " ---------------------------------------------------------------------------
-
+"  きほんせってい
+" ---------------------------------------------------------------------------
 set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
