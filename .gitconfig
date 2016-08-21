@@ -1,23 +1,36 @@
 [user]
-	name = tokoyax
-	email = getting.foolish@gmail.com
+  name = tokoyax
+  email = getting.foolish@gmail.com
 [color]
-	ui = true
+  ui = true
 [alias]
-	co = checkout
+  # http://qiita.com/peccul/items/90dd469e2f72babbc106
+  # http://qiita.com/qurage/items/daa67763e5a0090af06a
+  co = checkout
+  cm = commit -m
+  st = status
+  # Untracked filesを表示せず，not stagedと，stagedだけの状態を出力する
+  stt = status -uno
+  # ログを綺麗に表示
+  l = log --pretty=format:'%C(red reverse)%d%Creset%C(white reverse) %h% Creset %C(green reverse) %an %Creset %C(cyan)%ar%Creset%n%C(white bold)%w(80)%s%Creset%n%n%w(80,2,2)%b' --graph --name-status
+  # ファイル名のみの差分を表示する
+  difff = diff --name-only
+  # staged diff
+  diffs = diff --cached
+  unstage = reset HEAD
 [core]
-	excludesfile = /Users/Takuya/.gitignore_global
+  excludesfile = /Users/Takuya/.gitignore_global
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
 [credential]
-	helper = cache --timeout=3600
+  helper = cache --timeout=3600
 [filter "hawser"]
-	clean = git hawser clean %f
-	smudge = git hawser smudge %f
-	required = true
+  clean = git hawser clean %f
+  smudge = git hawser smudge %f
+  required = true
 [init]
-	templatedir = ~/.git_template
+  templatedir = ~/.git_templatcommit
