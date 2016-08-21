@@ -343,8 +343,9 @@ let g:lightline = {
 
 " vdebug {{{
 let g:vimrc_vdebug = getcwd() . "/.vimrc.vdebug"
-if filereadable(vimrc_vdebug)
-  source vimrc_vdebug
+if filereadable(g:vimrc_vdebug)
+  " source の引数に変数が指定できないため exec で読み込む
+  exec ":source " . g:vimrc_vdebug
 endif
 
 " -------------------------------------------------------------------------
