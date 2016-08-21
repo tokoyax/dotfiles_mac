@@ -349,7 +349,7 @@ endif
 
 " -------------------------------------------------------------------------
 " パスマップ設定の仕方
-" ステップ実行用の .vimrc_vdebug をプロジェクトのルートに配置する
+" ステップ実行用の .vimrc.vdebug をプロジェクトのルートに配置する
 "
 "let g:vdebug_options = {
 "  \ 'path_maps': {"/path/to/remote/project": "/path/to/local/project"},
