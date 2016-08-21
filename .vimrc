@@ -342,10 +342,20 @@ let g:lightline = {
 "}}}
 
 " vdebug {{{
-" ステップ実行用
-let g:vdebug_options = {
-  \ 'path_maps': {"/opt/kanesue.co.jp/k_tuba": "/Users/Takuya/LocalDev/k_tuba/dev"},
-  \}
+let g:vimrc_vdebug = getcwd() . "/.vimrc.vdebug"
+if filereadable(vimrc_vdebug)
+  source vimrc_vdebug
+endif
+
+" -------------------------------------------------------------------------
+" パスマップ設定の仕方
+" ステップ実行用の .vimrc_vdebug をプロジェクトのルートに配置する
+"
+"let g:vdebug_options = {
+"  \ 'path_maps': {"/path/to/remote/project": "/path/to/local/project"},
+"  \
+"}
+" -------------------------------------------------------------------------
 "}}}
 
 " ---------------------------------------------------------------------------
