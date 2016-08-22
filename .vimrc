@@ -400,7 +400,7 @@ set history=2000
 set hlsearch
 set incsearch
 set ruler
-set cursorline
+set nocursorline
 set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
 
