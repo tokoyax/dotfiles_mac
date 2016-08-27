@@ -256,6 +256,8 @@ call smartinput_endwise#define_default_rules()
 "}}}
 
 " emmet-vim {{{
+" <C-E>, で発動
+let g:user_emmet_leader_key = '<C-E>'
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
   \ 'lang' : 'ja',
