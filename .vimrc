@@ -60,7 +60,8 @@ NeoBundle 'ctrlpvim/ctrlp.vim'
 NeoBundle 'nixprime/cpsm'
 " }}}
 " Color {{{
-NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'altercation/vim-colors-solarized'
+"NeoBundle 'nanotech/jellybeans.vim'
 " }}}
 " Completion {{{
 "NeoBundle 'Shougo/neocomplete.vim'
@@ -109,7 +110,7 @@ NeoBundle 'joonty/vdebug'
 " }}}
 " Syntax {{{
 " 構文チェック
-NeoBundle 'osyo-manga/vim-watchdogs'
+" NeoBundle 'osyo-manga/vim-watchdogs'
 " }}}
 "--------------------------------------------------------------
 " 言語別
@@ -130,6 +131,9 @@ NeoBundle 'pangloss/vim-javascript'
 " }}}
 " coffeescript {{{
 NeoBundle 'kchmck/vim-coffee-script'
+" }}}
+" elixir {{{
+NeoBundle 'elixir-lang/vim-elixir'
 " }}}
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
@@ -339,7 +343,7 @@ endfunction "}}}
 
 " lightline {{{
 let g:lightline = {
-\ 'colorscheme': 'jellybeans'
+\ 'colorscheme': 'solarized'
 \}
 "}}}
 
@@ -367,7 +371,10 @@ endif
 set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
-colorscheme jellybeans
+
+"colorscheme jellybeans
+colorscheme solarized
+set background=dark    "または light
 
 set nonumber
 set title

@@ -20,6 +20,7 @@
   unstage = reset HEAD
 [core]
   excludesfile = /Users/Takuya/.gitignore_global
+	editor = /Applications/MacVim.app/Contents/MacOS/Vim
 [difftool "sourcetree"]
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path = 
@@ -33,4 +34,4 @@
   smudge = git hawser smudge %f
   required = true
 [init]
-  templatedir = ~/.git_templatcommit
+  templatedir = ~/.git_template
