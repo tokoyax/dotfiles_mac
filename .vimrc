@@ -368,9 +368,16 @@ endif
 " ---------------------------------------------------------------------------
 "  きほんせってい
 " ---------------------------------------------------------------------------
+
+" ※などがずれるので
+set ambiwidth=double
+
 set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
+
+autocmd VimEnter,Colorscheme * highlight SpecialKey cterm=NONE ctermfg=239 ctermbg=NONE
+autocmd VimEnter,Colorscheme * highlight NonText cterm=NONE ctermfg=239 ctermbg=NONE
 
 "colorscheme jellybeans
 colorscheme solarized
