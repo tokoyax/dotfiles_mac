@@ -400,6 +400,7 @@ augroup vimrc
   autocmd! FileType perl  setlocal shiftwidth=4 tabstop=4 softtabstop=4
   autocmd! FileType php   setlocal shiftwidth=4 tabstop=4 softtabstop=4
   autocmd! FileType ruby  setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType eruby setlocal shiftwidth=2 tabstop=2 softtabstop=2
   autocmd! FileType html  setlocal shiftwidth=2 tabstop=2 softtabstop=2
   autocmd! FileType css   setlocal shiftwidth=4 tabstop=4 softtabstop=4
 augroup END
