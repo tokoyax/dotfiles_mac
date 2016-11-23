@@ -84,6 +84,9 @@ eval "$(rbenv init - zsh)"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# Aliases
+alias fig='docker-compose'
+
 # ビープ音消す
 setopt nobeep
 
