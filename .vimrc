@@ -342,6 +342,7 @@ let s:hooks = neobundle#get_hooks('vim-ref')
 function! s:hooks.on_source(bundle) abort "{{{
   let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
   let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
+  let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
 endfunction "}}}
 "}}}
 
