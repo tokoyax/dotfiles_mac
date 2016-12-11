@@ -134,6 +134,10 @@ NeoBundle 'kchmck/vim-coffee-script'
 " }}}
 " elixir {{{
 NeoBundle 'elixir-lang/vim-elixir'
+" ruby {{{
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'todesking/ruby_hl_lvar.vim'
 " }}}
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
@@ -462,6 +466,10 @@ let g:php_baselib=1
 let g:php_htmlInStrings=1
 let g:php_noShortTags=1
 let g:php_sql_query=1
+" }}}
+
+" Ruby settings {{{
+let g:rsenseHome = '/Users/Takuya/.rbenv/shims/rsense'
 " }}}
 
 " SQL syntax setting
