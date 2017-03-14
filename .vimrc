@@ -135,6 +135,10 @@ NeoBundle 'kchmck/vim-coffee-script'
 " }}}
 " elixir {{{
 NeoBundle 'elixir-lang/vim-elixir'
+" ruby {{{
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'todesking/ruby_hl_lvar.vim'
 " }}}
 " ruby {{{
 NeoBundle 'tpope/vim-rails'
@@ -424,6 +428,10 @@ let g:php_sql_query=1
 " hoge? が1個の単語として認識されるようにする
 autocmd FileType ruby setl iskeyword+=?
 let g:rsenseHome = '/usr/local/bin/rsense'
+" }}}
+
+" Ruby settings {{{
+let g:rsenseHome = '/Users/Takuya/.rbenv/shims/rsense'
 " }}}
 
 " SQL syntax setting
