@@ -455,7 +455,7 @@ augroup foldmethod-syntax
 augroup END
 
 " Update ctags when file has been saved
-"autocmd BufWritePost *
-"  \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
-"  \   call system('"'.b:git_dir.'/hooks/ctags" &') |
-"  \ endif
+autocmd BufWritePost *
+  \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
+  \   call system('"'.b:git_dir.'/hooks/ctags" &') |
+  \ endif
