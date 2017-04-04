@@ -55,6 +55,7 @@ source $ZSH/oh-my-zsh.sh
 export TERM="xterm-256color"
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$PATH:`yarn global bin`"
 export GOPATH="$HOME/LocalDev/go_work"
 export PATH="$PATH:$GOPATH/bin"
 eval "$(rbenv init - zsh)"
