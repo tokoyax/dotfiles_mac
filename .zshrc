@@ -52,6 +52,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+export TERM="xterm-256color"
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export GOPATH="$HOME/LocalDev/go_work"
@@ -85,14 +86,17 @@ eval "$(rbenv init - zsh)"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Aliases
-alias fig='docker-compose'
+alias fig='UID=${UID} GID=${GID} docker-compose'
 
 # ビープ音消す
 setopt nobeep
 
 # MacOSの場合：vimの設定
 if [ -f /Applications/MacVim.app/Contents/MacOS/Vim ]; then
+  export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
   alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 fi
 
+# glob させない
+setopt nonomatch

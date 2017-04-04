@@ -1,6 +1,10 @@
 *~
 .DS_Store
 .vimrc.vdebug
+.ruby-version
+.vagrant
 GPATH
 GRTAGS
 GTAGS
+bundle_bin
+tags
