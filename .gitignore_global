@@ -3,8 +3,11 @@
 .vimrc.vdebug
 .ruby-version
 .vagrant
+.bash_history
+.docker-sync
 GPATH
 GRTAGS
 GTAGS
 bundle_bin
 tags
+Session.vim

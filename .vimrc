@@ -113,6 +113,10 @@ NeoBundle 'joonty/vdebug'
 " 構文チェック
 NeoBundle 'osyo-manga/vim-watchdogs'
 " }}}
+" tmux {{{
+" tmux用
+NeoBundle 'tpope/vim-obsession'
+" }}}
 "--------------------------------------------------------------
 " 言語別
 "--------------------------------------------------------------
@@ -293,8 +297,18 @@ endfunction "}}}
 
 " lightline {{{
 let g:lightline = {
-\ 'colorscheme': 'solarized'
-\}
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'fugitive': 'LightlineFugitive'
+      \ }
+  \ }
+function! LightlineFugitive()
+  return exists('*fugitive#head') ? fugitive#head() : ''
+endfunction
 "}}}
 
 " vdebug {{{
