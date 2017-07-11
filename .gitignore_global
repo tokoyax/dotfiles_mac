@@ -5,6 +5,7 @@
 .vagrant
 .bash_history
 .docker-sync
+.sass-cache
 GPATH
 GRTAGS
 GTAGS
