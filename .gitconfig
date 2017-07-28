@@ -19,7 +19,7 @@
   diffs = diff --cached
   unstage = reset HEAD
 [core]
-  excludesfile = /Users/Takuya/.gitignore_global
+  excludesfile = ~/.gitignore_global
 	editor = /Applications/MacVim.app/Contents/MacOS/Vim
 [difftool "sourcetree"]
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"

@@ -46,7 +46,7 @@ ZSH_THEME="terminalparty"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ruby osx bundler brew rails emoji-clock)
+plugins=(git ruby osx bundler brew rails emoji-clock zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -101,3 +101,33 @@ fi
 
 # glob させない
 setopt nonomatch
+
+# direnv
+# https://github.com/direnv/direnv
+eval "$(direnv hook zsh)"
+
+# vim keybind
+bindkey -v
+
+# マッチしたコマンドのヒストリを表示
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^p" history-beginning-search-backward-end
+bindkey "^n" history-beginning-search-forward-end
+
+# ------------------------------
+# Look And Feel Settings
+# ------------------------------
+### Ls Color ###
+# 色の設定
+export LSCOLORS=Exfxcxdxbxegedabagacad
+# 補完時の色の設定
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# ZLS_COLORSとは？
+export ZLS_COLORS=$LS_COLORS
+# lsコマンド時、自動で色がつく(ls -Gのようなもの？)
+export CLICOLOR=true
+# 補完候補に色を付ける
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+

@@ -83,6 +83,10 @@ NeoBundleLazy 'mattn/emmet-vim', {
   \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee'],
   \   'commands' : ['<Plug>ZenCodingExpandNormal']
   \ }}
+" quickfixを更に絞りこめる
+NeoBundle 'fuenor/qfixgrep'
+" quickfixを置換対象にする
+NeoBundle 'thinca/vim-qfreplace'
 " }}}
 " Move {{{
 " 対応する括弧に移動
@@ -144,11 +148,6 @@ NeoBundle 'tpope/vim-rails'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'todesking/ruby_hl_lvar.vim'
 " }}}
-" ruby {{{
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'todesking/ruby_hl_lvar.vim'
-" }}}
 " slim {{{
 NeoBundle 'slim-template/vim-slim'
 " }}}
@@ -179,12 +178,12 @@ nnoremap <silent> <Space>ug :<C-u>Unite vimgrep -no-quit<CR>
 " }}}
 
 " ctrlp.vim {{{
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.jpg,*.png
+set wildignore+=*/tmp/*,*/.git/*,*.so,*.swp,*.zip,*.jpg,*.png
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)$'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
-let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+" let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
 let g:ctrlp_extensions = ['buffertag', 'quickfix', 'dir',
                         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 " }}}
@@ -242,6 +241,8 @@ let g:indentLine_char = '|'
 nnoremap <Leader>run :<C-u>QuickRun<CR>
 let g:quickrun_config = {
 \    '_': {
+\        'hook/nuko/enable' : 1,
+\        'hook/nuko/wait' : 0,
 \        'hook/close_buffer/enable_empty_data': 1,
 \        'hook/close_buffer/enable_failure':    1,
 \        'outputter':                           'multi:buffer:quickfix',
@@ -250,12 +251,8 @@ let g:quickrun_config = {
 \        'runner':                              'vimproc',
 \        'runner/vimproc/updatetime':           600},
 \    'watchdogs_checker/_': {
-\        'hook/close_quickfix/enable_exit':        1,
-\        'hook/back_window/enable_exit':           0,
-\        'hook/back_window/priority_exit':         1,
-\        'hook/qfstatusline_update/enable_exit':   1,
-\        'hook/qfstatusline_update/priority_exit': 2,
-\        'outputter/quickfix/open_cmd':            ''},
+\        'outputter/quickfix/open_cmd' : '',
+\        },
 \    'watchdogs_checker/php': {
 \        'command': 'php',
 \        'cmdopt':  '-l -d error_reporting=E_ALL -d display_errors=1 -d display_startup_errors=1 -d log_errors=0 -d xdebug.cli_color=0',

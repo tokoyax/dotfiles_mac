@@ -6,6 +6,7 @@
 .bash_history
 .docker-sync
 .sass-cache
+.envrc
 GPATH
 GRTAGS
 GTAGS
