@@ -11,9 +11,8 @@ eval "$(rbenv init - zsh)"
 
 ##############################################
 # keybind
-# vim
 bindkey -d # reset keybind
-bindkey -v
+bindkey -e
 
 ##############################################
 # prompt
