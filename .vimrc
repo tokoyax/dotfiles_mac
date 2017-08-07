@@ -472,3 +472,8 @@ autocmd BufWritePost *
   \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
   \   call system('"'.b:git_dir.'/hooks/ctags" &') |
   \ endif
+
+" fish shell setting
+if $SHELL =~ '/fish$'
+  set shell=zsh
+endif

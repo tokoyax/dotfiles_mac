@@ -7,6 +7,7 @@
 .docker-sync
 .sass-cache
 .envrc
+.unison*
 GPATH
 GRTAGS
 GTAGS

@@ -37,3 +37,5 @@
   templatedir = ~/.git_template
 [push]
 	default = simple
+[ghq]
+  root = ~/src

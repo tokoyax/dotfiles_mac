@@ -11,30 +11,19 @@ eval "$(rbenv init - zsh)"
 
 ##############################################
 # keybind
-bindkey -d # reset keybind
-bindkey -e
+#bindkey -d # reset keybind
+#bindkey -e
 
 ##############################################
 # prompt
-autoload colors
+autoload -Uz colors
 colors
 
-case ${UID} in
-0)
-  PROMPT="%B%{${fg[green]}%}%/#%{${reset_color}%}%b "
-  PROMPT2="%B%{${fg[green]}%}%_#%{${reset_color}%}%b "
-  SPROMPT="%B%{${fg[green]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
-  [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
-    PROMPT="%{${fg[white]}%}${HOST%%.*} ${PROMPT}"
-  ;;
-*)
-  PROMPT="%{${fg[green]}%}%/%%%{${reset_color}%} "
-  PROMPT2="%{${fg[green]}%}%_%%%{${reset_color}%} "
-  SPROMPT="%{${fg[green]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-  [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
-    PROMPT="%{${fg[white]}%}${HOST%%.*} ${PROMPT}"
-  ;;
-esac
+PROMPT="${fg[yellow]}%~%%${reset_color} "
+PROMPT2="${fg[yellow]}%_%%${reset_color} "
+SPROMPT="${fg[yellow]}%r is correct? [n,y,a,e]:${reset_color} "
+[ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
+  PROMPT="${fg[white]}${HOST%%.*} ${PROMPT}"
 
 ##############################################
 # terminal title
