@@ -91,6 +91,8 @@ NeoBundle 'thinca/vim-qfreplace'
 " Move {{{
 " 対応する括弧に移動
 NeoBundle 'vim-scripts/matchit.zip'
+" f{char}の移動を便利に
+NeoBundle 'rhysd/clever-f.vim'
 " }}}
 " Format {{{
 NeoBundle 'junegunn/vim-easy-align'
@@ -183,6 +185,7 @@ let g:ctrlp_show_hidden = 1
 " let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
 let g:ctrlp_extensions = ['buffertag', 'quickfix', 'dir',
                         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
+" highway があればキャッシュ使わない ちょっぱや
 " ag があればキャッシュ使わない ちょっぱや
 if executable('ag')
   let g:ctrlp_use_caching=0
@@ -323,6 +326,12 @@ nmap <leader>he <Plug>(ruby_hl_lvar-enable)
 nmap <leader>hd <Plug>(ruby_hl_lvar-disable)
 nmap <leader>hr <Plug>(ruby_hl_lvar-refresh)
 " }}}
+" clever-f {{{
+let g:clever_f_ignore_case = 1
+let g:clever_f_use_migemo = 1
+let g:clever_f_chars_match_any_signs = ';'
+" }}}
+
 " ---------------------------------------------------------------------------
 "  きほんせってい
 " ---------------------------------------------------------------------------
@@ -348,6 +357,9 @@ set smartcase
 
 " yank したら * レジスタにもコピー
 set clipboard+=unnamed
+
+" highway grep
+set grepprg=hw\ --no-group\ --no-color
 
 " インデント設定 
 set tabstop=2
@@ -466,3 +478,7 @@ autocmd BufWritePost *
 if $SHELL =~ '/fish$'
   set shell=zsh
 endif
+
+" clear qflist
+command! ClearQuickfixList cexpr []
+nmap <Space>cf :ClearQuickfixList<cr>
