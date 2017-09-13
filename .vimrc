@@ -145,6 +145,8 @@ NeoBundle 'kchmck/vim-coffee-script'
 " }}}
 " elixir {{{
 NeoBundle 'elixir-lang/vim-elixir'
+NeoBundle 'slashmili/alchemist.vim'
+"}}}
 " ruby {{{
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'vim-ruby/vim-ruby'
@@ -153,7 +155,6 @@ NeoBundle 'todesking/ruby_hl_lvar.vim'
 " slim {{{
 NeoBundle 'slim-template/vim-slim'
 " }}}
-
 
 " vimrc に記述されたプラグインでインストールされていないものがないかチェックする
 NeoBundleCheck
