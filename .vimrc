@@ -58,8 +58,6 @@ NeoBundle 'rking/ag.vim'
 " Filer {{{
 NeoBundle 'justinmk/vim-dirvish'
 NeoBundle 'mattn/ctrlp.vim'
-" ctrlp の抹茶
-NeoBundle 'nixprime/cpsm'
 " }}}
 " Color {{{
 NeoBundle 'altercation/vim-colors-solarized'
@@ -183,10 +181,6 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)$'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
-" let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
-let g:ctrlp_extensions = ['buffertag', 'quickfix', 'dir',
-                        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
-" highway があればキャッシュ使わない ちょっぱや
 " ag があればキャッシュ使わない ちょっぱや
 if executable('ag')
   let g:ctrlp_use_caching=0
@@ -242,13 +236,13 @@ let g:quickrun_config = {
 \    '_': {
 \        'hook/nuko/enable' : 1,
 \        'hook/nuko/wait' : 0,
-\        'hook/close_buffer/enable_empty_data': 1,
-\        'hook/close_buffer/enable_failure':    1,
-\        'outputter':                           'multi:buffer:quickfix',
+\        'outputter':                           'error',
+\        'outputter/error/success':             'buffer',
+\        'outputter/error/error':               'quickfix',
 \        'outputter/buffer/close_on_empty':     1,
-\        'outputter/buffer/split':              ':botright',
+\        'outputter/buffer/split':              ':rightbelow 8sp',
 \        'runner':                              'vimproc',
-\        'runner/vimproc/updatetime':           600},
+\        'runner/vimproc/updatetime':           60},
 \    'watchdogs_checker/_': {
 \        'outputter/quickfix/open_cmd' : '',
 \        },
@@ -437,6 +431,8 @@ noremap   <Right>  <nop>
 set directory=~/.vim/tmp
 set backupdir=~/.vim/tmp
 set undodir=~/.vim/tmp
+" tags directory
+set tags+=.git/tags
 
 " PHP settings {{{
 let g:php_baselib=1
@@ -469,17 +465,7 @@ augroup foldmethod-syntax
   \                   | endif
 augroup END
 
-" Update ctags when file has been saved
-autocmd BufWritePost *
-  \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/ctags') |
-  \   call system('"'.b:git_dir.'/hooks/ctags" &') |
-  \ endif
-
 " fish shell setting
 if $SHELL =~ '/fish$'
   set shell=zsh
 endif
-
-" clear qflist
-command! ClearQuickfixList cexpr []
-nmap <Space>cf :ClearQuickfixList<cr>
