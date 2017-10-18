@@ -32,11 +32,6 @@ NeoBundle 'Shougo/vimproc', {
   \    },
   \ }
 " unite {{{
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'Shougo/neoyank.vim'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'hewes/unite-gtags'
 " }}}
 " markdown の プレビュー
 NeoBundle 'kannokanno/previm'
@@ -148,7 +143,6 @@ NeoBundle 'slashmili/alchemist.vim'
 " ruby {{{
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'todesking/ruby_hl_lvar.vim'
 " }}}
 " slim {{{
 NeoBundle 'slim-template/vim-slim'
@@ -163,18 +157,6 @@ filetype plugin indent on
 " ---------------------------------------------------------------------------
 "  ぷらぎんせってぃんぐ
 " ---------------------------------------------------------------------------
-" unite {{{
-let g:unite_enable_start_insert = 1
-let g:unite_enable_split_vertically = 0
-let g:unite_source_file_mru_limit = 200
-let g:unite_winwidth = 30
-nnoremap <silent> <Space>uf :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
-nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
-nnoremap <silent> <Space>uo :<C-u>Unite outline<CR>
-nnoremap <silent> <Space>um :<C-u>Unite file_mru buffer<CR>
-nnoremap <silent> <Space>uy :<C-u>Unite history/yank<CR>
-nnoremap <silent> <Space>ug :<C-u>Unite vimgrep -no-quit<CR>
-" }}}
 " ctrlp.vim {{{
 set wildignore+=*/vendor/*,*/tmp/*,*/.git/*,*.so,*.swp,*.zip,*.jpg,*.png
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)$'
@@ -188,13 +170,13 @@ if executable('ag')
 endif
 " }}}
 " auto-ctags {{{
-let g:auto_ctags = 1
+let g:auto_ctags = 0
 let g:auto_ctags_directory_list = ['.git', '.svn']
 let g:auto_ctags_tags_args = '--tag-relative --recurse --sort=yes'
 " }}}
 " gtags.vim {{{
 " ,gでタグファイルを生成する
-nnoremap ,g :!gtags<CR>
+nnoremap ,g :!gtags -v<CR>
 " カレントファイル内の関数一覧
 nnoremap <C-l> :Gtags -f %<CR>
 " カーソル上の関数の定義場所へジャンプ
@@ -314,13 +296,6 @@ endif
 "}
 " -------------------------------------------------------------------------
 "}}}
-" ruby_hl_lvar {{{
-let g:ruby_hl_lvar_hl_group = 'RubyLocalVariable'
-let g:ruby_hl_lvar_auto_enable = 0
-nmap <leader>he <Plug>(ruby_hl_lvar-enable)
-nmap <leader>hd <Plug>(ruby_hl_lvar-disable)
-nmap <leader>hr <Plug>(ruby_hl_lvar-refresh)
-" }}}
 " clever-f {{{
 let g:clever_f_ignore_case = 1
 let g:clever_f_use_migemo = 1
@@ -335,9 +310,9 @@ set ambiwidth=double
 set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
-autocmd VimEnter,Colorscheme * highlight SpecialKey cterm=NONE ctermfg=239 ctermbg=NONE
-autocmd VimEnter,Colorscheme * highlight NonText cterm=NONE ctermfg=239 ctermbg=NONE
-autocmd VimEnter,Colorscheme * highlight SpellBad cterm=underline ctermfg=196 ctermbg=NONE
+"autocmd VimEnter,Colorscheme * highlight SpecialKey cterm=NONE ctermfg=239 ctermbg=NONE
+"autocmd VimEnter,Colorscheme * highlight NonText cterm=NONE ctermfg=239 ctermbg=NONE
+"autocmd VimEnter,Colorscheme * highlight SpellBad cterm=underline ctermfg=196 ctermbg=NONE
 
 "colorscheme jellybeans
 colorscheme solarized
