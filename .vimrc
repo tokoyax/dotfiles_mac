@@ -49,6 +49,8 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle "dannyob/quickfixstatus"
 " ag search
 NeoBundle 'rking/ag.vim'
+" benchmark
+NeoBundleLazy 'mattn/benchvimrc-vim'
 " }}}
 " Filer {{{
 NeoBundle 'justinmk/vim-dirvish'
@@ -99,6 +101,10 @@ NeoBundle "cohama/vim-hier"
 NeoBundle 'itchyny/lightline.vim'
 " 単語単位のdiff
 NeoBundle 'rickhowe/diffchar.vim'
+" 対応括弧強調
+NeoBundle 'itchyny/vim-parenmatch'
+" cursor下のワードに下線ひく
+NeoBundle 'itchyny/vim-cursorword'
 " }}}
 " Execution {{{
 " プログラムをVimから実行して結果見る
@@ -166,7 +172,7 @@ let g:ctrlp_show_hidden = 1
 " ag があればキャッシュ使わない ちょっぱや
 if executable('ag')
   let g:ctrlp_use_caching=0
-  let g:ctrlp_user_command='ag %s -i --nocolor --nogroup -g ""'
+  let g:ctrlp_user_command='ag %s -l --nocolor --nogroup -g ""'
 endif
 " }}}
 " auto-ctags {{{
@@ -216,8 +222,6 @@ let g:indentLine_char = '|'
 nnoremap <Leader>run :<C-u>QuickRun<CR>
 let g:quickrun_config = {
 \    '_': {
-\        'hook/nuko/enable' : 1,
-\        'hook/nuko/wait' : 0,
 \        'outputter':                           'error',
 \        'outputter/error/success':             'buffer',
 \        'outputter/error/error':               'quickfix',
@@ -236,7 +240,7 @@ let g:quickrun_config = {
 "}}}
 " vim-watchdogs {{{
 let g:watchdogs_check_BufWritePost_enable  = 1
-let g:watchdogs_check_CursorHold_enable    = 1
+let g:watchdogs_check_CursorHold_enable    = 0
 call watchdogs#setup(g:quickrun_config)
 "}}}
 " vim-php-cs-fixer {{{
@@ -301,6 +305,9 @@ let g:clever_f_ignore_case = 1
 let g:clever_f_use_migemo = 1
 let g:clever_f_chars_match_any_signs = ';'
 " }}}
+" vim-parenmatch {{{
+let g:loaded_matchparen = 1
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -331,7 +338,7 @@ set clipboard+=unnamed
 " highway grep
 set grepprg=hw\ --no-group\ --no-color
 
-" インデント設定 
+" インデント設定
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
@@ -359,6 +366,9 @@ set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
 " 1行が長い場合にくそ重たくなるので
 set synmaxcol=300
+" くそ重たくなる対策
+set lazyredraw
+set ttyfast
 
 " ---------------------------------------------------------------------------
 " keymap
@@ -430,15 +440,14 @@ nnoremap <C-]> g<C-]>
 set foldmethod=syntax
 set foldlevel=1
 set foldnestmax=2
-augroup foldmethod-syntax
-  autocmd!
-  autocmd InsertEnter * if &l:foldmethod ==# 'syntax'
-  \                   |   setlocal foldmethod=manual
-  \                   | endif
-  autocmd InsertLeave * if &l:foldmethod ==# 'manual'
-  \                   |   setlocal foldmethod=syntax
-  \                   | endif
-augroup END
+autocmd InsertEnter * if !exists('w:last_fdm')
+            \| let w:last_fdm=&foldmethod
+            \| setlocal foldmethod=manual
+            \| endif
+autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
+            \| let &l:foldmethod=w:last_fdm
+            \| unlet w:last_fdm
+            \| endif
 
 " fish shell setting
 if $SHELL =~ '/fish$'
