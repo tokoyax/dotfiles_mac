@@ -5,160 +5,148 @@ set modelines=3
 " vim: foldlevel=0
 
 " Plugins {{{
-if has('vim_starting')
-  set nocompatible
-    " neobundle をインストールしていない場合は自動インストール
-    if !isdirectory(expand("~/.vim/bundle/neobundle.vim/"))
-      echo "install neobundle..."
-      " vim からコマンド呼び出しているだけ neobundle.vim のクローン
-      :call system("git clone git://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim")
-    endif
-  " runtimepath の追加は必須
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-" neobundle#begin - neobundle#end の間に導入するプラグインを記載します。
-call neobundle#begin(expand('~/.vim/bundle'))
-let g:neobundle_default_git_protocol='https'
-
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Util {{{
-NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-  \     'windows' : 'make -f make_mingw32.mak',
-  \     'cygwin' : 'make -f make_cygwin.mak',
-  \     'mac' : 'make -f make_mac.mak',
-  \     'unix' : 'make -f make_unix.mak',
-  \    },
-  \ }
-" unite {{{
-" }}}
-" markdown の プレビュー
-NeoBundle 'kannokanno/previm'
-" URI 開いたり
-NeoBundle 'tyru/open-browser.vim'
-" API 叩く
-NeoBundle 'mattn/webapi-vim'
-" はてなブログ投稿
-NeoBundle 'moznion/hateblo.vim'
-" Document 見る
-NeoBundleLazy 'thinca/vim-ref', {'functions': 'ref#K'}
-" git
-NeoBundle 'tpope/vim-fugitive'
-" quickfix をステータスバーに表示
-NeoBundle "dannyob/quickfixstatus"
-" ag search
-NeoBundle 'rking/ag.vim'
-" benchmark
-NeoBundleLazy 'mattn/benchvimrc-vim'
-" }}}
-" Filer {{{
-NeoBundle 'justinmk/vim-dirvish'
-NeoBundle 'mattn/ctrlp.vim'
-" }}}
-" Color {{{
-NeoBundle 'altercation/vim-colors-solarized'
-"NeoBundle 'nanotech/jellybeans.vim'
-" }}}
-" Completion {{{
-"}}}
-" Tags {{{
-NeoBundle 'soramugi/auto-ctags.vim'
-NeoBundle 'vim-scripts/gtags.vim'
-" }}}
-" Input {{{
-" 括弧自動閉じ
-NeoBundle "kana/vim-smartinput"
-NeoBundle "cohama/vim-smartinput-endwise"
-" 文字を囲んだり
-NeoBundle 'tpope/vim-surround'
-" HTMLタグを素早く書く
-NeoBundle 'mattn/emmet-vim', {
-  \ 'autoload' : {
-  \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee', 'eelixir'],
-  \   'commands' : ['<Plug>ZenCodingExpandNormal']
-  \ }}
-" quickfixを更に絞りこめる
-NeoBundle 'fuenor/qfixgrep'
-" quickfixを置換対象にする
-NeoBundle 'thinca/vim-qfreplace'
-" }}}
-" Move {{{
-" 対応する括弧に移動
-NeoBundle 'vim-scripts/matchit.zip'
-" f{char}の移動を便利に
-NeoBundle 'rhysd/clever-f.vim'
-" }}}
-" Format {{{
-NeoBundle 'junegunn/vim-easy-align'
-" }}}
-" Appearance {{{
-" インデントわかりやすくするやつ
-NeoBundle 'Yggdroot/indentLine'
-" ハイライト
-NeoBundle "cohama/vim-hier"
-" ステータスライン変える
-NeoBundle 'itchyny/lightline.vim'
-" 単語単位のdiff
-NeoBundle 'rickhowe/diffchar.vim'
-" 対応括弧強調
-NeoBundle 'itchyny/vim-parenmatch'
-" cursor下のワードに下線ひく
-NeoBundle 'itchyny/vim-cursorword'
-" }}}
-" Execution {{{
-" プログラムをVimから実行して結果見る
-NeoBundle 'thinca/vim-quickrun', {'commands': 'QuickRun'}
-" vim-quickrun の 汎用的な quickrun-hook 集
-NeoBundle "osyo-manga/shabadou.vim"
-" ステップ実行
-NeoBundle 'joonty/vdebug'
-" }}}
-" Syntax {{{
-" 構文チェック
-NeoBundle 'osyo-manga/vim-watchdogs'
-" }}}
-" tmux {{{
-" tmux用
-NeoBundle 'tpope/vim-obsession'
-" }}}
-"--------------------------------------------------------------
-" 言語別
-"--------------------------------------------------------------
-" php {{{
-" コーディング規約チェック
-NeoBundle 'stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'}
-" }}}
-" markdown {{{
-" markdown ハイライト
-NeoBundle 'rcmdnk/vim-markdown'
-" }}}
-" slim {{{
-NeoBundle "slim-template/vim-slim"
-" }}}
-" javascript {{{
-NeoBundle 'pangloss/vim-javascript'
-" }}}
-" coffeescript {{{
-NeoBundle 'kchmck/vim-coffee-script'
-" }}}
-" elixir {{{
-NeoBundle 'elixir-lang/vim-elixir'
-NeoBundle 'slashmili/alchemist.vim'
-"}}}
-" ruby {{{
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'vim-ruby/vim-ruby'
-" }}}
-" slim {{{
-NeoBundle 'slim-template/vim-slim'
-" }}}
-
-" vimrc に記述されたプラグインでインストールされていないものがないかチェックする
-NeoBundleCheck
-call neobundle#end()
-
 filetype plugin indent on
+syntax enable
+if &compatible
+  set nocompatible
+endif
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+if dein#load_state(expand('~/.vim/dein'))
+  call dein#begin(expand('~/.vim/dein'))
+
+  call dein#add('Shougo/dein.vim')
+  " Util {{{
+  call dein#add('Shougo/vimproc', {
+    \ 'build' : {
+    \     'windows' : 'make -f make_mingw32.mak',
+    \     'cygwin' : 'make -f make_cygwin.mak',
+    \     'mac' : 'make -f make_mac.mak',
+    \     'unix' : 'make -f make_unix.mak',
+    \    },
+    \ })
+  " markdown の プレビュー
+  call dein#add('kannokanno/previm')
+  " URI 開いたり
+  call dein#add('tyru/open-browser.vim')
+  " API 叩く
+  call dein#add('mattn/webapi-vim')
+  " はてなブログ投稿
+  call dein#add('moznion/hateblo.vim')
+  " Document 見る
+  call dein#add('thinca/vim-ref', {'functions': 'ref#K'})
+  " git
+  call dein#add('tpope/vim-fugitive')
+  " quickfix をステータスバーに表示
+  call dein#add("dannyob/quickfixstatus")
+  " ag search
+  call dein#add('rking/ag.vim')
+  " benchmark
+  call dein#add('mattn/benchvimrc-vim')
+  " }}}
+  " Filer {{{
+  call dein#add('justinmk/vim-dirvish')
+  call dein#add('mattn/ctrlp.vim')
+  " }}}
+  " Color {{{
+  call dein#add('altercation/vim-colors-solarized')
+  " Completion {{{
+  "}}}
+  " Tags {{{
+  call dein#add('soramugi/auto-ctags.vim')
+  call dein#add('vim-scripts/gtags.vim')
+  " }}}
+  " Input {{{
+  " 括弧自動閉じ
+  call dein#add("kana/vim-smartinput")
+  call dein#add("cohama/vim-smartinput-endwise")
+  " 文字を囲んだり
+  call dein#add('tpope/vim-surround')
+  " HTMLタグを素早く書く
+  call dein#add('mattn/emmet-vim', {
+    \ 'autoload' : {
+    \   'filetypes' : ['html', 'html5', 'php', 'phtml', 'eruby', 'jsp', 'xml', 'css', 'scss', 'coffee', 'eelixir'],
+    \   'commands' : ['<Plug>ZenCodingExpandNormal']
+    \ }})
+  " quickfixを更に絞りこめる
+  call dein#add('fuenor/qfixgrep')
+  " quickfixを置換対象にする
+  call dein#add('thinca/vim-qfreplace')
+  " }}}
+  " Move {{{
+  " 対応する括弧に移動
+  call dein#add('vim-scripts/matchit.zip')
+  " f{char}の移動を便利に
+  call dein#add('rhysd/clever-f.vim')
+  " }}}
+  " Format {{{
+  call dein#add('junegunn/vim-easy-align')
+  " }}}
+  " Appearance {{{
+  " インデントわかりやすくするやつ
+  call dein#add('Yggdroot/indentLine')
+  " ハイライト
+  call dein#add("cohama/vim-hier")
+  " ステータスライン変える
+  call dein#add('itchyny/lightline.vim')
+  " 単語単位のdiff
+  call dein#add('rickhowe/diffchar.vim')
+  " 対応括弧強調
+  call dein#add('itchyny/vim-parenmatch')
+  " cursor下のワードに下線ひく
+  call dein#add('itchyny/vim-cursorword')
+  " }}}
+  " Execution {{{
+  " プログラムをVimから実行して結果見る
+  call dein#add('thinca/vim-quickrun', {'commands': 'QuickRun'})
+  " vim-quickrun の 汎用的な quickrun-hook 集
+  call dein#add("osyo-manga/shabadou.vim")
+  " ステップ実行
+  call dein#add('joonty/vdebug')
+  " }}}
+  " Syntax {{{
+  " 構文チェック
+  call dein#add('osyo-manga/vim-watchdogs')
+  " }}}
+  " tmux {{{
+  " tmux用
+  call dein#add('tpope/vim-obsession')
+  " }}}
+  "--------------------------------------------------------------
+  " 言語別
+  "--------------------------------------------------------------
+  " php {{{
+  " コーディング規約チェック
+  call dein#add('stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'})
+  " }}}
+  " markdown {{{
+  " markdown ハイライト
+  call dein#add('rcmdnk/vim-markdown')
+  " }}}
+  " slim {{{
+  call dein#add("slim-template/vim-slim")
+  " }}}
+  " javascript {{{
+  call dein#add('pangloss/vim-javascript')
+  " }}}
+  " coffeescript {{{
+  call dein#add('kchmck/vim-coffee-script')
+  " }}}
+  " elixir {{{
+  call dein#add('elixir-lang/vim-elixir')
+  call dein#add('slashmili/alchemist.vim')
+  "}}}
+  " ruby {{{
+  call dein#add('tpope/vim-rails')
+  call dein#add('vim-ruby/vim-ruby')
+  " }}}
+  " slim {{{
+  call dein#add('slim-template/vim-slim')
+  " }}}
+
+  call dein#end()
+  call dein#save_state()
+endif
 "}}}
 " ---------------------------------------------------------------------------
 "  ぷらぎんせってぃんぐ
@@ -258,15 +246,15 @@ au BufRead,BufNewFile *.md set filetype=markdown
 let g:previm_open_cmd = 'open -a Safari'
 "}}}
 " vim-ref {{{
-let g:ref_no_default_key_mappings = 1
-"inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
-nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
-let s:hooks = neobundle#get_hooks('vim-ref')
-function! s:hooks.on_source(bundle) abort "{{{
-  let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
-  let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
-  let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
-endfunction "}}}
+"let g:ref_no_default_key_mappings = 1
+""inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
+"nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
+"let s:hooks = neobundle#get_hooks('vim-ref')
+"function! s:hooks.on_source(bundle) abort "{{{
+"  let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
+"  let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
+"  let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
+"endfunction "}}}
 "}}}
 " lightline {{{
 let g:lightline = {
@@ -448,8 +436,3 @@ autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
             \| let &l:foldmethod=w:last_fdm
             \| unlet w:last_fdm
             \| endif
-
-" fish shell setting
-if $SHELL =~ '/fish$'
-  set shell=zsh
-endif
