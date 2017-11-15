@@ -4,6 +4,10 @@ set modelines=3
 " vim: foldcolumn=3
 " vim: foldlevel=0
 
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
 " Plugins {{{
 filetype plugin indent on
 syntax enable
@@ -50,10 +54,16 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " Color {{{
   call dein#add('altercation/vim-colors-solarized')
+  " }}}
   " Completion {{{
+  call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+    call dein#add('roxma/nvim-yarp')
+    call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
   "}}}
   " Tags {{{
-  call dein#add('soramugi/auto-ctags.vim')
+  call dein#add('jsfaint/gen_tags.vim')
   call dein#add('vim-scripts/gtags.vim')
   " }}}
   " Input {{{
@@ -134,11 +144,14 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " elixir {{{
   call dein#add('elixir-lang/vim-elixir')
-  call dein#add('slashmili/alchemist.vim')
+  call dein#add('archSeer/elixir.nvim')
+  "call dein#add('slashmili/alchemist.vim')
   "}}}
   " ruby {{{
   call dein#add('tpope/vim-rails')
   call dein#add('vim-ruby/vim-ruby')
+  " 補完
+  call dein#add('osyo-manga/vim-monster')
   " }}}
   " slim {{{
   call dein#add('slim-template/vim-slim')
@@ -147,7 +160,12 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#end()
   call dein#save_state()
 endif
-"}}}
+
+" もし、未インストールものものがあったらインストール
+if dein#check_install()
+  call dein#install()
+endif
+" }}}
 " ---------------------------------------------------------------------------
 "  ぷらぎんせってぃんぐ
 " ---------------------------------------------------------------------------
@@ -163,10 +181,10 @@ if executable('ag')
   let g:ctrlp_user_command='ag %s -l --nocolor --nogroup -g ""'
 endif
 " }}}
-" auto-ctags {{{
-let g:auto_ctags = 0
-let g:auto_ctags_directory_list = ['.git', '.svn']
-let g:auto_ctags_tags_args = '--tag-relative --recurse --sort=yes'
+" gen_tags {{{
+let g:gen_tags#ctags_auto_gen = 1
+let g:gen_tags#gtags_auto_gen = 1
+let g:gen_tags#blacklist = ['$HOME']
 " }}}
 " gtags.vim {{{
 " ,gでタグファイルを生成する
@@ -246,9 +264,18 @@ au BufRead,BufNewFile *.md set filetype=markdown
 let g:previm_open_cmd = 'open -a Safari'
 "}}}
 " vim-ref {{{
-"let g:ref_no_default_key_mappings = 1
-""inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
-"nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
+let g:ref_no_default_key_mappings = 1
+"inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
+nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
+if dein#tap('vim-ref')
+  function! s:vim_ref_on_source() abort "{{{
+    let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
+    let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
+    let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
+  endfunction "}}}
+  execute 'autocmd MyAutoCmd User' 'dein#source#' . g:dein#name
+        \ 'call s:vim_ref_on_source()'
+endif
 "let s:hooks = neobundle#get_hooks('vim-ref')
 "function! s:hooks.on_source(bundle) abort "{{{
 "  let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
@@ -296,6 +323,17 @@ let g:clever_f_chars_match_any_signs = ';'
 " vim-parenmatch {{{
 let g:loaded_matchparen = 1
 " }}}
+" vim-monster {{{
+" Set async completion.
+let g:monster#completion#rcodetools#backend = "async_rct_complete"
+let g:deoplete#sources#omni#input_patterns = {
+\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+\}
+" }}}
+" deoplete.vim {{{
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -305,9 +343,6 @@ set ambiwidth=double
 set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
-"autocmd VimEnter,Colorscheme * highlight SpecialKey cterm=NONE ctermfg=239 ctermbg=NONE
-"autocmd VimEnter,Colorscheme * highlight NonText cterm=NONE ctermfg=239 ctermbg=NONE
-"autocmd VimEnter,Colorscheme * highlight SpellBad cterm=underline ctermfg=196 ctermbg=NONE
 
 "colorscheme jellybeans
 colorscheme solarized
@@ -353,10 +388,10 @@ set nocursorline
 set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
 " 1行が長い場合にくそ重たくなるので
-set synmaxcol=300
+" set synmaxcol=300
 " くそ重たくなる対策
-set lazyredraw
-set ttyfast
+"set lazyredraw
+"set ttyfast
 
 " ---------------------------------------------------------------------------
 " keymap
