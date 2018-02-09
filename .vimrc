@@ -122,6 +122,9 @@ if dein#load_state(expand('~/.vim/dein'))
   " tmux用
   call dein#add('tpope/vim-obsession')
   " }}}
+  " IME 制御 {{{
+  call dein#add('fuenor/im_control.vim')
+  " }}}
   "--------------------------------------------------------------
   " 言語別
   "--------------------------------------------------------------
@@ -471,3 +474,30 @@ autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
             \| let &l:foldmethod=w:last_fdm
             \| unlet w:last_fdm
             \| endif
+
+" -------------------------------------------
+"  IME setting
+"
+" 「日本語入力固定モード」の動作モード
+let IM_CtrlMode = 1
+" 「日本語入力固定モード」切替キー
+inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+" IBus 1.5以降
+function! IMCtrl(cmd)
+  let cmd = a:cmd
+  if cmd == 'On'
+    let res = system('ibus engine "mozc-jp"')
+  elseif cmd == 'Off'
+    let res = system('ibus engine "xkb:us::eng"')
+  endif
+  return ''
+endfunction
+" <ESC>押下後のIM切替開始までの反応が遅い場合はttimeoutlenを短く設定してみてください。
+" IMCtrl()のsystem()コマンド実行時に&を付けて非同期で実行するという方法でも体感速度が上がる場合があります。
+set timeout timeoutlen=3000 ttimeoutlen=100 
+" 「日本語入力固定モード」がオンの場合、ステータス行にメッセージ表示
+set statusline+=%{IMStatus('[日本語固定]')}
+" im_control.vimがない環境でもエラーを出さないためのダミー関数
+function! IMStatus(...)
+  return ''
+endfunction
