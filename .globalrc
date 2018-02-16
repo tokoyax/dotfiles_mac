@@ -35,7 +35,7 @@
 # Please refer to gtags.conf(5) for details.
 #
 default:\
-	:tc=native:tc=pygments:
+	:tc=pygments:tc=native:
 native:\
 	:tc=gtags:tc=htags:
 user:\
@@ -56,7 +56,7 @@ pygments:\
 #	Else if pygments parser exists it is used.
 #
 native-pygments:\
-	:tc=builtin-parser:tc=pygments-parser:htags:
+	:tc=pygments-parser:htags:tc=builtin-parser:
 #---------------------------------------------------------------------
 # Configuration for gtags(1)
 # See gtags(1).
