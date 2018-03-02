@@ -47,10 +47,18 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('rking/ag.vim')
   " benchmark
   call dein#add('mattn/benchvimrc-vim')
+  " terminal
+  call dein#add('kassio/neoterm')
+  call dein#add('mklabs/split-term.vim')
+  " comment out
+  call dein#add('tomtom/tcomment_vim')
   " }}}
   " Filer {{{
   call dein#add('justinmk/vim-dirvish')
   call dein#add('mattn/ctrlp.vim')
+  " }}}
+  " Window {{{
+  call dein#add('simeji/winresizer')
   " }}}
   " Color {{{
   call dein#add('altercation/vim-colors-solarized')
@@ -337,6 +345,16 @@ let g:deoplete#sources#omni#input_patterns = {
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 " }}}
+" winresizer {{{
+" If you want to start window resize mode by `Ctrl+T`
+let g:winresizer_start_key = '<C-T>'
+" If you cancel and quit window resize mode by `z` (keycode 122)
+let g:winresizer_keycode_cancel = 122
+" }}}
+" split-term {{{
+set splitright
+set splitbelow
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -347,7 +365,6 @@ set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 
-"colorscheme jellybeans
 colorscheme solarized
 set background=dark    "または light
 set nonumber
@@ -403,11 +420,6 @@ set ruler
 set nocursorline
 set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
-" 1行が長い場合にくそ重たくなるので
-" set synmaxcol=300
-" くそ重たくなる対策
-"set lazyredraw
-"set ttyfast
 
 " ---------------------------------------------------------------------------
 " keymap
@@ -450,6 +462,8 @@ noremap   <Up>     <nop>
 noremap   <Down>   <nop>
 noremap   <Left>   <nop>
 noremap   <Right>  <nop>
+" terminal 設定
+tnoremap <silent> <ESC> <C-\><C-n>
 
 " tmp directory
 set directory=~/.vim/tmp
