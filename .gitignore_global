@@ -14,3 +14,4 @@ GTAGS
 bundle_bin
 tags
 Session.vim
+node_modules
