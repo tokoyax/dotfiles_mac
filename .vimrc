@@ -23,10 +23,10 @@ if dein#load_state(expand('~/.vim/dein'))
   " Util {{{
   call dein#add('Shougo/vimproc', {
     \ 'build' : {
-    \     'windows' : 'make -f make_mingw32.mak',
-    \     'cygwin' : 'make -f make_cygwin.mak',
-    \     'mac' : 'make -f make_mac.mak',
-    \     'unix' : 'make -f make_unix.mak',
+    \     'windows': 'make -f make_mingw32.mak',
+    \     'cygwin':  'make -f make_cygwin.mak',
+    \     'mac':     'make -f make_mac.mak',
+    \     'unix':    'make -f make_unix.mak',
     \    },
     \ })
   " markdown の プレビュー
@@ -131,7 +131,9 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('tpope/vim-obsession')
   " }}}
   " IME 制御 {{{
-  call dein#add('fuenor/im_control.vim')
+  if has("unix")
+    call dein#add('fuenor/im_control.vim')
+  endif
   " }}}
   "--------------------------------------------------------------
   " 言語別
@@ -167,6 +169,14 @@ if dein#load_state(expand('~/.vim/dein'))
   " slim {{{
   call dein#add('slim-template/vim-slim')
   " }}}
+  " haskell {{{
+  call dein#add('dag/vim2hs')
+  call dein#add('neovimhaskell/haskell-vim')
+  " }}}
+  " elm {{{
+  call dein#add('ElmCast/elm-vim')
+  " }}}
+  call dein#add('w0rp/ale')
 
   call dein#end()
   call dein#save_state()
@@ -189,7 +199,7 @@ let g:ctrlp_show_hidden = 1
 " ag があればキャッシュ使わない ちょっぱや
 if executable('ag')
   let g:ctrlp_use_caching=0
-  let g:ctrlp_user_command='ag %s -l --nocolor --nogroup -g ""'
+  let g:ctrlp_user_command='ag %s -l --hidden --nocolor --nogroup -g ""'
 endif
 " }}}
 " gen_tags {{{
@@ -378,19 +388,6 @@ set smartcase
 " yank したら * レジスタにもコピー
 set clipboard+=unnamed
 
-" clipboard settings
-" https://github.com/neovim/neovim/issues/583
-function! ClipboardYank()
-  call system('xclip -i -selection clipboard', @@)
-endfunction
-function! ClipboardPaste()
-  let @@ = system('xclip -o -selection clipboard')
-endfunction
-
-vnoremap <silent> y y:call ClipboardYank()<cr>
-vnoremap <silent> d d:call ClipboardYank()<cr>
-nnoremap <silent> p :call ClipboardPaste()<cr>p
-
 " highway grep
 set grepprg=hw\ --no-group\ --no-color
 
@@ -399,12 +396,14 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 augroup vimrc
-  autocmd! FileType perl  setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd! FileType php   setlocal shiftwidth=4 tabstop=4 softtabstop=4
-  autocmd! FileType ruby  setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd! FileType eruby setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd! FileType html  setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd! FileType css   setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType perl    setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType php     setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType ruby    setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType eruby   setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType html    setlocal shiftwidth=2 tabstop=2 softtabstop=2
+  autocmd! FileType css     setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType elm     setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType haskell setlocal shiftwidth=4 tabstop=4 softtabstop=4
 augroup END
 set autoindent
 set smartindent
@@ -420,6 +419,7 @@ set ruler
 set nocursorline
 set list
 set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
+set diffopt=filler,vertical
 
 " ---------------------------------------------------------------------------
 " keymap
@@ -502,29 +502,44 @@ autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
             \| unlet w:last_fdm
             \| endif
 
-" -------------------------------------------
-"  IME setting
-"
-" 「日本語入力固定モード」の動作モード
-let IM_CtrlMode = 1
-" 「日本語入力固定モード」切替キー
-inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
-" IBus 1.5以降
-function! IMCtrl(cmd)
-  let cmd = a:cmd
-  if cmd == 'On'
-    let res = system('ibus engine "mozc-jp"')
-  elseif cmd == 'Off'
-    let res = system('ibus engine "xkb:us::eng"')
-  endif
-  return ''
-endfunction
-" <ESC>押下後のIM切替開始までの反応が遅い場合はttimeoutlenを短く設定してみてください。
-" IMCtrl()のsystem()コマンド実行時に&を付けて非同期で実行するという方法でも体感速度が上がる場合があります。
-set timeout timeoutlen=3000 ttimeoutlen=100 
-" 「日本語入力固定モード」がオンの場合、ステータス行にメッセージ表示
-set statusline+=%{IMStatus('[日本語固定]')}
-" im_control.vimがない環境でもエラーを出さないためのダミー関数
-function! IMStatus(...)
-  return ''
-endfunction
+if has ("unix")
+  " clipboard settings
+  " https://github.com/neovim/neovim/issues/583
+  function! ClipboardYank()
+    call system('xclip -i -selection clipboard', @@)
+  endfunction
+  function! ClipboardPaste()
+    let @@ = system('xclip -o -selection clipboard')
+  endfunction
+
+  vnoremap <silent> y y:call ClipboardYank()<cr>
+  vnoremap <silent> d d:call ClipboardYank()<cr>
+  nnoremap <silent> p :call ClipboardPaste()<cr>p
+
+  " -------------------------------------------
+  "  IME setting
+  "
+  " 「日本語入力固定モード」の動作モード
+  let IM_CtrlMode = 1
+  " 「日本語入力固定モード」切替キー
+  inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+  " IBus 1.5以降
+  function! IMCtrl(cmd)
+    let cmd = a:cmd
+    if cmd == 'On'
+      let res = system('ibus engine "mozc-jp"')
+    elseif cmd == 'Off'
+      let res = system('ibus engine "xkb:us::eng"')
+    endif
+    return ''
+  endfunction
+  " <ESC>押下後のIM切替開始までの反応が遅い場合はttimeoutlenを短く設定してみてください。
+  " IMCtrl()のsystem()コマンド実行時に&を付けて非同期で実行するという方法でも体感速度が上がる場合があります。
+  set timeout timeoutlen=3000 ttimeoutlen=100 
+  " 「日本語入力固定モード」がオンの場合、ステータス行にメッセージ表示
+  set statusline+=%{IMStatus('[日本語固定]')}
+  " im_control.vimがない環境でもエラーを出さないためのダミー関数
+  function! IMStatus(...)
+    return ''
+  endfunction
+endif
