@@ -157,8 +157,8 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " elixir {{{
   call dein#add('elixir-lang/vim-elixir')
-  call dein#add('archSeer/elixir.nvim')
-  "call dein#add('slashmili/alchemist.vim')
+  "call dein#add('archSeer/elixir.nvim')
+  call dein#add('slashmili/alchemist.vim')
   "}}}
   " ruby {{{
   call dein#add('tpope/vim-rails')
