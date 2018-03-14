@@ -71,7 +71,7 @@ alias ls='exa'
 ##############################################
 # neovim
 if test (uname) = "Darwin"
-  if test -f /usr/bin/nvim
+  if test -f /usr/local/bin/nvim
     set -x EDITOR /usr/local/bin/nvim
     alias vi='/usr/local/bin/nvim'
     alias vim='/usr/local/bin/nvim'
