@@ -178,7 +178,6 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('ElmCast/elm-vim')
   " }}}
   call dein#add('w0rp/ale')
->>>>>>> 4faceb8fa8bada1331cc0a133e919aa8384f6e2a
 
   call dein#end()
   call dein#save_state()
