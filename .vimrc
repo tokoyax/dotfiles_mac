@@ -167,6 +167,9 @@ if dein#load_state(expand('~/.vim/dein'))
   " slim {{{
   call dein#add('slim-template/vim-slim')
   " }}}
+  " haskell {{{
+  call dein#add('nbouscal/vim-stylish-haskell')
+  " }}}
 
   call dein#end()
   call dein#save_state()
