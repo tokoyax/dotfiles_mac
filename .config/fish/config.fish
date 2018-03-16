@@ -7,7 +7,9 @@ set -x PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 set -x PATH $PATH `yarn global bin`
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.local/bin
-#eval (rbenv init - | source)
+if test (uname) = "Darwin"
+  eval (rbenv init - | source)
+end
 
 ##############################################
 # key binding
@@ -59,27 +61,28 @@ end
 ##############################################
 # alias
 alias fig='docker-compose'
-alias docker='docker'
-#alias rm='rmtrash'
+if test (uname) = "Darwin"
+  alias rm='rmtrash'
+end
 alias tmux='tmux -u'
 alias l='exa -hla --git'
 alias ls='exa'
 
 ##############################################
 # neovim
-if test -f /usr/bin/nvim
-  set -x EDITOR /usr/bin/nvim
-  alias vi='/usr/bin/nvim'
-  alias vim='/usr/bin/nvim'
+if test (uname) = "Darwin"
+  if test -f /usr/local/bin/nvim
+    set -x EDITOR /usr/local/bin/nvim
+    alias vi='/usr/local/bin/nvim'
+    alias vim='/usr/local/bin/nvim'
+  end
+else
+  if test -f /usr/bin/nvim
+    set -x EDITOR /usr/bin/nvim
+    alias vi='/usr/bin/nvim'
+    alias vim='/usr/bin/nvim'
+  end
 end
-
-##############################################
-# vim
-#if test -f /Applications/MacVim.app/Contents/MacOS/Vim
-#  set -x EDITOR /Applications/MacVim.app/Contents/MacOS/Vim
-#  alias vi='/Applications/MacVim.app/Contents/MacOS/Vim'
-#  alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-#end
 
 ##############################################
 # direnv
