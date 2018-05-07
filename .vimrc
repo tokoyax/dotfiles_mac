@@ -37,6 +37,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('mattn/webapi-vim')
   " はてなブログ投稿
   call dein#add('moznion/hateblo.vim')
+  " esa.io 投稿
+  call dein#add('upamune/esa.vim')
   " Document 見る
   call dein#add('thinca/vim-ref', {'functions': 'ref#K'})
   " git
@@ -365,6 +367,23 @@ let g:winresizer_keycode_cancel = 122
 " split-term {{{
 set splitright
 set splitbelow
+" }}}
+" vim2hs {{{
+let g:haskell_conceal = 0
+" }}}
+" esa.vim {{{
+let g:esa_team = 'tokoyax'
+" }}}
+" ale {{{
+let g:ale_sign_column_always = 1
+let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
 " }}}
 
 " ---------------------------------------------------------------------------
