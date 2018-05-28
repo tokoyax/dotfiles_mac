@@ -71,6 +71,9 @@ if dein#load_state(expand('~/.vim/dein'))
     call dein#add('roxma/nvim-yarp')
     call dein#add('roxma/vim-hug-neovim-rpc')
   endif
+  call dein#add('Shougo/neco-syntax')
+  call dein#add('pbogut/deoplete-elm')
+  call dein#add('eagletmt/neco-ghc')
   "}}}
   " Tags {{{
   call dein#add('jsfaint/gen_tags.vim')
@@ -173,7 +176,6 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " haskell {{{
   call dein#add('nbouscal/vim-stylish-haskell')
-  call dein#add('dag/vim2hs')
   call dein#add('neovimhaskell/haskell-vim')
   " }}}
   " elm {{{
@@ -367,9 +369,6 @@ let g:winresizer_keycode_cancel = 122
 " split-term {{{
 set splitright
 set splitbelow
-" }}}
-" vim2hs {{{
-let g:haskell_conceal = 0
 " }}}
 " esa.vim {{{
 let g:esa_team = 'tokoyax'
