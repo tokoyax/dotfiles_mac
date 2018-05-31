@@ -3,10 +3,10 @@
 set -x LANG ja_JP.UTF-8
 set -x TERM xterm-256color
 set -x GOPATH $HOME/dev/go_work
-set -x PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 set -x PATH $PATH `yarn global bin`
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.local/bin
+set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 if test (uname) = "Darwin"
   eval (rbenv init - | source)
 end
