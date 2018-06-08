@@ -58,6 +58,7 @@ if dein#load_state(expand('~/.vim/dein'))
   " Filer {{{
   call dein#add('justinmk/vim-dirvish')
   call dein#add('mattn/ctrlp.vim')
+  call dein#add('Shougo/denite.nvim')
   " }}}
   " Window {{{
   call dein#add('simeji/winresizer')
@@ -76,7 +77,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('eagletmt/neco-ghc')
   "}}}
   " Tags {{{
-  " call dein#add('jsfaint/gen_tags.vim')
+  call dein#add('jsfaint/gen_tags.vim')
+  call dein#add('ozelentok/denite-gtags')
   call dein#add('vim-scripts/gtags.vim')
   " }}}
   " Input {{{
@@ -208,9 +210,18 @@ if executable('ag')
 endif
 " }}}
 " gen_tags {{{
-let g:gen_tags#ctags_auto_gen = 1
+let g:gen_tags#ctags_auto_gen = 0
 let g:gen_tags#gtags_auto_gen = 1
 let g:gen_tags#blacklist = ['$HOME']
+" }}}
+" denite-gtags {{{
+nnoremap <leader>a :DeniteCursorWord -buffer-name=gtags_context gtags_context<cr>
+nnoremap <leader>d :DeniteCursorWord -buffer-name=gtags_def gtags_def<cr>
+nnoremap <leader>r :DeniteCursorWord -buffer-name=gtags_ref gtags_ref<cr>
+" nnoremap <leader>g :DeniteCursorWord -buffer-name=gtags_grep gtags_grep<cr>
+" nnoremap <leader>t :Denite -buffer-name=gtags_completion gtags_completion<cr>
+" nnoremap <leader>f :Denite -buffer-name=gtags_file gtags_file<cr>
+" nnoremap <leader>p :Denite -buffer-name=gtags_path gtags_path<cr>
 " }}}
 " gtags.vim {{{
 " ,gでタグファイルを生成する
