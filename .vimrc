@@ -76,7 +76,7 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('eagletmt/neco-ghc')
   "}}}
   " Tags {{{
-  call dein#add('jsfaint/gen_tags.vim')
+  " call dein#add('jsfaint/gen_tags.vim')
   call dein#add('vim-scripts/gtags.vim')
   " }}}
   " Input {{{
