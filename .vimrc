@@ -20,6 +20,10 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#begin(expand('~/.vim/dein'))
 
   call dein#add('Shougo/dein.vim')
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('nixprime/cpsm', {
+        \ 'build' : 'env PY3=ON ./install.sh'
+        \ })
   " Util {{{
   call dein#add('Shougo/vimproc', {
     \ 'build' : {
@@ -57,7 +61,6 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " Filer {{{
   call dein#add('justinmk/vim-dirvish')
-  call dein#add('mattn/ctrlp.vim')
   call dein#add('Shougo/denite.nvim')
   " }}}
   " Window {{{
@@ -158,6 +161,7 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " javascript {{{
   call dein#add('pangloss/vim-javascript')
+  call dein#add('mxw/vim-jsx')
   " }}}
   " coffeescript {{{
   call dein#add('kchmck/vim-coffee-script')
@@ -197,43 +201,64 @@ endif
 " ---------------------------------------------------------------------------
 "  ぷらぎんせってぃんぐ
 " ---------------------------------------------------------------------------
-" ctrlp.vim {{{
-set wildignore+=*/vendor/*,*/tmp/*,*/.git/*,*.so,*.swp,*.zip,*.jpg,*.png
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|build)$'
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_show_hidden = 1
-" ag があればキャッシュ使わない ちょっぱや
-if executable('ag')
-  let g:ctrlp_use_caching=0
-  let g:ctrlp_user_command='ag %s -l --hidden --nocolor --nogroup -g ""'
+" denite.vim {{{
+call denite#custom#option('default', {
+      \ 'prompt': '>',
+      \})
+call denite#custom#option('_', {
+      \ 'highlight_matched_char': 'Underlined',
+      \})
+" denite/insert モードのときは，C- で移動できるようにする
+call denite#custom#map('insert', "<C-j>", '<denite:move_to_next_line>')
+call denite#custom#map('insert', "<C-k>", '<denite:move_to_previous_line>')
+" tabopen や vsplit のキーバインドを割り当て
+call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
+call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
+call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
+" ripgrep があればそれで grep
+if executable('rg')
+  call denite#custom#var('file_rec', 'command',
+        \ ['rg', '--files', '--glob', '!.git'])
+  call denite#custom#var('grep', 'command',
+        \ ['rg'])
 endif
+" ファイル検索
+nnoremap <silent> <C-p> :<C-u>Denite file_rec<CR>
+" バッファリスト
+nnoremap <silent> ,b :<C-u>Denite buffer<CR>
+" MRU
+nnoremap <silent> ,m :<C-u>Denite file_mru<CR>
+" カーソル以下の単語をgrep
+nnoremap <silent> ,cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+" 普通にgrep
+nnoremap <silent> ,g :<C-u>Denite -buffer-name=search -mode=normal grep<CR>
+" resume previous buffer
+nnoremap <silent> ,r :<C-u>Denite -resume -mode=normal<CR>
+" customize ignore globs
+call denite#custom#source(
+      \ 'file_rec',
+      \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
+call denite#custom#source(
+      \ 'file_mru',
+      \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
+call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+      \ [
+      \ '.git/', 'build/', '__pycache__/',
+      \ 'images/', '*.o', '*.make',
+      \ '*.min.*',
+      \ 'img/', 'fonts/'])
 " }}}
 " gen_tags {{{
-let g:gen_tags#ctags_auto_gen = 0
+let g:loaded_gentags#ctags = 1
 let g:gen_tags#gtags_auto_gen = 1
 let g:gen_tags#blacklist = ['$HOME']
 " }}}
 " denite-gtags {{{
-nnoremap <leader>a :DeniteCursorWord -buffer-name=gtags_context gtags_context<cr>
-nnoremap <leader>d :DeniteCursorWord -buffer-name=gtags_def gtags_def<cr>
-nnoremap <leader>r :DeniteCursorWord -buffer-name=gtags_ref gtags_ref<cr>
-" nnoremap <leader>g :DeniteCursorWord -buffer-name=gtags_grep gtags_grep<cr>
-" nnoremap <leader>t :Denite -buffer-name=gtags_completion gtags_completion<cr>
-" nnoremap <leader>f :Denite -buffer-name=gtags_file gtags_file<cr>
-" nnoremap <leader>p :Denite -buffer-name=gtags_path gtags_path<cr>
-" }}}
-" gtags.vim {{{
-" ,gでタグファイルを生成する
-nnoremap ,g :!gtags -v<CR>
-" カレントファイル内の関数一覧
-nnoremap <C-l> :Gtags -f %<CR>
-" カーソル上の関数の定義場所へジャンプ
-nnoremap <C-j> :GtagsCursor<CR>
-vnoremap <C-j> :GtagsCursor<CR>
-" Usagesを表示
-nnoremap <C-h> :Gtags -r <C-r><C-w><CR>
-vnoremap <C-h> :Gtags -r <C-r><C-w><CR>
+noremap [denite-gtags]  <Nop>
+nmap ,t [denite-gtags]
+nnoremap [denite-gtags]d :<C-u>DeniteCursorWord -buffer-name=gtags_def -mode=normal gtags_def<CR>
+nnoremap [denite-gtags]r :<C-u>DeniteCursorWord -buffer-name=gtags_ref -mode=normal gtags_ref<CR>
+nnoremap [denite-gtags]c :<C-u>DeniteCursorWord -buffer-name=gtags_context -mode=normal gtags_context<CR>
 " }}}
 " vim-smartinput-endwise {{{
 call smartinput_endwise#define_default_rules()
@@ -243,10 +268,14 @@ call smartinput_endwise#define_default_rules()
 let g:user_emmet_leader_key = '<C-E>'
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
-  \ 'lang' : 'ja',
-  \ 'html' : {
-  \   'indentation' : '  '
-  \ }}
+      \ 'lang' : 'ja',
+      \ 'html' : {
+      \   'indentation' : '  '
+      \   },
+      \ 'javascript.jsx' : {
+      \   'extends' : 'jsx',
+      \ },
+      \}
 " }}}
 " vim-easy-align {{{
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -394,6 +423,9 @@ let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
+let g:ale_linters = {
+      \ 'javascript': ['eslint'],
+      \ }
 " }}}
 
 " ---------------------------------------------------------------------------
