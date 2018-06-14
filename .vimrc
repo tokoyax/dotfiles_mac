@@ -202,10 +202,8 @@ endif
 "  ぷらぎんせってぃんぐ
 " ---------------------------------------------------------------------------
 " denite.vim {{{
-call denite#custom#option('default', {
-      \ 'prompt': '>',
-      \})
 call denite#custom#option('_', {
+      \ 'prompt': '>',
       \ 'highlight_matched_char': 'Underlined',
       \})
 " denite/insert モードのときは，C- で移動できるようにする
@@ -219,8 +217,15 @@ call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
 if executable('rg')
   call denite#custom#var('file_rec', 'command',
         \ ['rg', '--files', '--glob', '!.git'])
-  call denite#custom#var('grep', 'command',
-        \ ['rg'])
+  call denite#custom#var('grep', 'command', ['rg'])
+  call denite#custom#var('grep', 'default_opts',
+      \ ['--vimgrep', '--no-heading','-S'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+  call denite#custom#var('grep', 'separator', ['--'])
+  call denite#custom#var('grep', 'final_opts', [])
+  call denite#custom#source('grep', 'args', ['', '', '!'])
+  call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
 endif
 " ファイル検索
 nnoremap <silent> <C-p> :<C-u>Denite file_rec<CR>
@@ -233,7 +238,7 @@ nnoremap <silent> ,cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C
 " 普通にgrep
 nnoremap <silent> ,g :<C-u>Denite -buffer-name=search -mode=normal grep<CR>
 " resume previous buffer
-nnoremap <silent> ,r :<C-u>Denite -resume -mode=normal<CR>
+nnoremap <silent> ,r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
 " customize ignore globs
 call denite#custom#source(
       \ 'file_rec',
