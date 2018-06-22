@@ -16,4 +16,5 @@ bundle_bin
 tags
 Session.vim
 node_modules
+elm-stuff
 dump.rdb
