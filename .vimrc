@@ -62,7 +62,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('tomtom/tcomment_vim')
   " }}}
   " Filer {{{
-  call dein#add('justinmk/vim-dirvish')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('Xuyuanp/nerdtree-git-plugin')
   call dein#add('Shougo/denite.nvim')
   " }}}
   " Window {{{
@@ -72,6 +73,10 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('altercation/vim-colors-solarized')
   " }}}
   " Completion {{{
+  call dein#add('autozimu/LanguageClient-neovim', {
+    \ 'rev': 'next',
+    \ 'build': 'bash install.sh',
+    \ })
   call dein#add('Shougo/deoplete.nvim')
   if !has('nvim')
     call dein#add('roxma/nvim-yarp')
@@ -255,6 +260,15 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ 'images/', '*.o', '*.make',
       \ '*.min.*',
       \ 'img/', 'fonts/'])
+" }}}
+" nerdtree {{{
+noremap <C-n> :NERDTreeToggle<CR>
+" }}}
+" LanguageClient-neovim {{{
+let g:LanguageClient_autoStop = 0
+let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['tcp://localhost:7658'],
+    \ }
 " }}}
 " gen_tags {{{
 let g:loaded_gentags#ctags = 1
