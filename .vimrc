@@ -77,7 +77,9 @@ if dein#load_state(expand('~/.vim/dein'))
     \ 'rev': 'next',
     \ 'build': 'bash install.sh',
     \ })
-  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('Shougo/deoplete.nvim', {
+    \ 'do': ':UpdateRemotePlugins'
+    \ })
   if !has('nvim')
     call dein#add('roxma/nvim-yarp')
     call dein#add('roxma/vim-hug-neovim-rpc')
@@ -182,8 +184,6 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('tpope/vim-rails')
   call dein#add('vim-ruby/vim-ruby')
   call dein#add('noprompt/vim-yardoc')
-  " 補完
-  call dein#add('osyo-manga/vim-monster')
   " }}}
   " slim {{{
   call dein#add('slim-template/vim-slim')
@@ -267,8 +267,8 @@ noremap <C-n> :NERDTreeToggle<CR>
 " LanguageClient-neovim {{{
 let g:LanguageClient_autoStop = 0
 let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['tcp://localhost:7658'],
-    \ }
+    \ 'ruby': ['solargraph', 'stdio'],
+    \}
 " }}}
 " gen_tags {{{
 let g:loaded_gentags#ctags = 1
@@ -432,16 +432,12 @@ let g:clever_f_chars_match_any_signs = ';'
 " vim-parenmatch {{{
 let g:loaded_matchparen = 1
 " }}}
-" vim-monster {{{
-" Set async completion.
-let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:deoplete#sources#omni#input_patterns = {
-\   "ruby" : '[^. *\t]\.\w*\|\h\w*::',
-\}
-" }}}
 " deoplete.vim {{{
-" Use deoplete.
+" deoplete.
 let g:deoplete#enable_at_startup = 1
+call deoplete#custom#var('omni', 'input_patterns', {
+    \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
+    \})
 " }}}
 " winresizer {{{
 " If you want to start window resize mode by `Ctrl+T`
