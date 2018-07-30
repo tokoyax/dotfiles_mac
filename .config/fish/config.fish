@@ -65,6 +65,7 @@ alias fig='docker-compose'
 if test (uname) = "Darwin"
   alias rmt='rmtrash'
 end
+alias rm='rm -i'
 alias tmux='tmux -u'
 alias l='exa -hla --git'
 alias ls='exa'
