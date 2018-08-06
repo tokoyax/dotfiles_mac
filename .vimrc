@@ -182,6 +182,8 @@ if dein#load_state(expand('~/.vim/dein'))
   "}}}
   " ruby {{{
   call dein#add('tpope/vim-rails')
+  call dein#add('tpope/vim-dispatch')
+  call dein#add('janko-m/vim-test')
   call dein#add('vim-ruby/vim-ruby')
   call dein#add('noprompt/vim-yardoc')
   " }}}
@@ -194,6 +196,9 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " elm {{{
   call dein#add('ElmCast/elm-vim')
+  " }}}
+  " fish {{{
+  call dein#add('dag/vim-fish')
   " }}}
   call dein#add('w0rp/ale')
 
@@ -467,6 +472,15 @@ let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ }
 " }}}
+" vim-test {{{
+let test#strategy = "neovim"
+" these "Ctrl mappings" work well when Caps Lock is mapped to Ctrl
+noremap <silent> t<C-n> :TestNearest<CR>
+noremap <silent> t<C-f> :TestFile<CR>
+noremap <silent> t<C-s> :TestSuite<CR>
+noremap <silent> t<C-l> :TestLast<CR>
+noremap <silent> t<C-g> :TestVisit<CR>
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -565,7 +579,10 @@ noremap   <Down>   <nop>
 noremap   <Left>   <nop>
 noremap   <Right>  <nop>
 " terminal 設定
-tnoremap <silent> <ESC> <C-\><C-n>
+if has('nvim')
+  tnoremap <C-o> <C-\><C-n>
+  tnoremap <silent> <ESC> <C-\><C-n>
+end
 
 " tmp directory
 set directory=~/.vim/tmp
