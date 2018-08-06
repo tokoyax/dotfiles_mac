@@ -4,6 +4,7 @@ ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/dotfiles/.ctags ~/.ctags
 ln -sf ~/dotfiles/.ghci ~/.ghci
+ln -sf ~/dotfiles/.tigrc ~/.tigrc
 ln -sf ~/dotfiles/.haskeline ~/.haskeline
 ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
