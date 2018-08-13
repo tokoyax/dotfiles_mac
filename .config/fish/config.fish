@@ -7,6 +7,8 @@ set -x PATH $PATH `yarn global bin`
 set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.local/bin
 set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
+set -x PATH $PATH /usr/local/opt/tmux@2.7/bin
+
 if test (uname) = "Darwin"
   eval (rbenv init - | source)
 end
