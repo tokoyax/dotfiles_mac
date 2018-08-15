@@ -70,7 +70,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('simeji/winresizer')
   " }}}
   " Color {{{
-  call dein#add('altercation/vim-colors-solarized')
+  " call dein#add('altercation/vim-colors-solarized')
+  call dein#add('w0ng/vim-hybrid')
   " }}}
   " Completion {{{
   call dein#add('autozimu/LanguageClient-neovim', {
@@ -126,12 +127,13 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add("cohama/vim-hier")
   " ステータスライン変える
   call dein#add('itchyny/lightline.vim')
+  call dein#add('cocopon/lightline-hybrid.vim')
   " 単語単位のdiff
   call dein#add('rickhowe/diffchar.vim')
   " 対応括弧強調
   call dein#add('itchyny/vim-parenmatch')
   " cursor下のワードに下線ひく
-  call dein#add('itchyny/vim-cursorword')
+  " call dein#add('itchyny/vim-cursorword')
   " }}}
   " Execution {{{
   " プログラムをVimから実行して結果見る
@@ -399,7 +401,7 @@ endif
 "}}}
 " lightline {{{
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'hybrid',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
@@ -491,7 +493,9 @@ set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 
-colorscheme solarized
+let g:hybrid_custom_term_colors = 1
+let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+colorscheme hybrid
 set background=dark    "または light
 set nonumber
 set title
