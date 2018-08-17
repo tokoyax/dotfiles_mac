@@ -62,8 +62,7 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('tomtom/tcomment_vim')
   " }}}
   " Filer {{{
-  call dein#add('scrooloose/nerdtree')
-  call dein#add('Xuyuanp/nerdtree-git-plugin')
+  call dein#add('cocopon/vaffle.vim')
   call dein#add('Shougo/denite.nvim')
   " }}}
   " Window {{{
@@ -228,6 +227,14 @@ call denite#custom#map('insert', "<C-k>", '<denite:move_to_previous_line>')
 call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
 call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
 call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
+" ag があればそれで grep
+" if executable('ag')
+"   call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+"   call denite#custom#var('grep', 'command', ['ag'])
+"   call denite#custom#var('grep', 'recursive_opts', [])
+"   call denite#custom#var('grep', 'pattern_opt', [])
+"   call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
+" endif
 " ripgrep があればそれで grep
 if executable('rg')
   call denite#custom#var('file_rec', 'command',
@@ -243,15 +250,17 @@ if executable('rg')
   call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
 endif
 " ファイル検索
-nnoremap <silent> <C-p> :<C-u>Denite file_rec<CR>
+nnoremap <silent> <C-p> :<C-u>DeniteProjectDir file_rec<CR>
+" ファイル検索(バッファ基準)
+nnoremap <silent> ,d :<C-u>DeniteBufferDir file_rec<CR>
 " バッファリスト
 nnoremap <silent> ,b :<C-u>Denite buffer<CR>
 " MRU
-nnoremap <silent> ,m :<C-u>Denite file_mru<CR>
+nnoremap <silent> ,m :<C-u>Denite file_old<CR>
 " カーソル以下の単語をgrep
 nnoremap <silent> ,cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
 " 普通にgrep
-nnoremap <silent> ,g :<C-u>Denite -buffer-name=search -mode=normal grep<CR>
+nnoremap <silent> ,g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
 " resume previous buffer
 nnoremap <silent> ,r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
 " customize ignore globs
@@ -259,17 +268,28 @@ call denite#custom#source(
       \ 'file_rec',
       \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
 call denite#custom#source(
-      \ 'file_mru',
+      \ 'file_old',
       \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
 call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ [
       \ '.git/', 'build/', '__pycache__/',
+      \ 'node_modules/',
       \ 'images/', '*.o', '*.make',
       \ '*.min.*',
       \ 'img/', 'fonts/'])
 " }}}
-" nerdtree {{{
-noremap <C-n> :NERDTreeToggle<CR>
+" Vaffle {{{
+nnoremap <C-f> :<C-u>Vaffle %:p:h<CR>
+let g:vaffle_show_hidden_files = 1
+function! s:customize_vaffle_mappings() abort
+  " Customize key mappings here
+  nmap <buffer> v <Plug>(vaffle-open-selected-split)
+  nmap <buffer> s <Plug>(vaffle-open-selected-vsplit)
+endfunction
+augroup vimrc_vaffle
+  autocmd!
+  autocmd FileType vaffle call s:customize_vaffle_mappings()
+augroup END
 " }}}
 " LanguageClient-neovim {{{
 let g:LanguageClient_autoStop = 0
