@@ -228,41 +228,45 @@ call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
 call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
 call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
 " ag があればそれで grep
-" if executable('ag')
-"   call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-"   call denite#custom#var('grep', 'command', ['ag'])
-"   call denite#custom#var('grep', 'recursive_opts', [])
-"   call denite#custom#var('grep', 'pattern_opt', [])
-"   call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
-" endif
-" ripgrep があればそれで grep
-if executable('rg')
-  call denite#custom#var('file_rec', 'command',
-        \ ['rg', '--files', '--glob', '!.git'])
-  call denite#custom#var('grep', 'command', ['rg'])
-  call denite#custom#var('grep', 'default_opts',
-      \ ['--vimgrep', '--no-heading','-S'])
+if executable('ag')
+  " file/rec
+  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  " grep
+  call denite#custom#var('grep', 'command', ['ag'])
+  call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
   call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+  call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
-  call denite#custom#source('grep', 'args', ['', '', '!'])
-  call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
 endif
+" ripgrep があればそれで grep
+" if executable('rg')
+"   call denite#custom#var('file_rec', 'command',
+"         \ ['rg', '--files', '--glob', '!.git'])
+"   call denite#custom#var('grep', 'command', ['rg'])
+"   call denite#custom#var('grep', 'default_opts',
+"       \ ['--vimgrep', '--no-heading','-S'])
+"   call denite#custom#var('grep', 'recursive_opts', [])
+"   call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+"   call denite#custom#var('grep', 'separator', ['--'])
+"   call denite#custom#var('grep', 'final_opts', [])
+"   call denite#custom#source('grep', 'args', ['', '', '!'])
+"   call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
+" endif
 " ファイル検索
-nnoremap <silent> <C-p> :<C-u>DeniteProjectDir file_rec<CR>
+nnoremap <silent> sf :<C-u>DeniteProjectDir file_rec<CR>
 " ファイル検索(バッファ基準)
-nnoremap <silent> ,d :<C-u>DeniteBufferDir file_rec<CR>
+nnoremap <silent> sd :<C-u>DeniteBufferDir file_rec<CR>
 " バッファリスト
-nnoremap <silent> ,b :<C-u>Denite buffer<CR>
+nnoremap <silent> sb :<C-u>Denite buffer<CR>
 " MRU
-nnoremap <silent> ,m :<C-u>Denite file_old<CR>
+nnoremap <silent> sm :<C-u>Denite file_old<CR>
 " カーソル以下の単語をgrep
-nnoremap <silent> ,cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+nnoremap <silent> scg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
 " 普通にgrep
-nnoremap <silent> ,g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
+nnoremap <silent> sg :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
 " resume previous buffer
-nnoremap <silent> ,r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
+nnoremap <silent> sr :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
 " customize ignore globs
 call denite#custom#source(
       \ 'file_rec',
