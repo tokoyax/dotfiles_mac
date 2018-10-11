@@ -4,6 +4,8 @@ set modelines=3
 " vim: foldcolumn=3
 " vim: foldlevel=0
 
+let g:mapleader = "\<Space>"
+
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -93,7 +95,7 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('ozelentok/denite-gtags')
   call dein#add('vim-scripts/gtags.vim')
   " }}}
-  " Input {{{
+  " Edit {{{
   " 括弧自動閉じ
   call dein#add("kana/vim-smartinput")
   call dein#add("cohama/vim-smartinput-endwise")
@@ -109,6 +111,10 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('fuenor/qfixgrep')
   " quickfixを置換対象にする
   call dein#add('thinca/vim-qfreplace')
+  " ブロックとワンライナーをトグルで切り替える
+  call dein#add('AndrewRadev/splitjoin.vim')
+  " surround.vim などを . でリピートできるように
+  call dein#add('tpope/vim-repeat')
   " }}}
   " Move {{{
   " 対応する括弧に移動
@@ -151,9 +157,15 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('tpope/vim-obsession')
   " }}}
   " IME 制御 {{{
-  if has("unix")
+  if has ("unix") && !has("mac")
     call dein#add('fuenor/im_control.vim')
   endif
+  " }}}
+  " Document {{{
+  call dein#add('rizzatti/dash.vim')
+  " }}}
+  " Linter {{{
+  call dein#add('w0rp/ale')
   " }}}
   "--------------------------------------------------------------
   " 言語別
@@ -165,9 +177,6 @@ if dein#load_state(expand('~/.vim/dein'))
   " markdown {{{
   " markdown ハイライト
   call dein#add('rcmdnk/vim-markdown')
-  " }}}
-  " slim {{{
-  call dein#add("slim-template/vim-slim")
   " }}}
   " javascript {{{
   call dein#add('pangloss/vim-javascript')
@@ -201,7 +210,6 @@ if dein#load_state(expand('~/.vim/dein'))
   " fish {{{
   call dein#add('dag/vim-fish')
   " }}}
-  call dein#add('w0rp/ale')
 
   call dein#end()
   call dein#save_state()
@@ -239,34 +247,23 @@ if executable('ag')
   call denite#custom#var('grep', 'separator', ['--'])
   call denite#custom#var('grep', 'final_opts', [])
 endif
-" ripgrep があればそれで grep
-" if executable('rg')
-"   call denite#custom#var('file_rec', 'command',
-"         \ ['rg', '--files', '--glob', '!.git'])
-"   call denite#custom#var('grep', 'command', ['rg'])
-"   call denite#custom#var('grep', 'default_opts',
-"       \ ['--vimgrep', '--no-heading','-S'])
-"   call denite#custom#var('grep', 'recursive_opts', [])
-"   call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-"   call denite#custom#var('grep', 'separator', ['--'])
-"   call denite#custom#var('grep', 'final_opts', [])
-"   call denite#custom#source('grep', 'args', ['', '', '!'])
-"   call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
-" endif
+
+nnoremap [denite] <Nop>
+nmap <Leader>d [denite]
 " ファイル検索
-nnoremap <silent> sf :<C-u>DeniteProjectDir file_rec<CR>
+nnoremap <silent> [denite]f :<C-u>DeniteProjectDir file_rec<CR>
 " ファイル検索(バッファ基準)
-nnoremap <silent> sd :<C-u>DeniteBufferDir file_rec<CR>
+nnoremap <silent> [denite]d :<C-u>DeniteBufferDir file_rec<CR>
 " バッファリスト
-nnoremap <silent> sb :<C-u>Denite buffer<CR>
+nnoremap <silent> [denite]b :<C-u>Denite buffer<CR>
 " MRU
-nnoremap <silent> sm :<C-u>Denite file_old<CR>
+nnoremap <silent> [denite]m :<C-u>Denite file_old<CR>
 " カーソル以下の単語をgrep
-nnoremap <silent> scg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+nnoremap <silent> [denite]cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
 " 普通にgrep
-nnoremap <silent> sg :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
+nnoremap <silent> [denite]g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
 " resume previous buffer
-nnoremap <silent> sr :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
+nnoremap <silent> [denite]r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
 " customize ignore globs
 call denite#custom#source(
       \ 'file_rec',
@@ -302,13 +299,16 @@ let g:LanguageClient_serverCommands = {
     \}
 " }}}
 " gen_tags {{{
-let g:loaded_gentags#ctags = 1
+let g:gen_tags#ctags_auto_gen = 1
 let g:gen_tags#gtags_auto_gen = 1
 let g:gen_tags#blacklist = ['$HOME']
+let g:gen_tags#status_line = 1
+autocmd User GenTags#CtagsLoaded echo "Ctags Loaded."
+autocmd User GenTags#GtagsLoaded echo "Gtags Loaded."
 " }}}
 " denite-gtags {{{
 noremap [denite-gtags]  <Nop>
-nmap ,t [denite-gtags]
+nmap <Leader>t [denite-gtags]
 nnoremap [denite-gtags]d :<C-u>DeniteCursorWord -buffer-name=gtags_def -mode=normal gtags_def<CR>
 nnoremap [denite-gtags]r :<C-u>DeniteCursorWord -buffer-name=gtags_ref -mode=normal gtags_ref<CR>
 nnoremap [denite-gtags]c :<C-u>DeniteCursorWord -buffer-name=gtags_context -mode=normal gtags_context<CR>
@@ -338,8 +338,8 @@ endif
 call smartinput_endwise#define_default_rules()
 "}}}
 " emmet-vim {{{
-" <C-E>, で発動
-let g:user_emmet_leader_key = '<C-E>'
+" <C-e>, で発動
+let g:user_emmet_leader_key = '<C-e>'
 let g:use_emmet_complete_tag = 1
 let g:user_emmet_settings = {
       \ 'lang' : 'ja',
@@ -507,6 +507,13 @@ noremap <silent> t<C-s> :TestSuite<CR>
 noremap <silent> t<C-l> :TestLast<CR>
 noremap <silent> t<C-g> :TestVisit<CR>
 " }}}
+" dash {{{
+nmap <silent> <Leader>k <Plug>DashSearch
+" }}}
+" splitjoin {{{
+nnoremap <silent> <Leader>sjj :SplitjoinJoin<cr>
+nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -533,7 +540,7 @@ set smartcase
 set clipboard+=unnamed
 
 " highway grep
-set grepprg=hw\ --no-group\ --no-color
+" set grepprg=hw\ --no-group\ --no-color
 
 " インデント設定
 set tabstop=2
@@ -566,14 +573,17 @@ set listchars=tab:>-,trail:-,nbsp:%,extends:>,precedes:<,eol:<
 set diffopt=filler,vertical
 
 " ---------------------------------------------------------------------------
-" keymap
+" custom keymap
 " ---------------------------------------------------------------------------
-noremap <Space>h ^
-noremap <Space>l $
-nnoremap <Space>/ *<C-o>
-nnoremap g<Space>/ g*<C-o>
+nnoremap <Space> <Nop>
+noremap <Leader>h ^
+noremap <Leader>l $
+nnoremap <Leader>/ *<C-o>
+nnoremap g<Leader>/ g*<C-o>
+" hide highlight
+nnoremap <silent> <Leader>nh :noh<CR>
 " 連続ペースト用
-nnoremap <Space>p "0p
+nnoremap <Leader>p "0p
 nnoremap ;  :
 nnoremap :  ;
 vnoremap ;  :
@@ -611,7 +621,12 @@ if has('nvim')
   tnoremap <C-o> <C-\><C-n>
   tnoremap <silent> <ESC> <C-\><C-n>
 end
+" tagsジャンプの時に複数ある時は一覧表示
+nnoremap <C-]> g<C-]>
 
+" ---------------------------------------------------------------------------
+" other
+" ---------------------------------------------------------------------------
 " tmp directory
 set directory=~/.vim/tmp
 set backupdir=~/.vim/tmp
@@ -633,9 +648,6 @@ let g:rsenseHome = '/usr/local/bin/rsense'
 " SQL syntax setting
 let g:sql_type_default='mysql'
 
-" tagsジャンプの時に複数ある時は一覧表示
-nnoremap <C-]> g<C-]>
-
 " 折りたたみ設定
 set foldmethod=syntax
 set foldlevel=1
@@ -649,7 +661,7 @@ autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
             \| unlet w:last_fdm
             \| endif
 
-if has ("unix")
+if has ("unix") && !has("mac")
   " clipboard settings
   " https://github.com/neovim/neovim/issues/583
   function! ClipboardYank()
