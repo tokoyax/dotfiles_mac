@@ -623,6 +623,8 @@ if has('nvim')
 end
 " tagsジャンプの時に複数ある時は一覧表示
 nnoremap <C-]> g<C-]>
+" buffer delete時にウインドウを消さない
+noremap <Leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " ---------------------------------------------------------------------------
 " other
