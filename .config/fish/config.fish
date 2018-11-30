@@ -2,14 +2,11 @@
 # environment variables
 set -x LANG ja_JP.UTF-8
 set -x TERM xterm-256color
-set -x GOPATH $HOME/dev/go_work
 
 ##############################################
 # path
 
 set -x PATH `yarn global bin` $PATH 
-set -x PATH $GOPATH/bin $PATH 
-set -x PATH $HOME/.local/bin $PATH 
 set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 
 if test (uname) = "Darwin"
@@ -26,7 +23,7 @@ end
 
 ##############################################
 # message
-set fish_greeting "(^o^)"
+set fish_greeting "\x -> 南無参照透明性"
 
 ##############################################
 # prompt
@@ -95,5 +92,17 @@ end
 # direnv
 # https://github.com/direnv/direnv
 eval (direnv hook fish | source)
+
+##############################################
+# start ssh-agent
+eval (ssh-agent -c) > /dev/null
+
+##############################################
+# exit hook
+function on_exit --on-process %self
+  ##############################################
+  # kill ssh-agent
+  ssh-agent -k > /dev/null
+end
 
 # vim:set ft=fish:
