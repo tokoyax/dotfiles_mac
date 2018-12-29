@@ -278,6 +278,29 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ 'images/', '*.o', '*.make',
       \ '*.min.*',
       \ 'img/', 'fonts/'])
+" grepの結果のファイル名でも絞りこめるようにする
+call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
+" qfreplace と 連携
+" https://qiita.com/hrsh7th@github/items/303d46ba13532c502828
+if dein#tap('denite.nvim') && dein#tap('vim-qfreplace')
+  function! MyDeniteReplace(context)
+    let qflist = []
+    for target in a:context['targets']
+      if !has_key(target, 'action__path') | continue | endif
+      if !has_key(target, 'action__line') | continue | endif
+      if !has_key(target, 'action__text') | continue | endif
+
+      call add(qflist, {
+            \ 'filename': target['action__path'],
+            \ 'lnum': target['action__line'],
+            \ 'text': target['action__text']
+            \ })
+    endfor
+    call setqflist(qflist)
+    call qfreplace#start('')
+  endfunction
+  call denite#custom#action('file', 'qfreplace', function('MyDeniteReplace'))
+endif
 " }}}
 " Vaffle {{{
 nnoremap <C-f> :<C-u>Vaffle %:p:h<CR>
