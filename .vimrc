@@ -303,7 +303,7 @@ if dein#tap('denite.nvim') && dein#tap('vim-qfreplace')
 endif
 " }}}
 " Vaffle {{{
-nnoremap <C-f> :<C-u>Vaffle %:p:h<CR>
+nnoremap <silent> <C-f> :<C-u>Vaffle %:p:h<CR>
 let g:vaffle_show_hidden_files = 1
 function! s:customize_vaffle_mappings() abort
   " Customize key mappings here
