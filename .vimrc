@@ -523,6 +523,21 @@ let g:ale_linters = {
 " }}}
 " vim-test {{{
 let test#strategy = "neovim"
+let test#ruby#rspec#executable = 'rspec'
+
+" https://qiita.com/joker1007/items/4dbff328f39c11e732af
+function! DockerTransformer(cmd) abort
+  if $APP_CONTAINER_NAME != ''
+    let container_id = system('docker ps --filter name=$APP_CONTAINER_NAME -q')
+    return 'docker exec -t ' . container_id . ' spring ' . a:cmd
+  else
+    return 'bundle exec ' . a:cmd
+  endif
+endfunction
+
+let g:test#custom_transformations = {'docker': function('DockerTransformer')}
+let g:test#transformation = 'docker'
+
 " these "Ctrl mappings" work well when Caps Lock is mapped to Ctrl
 noremap <silent> t<C-n> :TestNearest<CR>
 noremap <silent> t<C-f> :TestFile<CR>
@@ -541,12 +556,9 @@ nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
 " ---------------------------------------------------------------------------
 "  きほんせってい
 " ---------------------------------------------------------------------------
-" ※などがずれるので
-set ambiwidth=double
-set t_Co=256
+set ambiwidth=double " ※などがずれるので
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
-
 set termguicolors
 let g:hybrid_custom_term_colors = 1
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
@@ -607,7 +619,7 @@ nnoremap g<Leader>/ g*<C-o>
 " hide highlight
 nnoremap <silent> <Leader>nh :noh<CR>
 " 連続ペースト用
-nnoremap <Leader>p "0p
+nnoremap <Leader>p "0p<CR>
 nnoremap ;  :
 nnoremap :  ;
 vnoremap ;  :
