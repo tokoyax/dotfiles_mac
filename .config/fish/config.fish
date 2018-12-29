@@ -1,7 +1,7 @@
 ##############################################
 # environment variables
 set -x LANG ja_JP.UTF-8
-set -x TERM xterm-256color
+set -x TERM screen-256color
 
 ##############################################
 # path

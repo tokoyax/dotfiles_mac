@@ -524,6 +524,7 @@ set t_Co=256
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 
+set termguicolors
 let g:hybrid_custom_term_colors = 1
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 colorscheme hybrid
