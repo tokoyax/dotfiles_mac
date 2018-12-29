@@ -316,7 +316,7 @@ augroup vimrc_vaffle
 augroup END
 " }}}
 " LanguageClient-neovim {{{
-let g:LanguageClient_autoStop = 0
+let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'ruby': ['solargraph', 'stdio'],
     \}
