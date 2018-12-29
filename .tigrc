@@ -1,2 +1,3 @@
 set editor-line-number = no
-
+bind main O @tosa %(commit)
+bind blame O @tosa %(commit)
