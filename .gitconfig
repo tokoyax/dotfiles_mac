@@ -20,7 +20,8 @@
   unstage = reset HEAD
 [core]
   excludesfile = ~/.gitignore_global
-  editor = \"$EDITOR\"
+  #editor = \"$EDITOR\"
+  editor = "/usr/local/bin/nvim"
 [difftool "sourcetree"]
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path = 
