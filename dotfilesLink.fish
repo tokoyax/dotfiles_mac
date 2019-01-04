@@ -1,5 +1,4 @@
 #! /usr/local/bin/fish
-
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/dotfiles/.ctags ~/.ctags
@@ -14,6 +13,8 @@ ln -sf ~/dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
 mkdir ~/.config/fish/functions/
 ln -sf ~/dotfiles/.config/fish/functions/peco_change_directory.fish ~/.config/fish/functions/peco_change_directory.fish
 ln -sf ~/dotfiles/.config/fish/functions/peco_select_history.fish ~/.config/fish/functions/peco_select_history.fish
+mkdir ~/.config/alacritty
+ln -sf ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
 if test (uname) = "Linux"
   ln -sf ~/dotfiles/.xinitrc ~/.xinitrc
