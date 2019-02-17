@@ -18,3 +18,5 @@ Session.vim
 node_modules
 elm-stuff
 dump.rdb
+
+.ignores/

@@ -62,10 +62,14 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('mklabs/split-term.vim')
   " comment out
   call dein#add('tomtom/tcomment_vim')
+  " csv
+  " https://github.com/mechatroner/rainbow_csv
+  call dein#add('mechatroner/rainbow_csv')
   " }}}
   " Filer {{{
   call dein#add('cocopon/vaffle.vim')
   call dein#add('Shougo/denite.nvim')
+  call dein#add('chemzqm/denite-extra')
   " }}}
   " Window {{{
   call dein#add('simeji/winresizer')
@@ -121,6 +125,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('vim-scripts/matchit.zip')
   " f{char}の移動を便利に
   call dein#add('rhysd/clever-f.vim')
+  " camelcase, snakecase の移動
+  call dein#add('vim-scripts/camelcasemotion')
   " }}}
   " Format {{{
   call dein#add('junegunn/vim-easy-align')
@@ -205,7 +211,9 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('neovimhaskell/haskell-vim')
   " }}}
   " elm {{{
-  call dein#add('ElmCast/elm-vim')
+  " 0.19に対応してなかったので
+  " call dein#add('ElmCast/elm-vim')
+  call dein#add('carmonw/elm-vim')
   " }}}
   " fish {{{
   call dein#add('dag/vim-fish')
@@ -264,6 +272,14 @@ nnoremap <silent> [denite]cg :<C-u>DeniteCursorWord grep -buffer-name=search lin
 nnoremap <silent> [denite]g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
 " resume previous buffer
 nnoremap <silent> [denite]r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
+" quickfix list
+nnoremap <silent> [denite]q :<C-u>Denite quickfix<CR>
+" quickfix list
+nnoremap <silent> [denite]q :<C-u>Denite quickfix<CR>
+" location list
+nnoremap <silent> [denite]l :<C-u>Denite location_list<CR>
+" location list
+nnoremap <silent> [denite]h :<C-u>Denite history<CR>
 " customize ignore globs
 call denite#custom#source(
       \ 'file_rec',
@@ -552,6 +568,9 @@ nmap <silent> <Leader>k <Plug>DashSearch
 nnoremap <silent> <Leader>sjj :SplitjoinJoin<cr>
 nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
 " }}}
+" elm-vim {{{
+let g:elm_setup_keybindings = 0
+" }}}
 
 " ---------------------------------------------------------------------------
 "  きほんせってい
@@ -616,7 +635,7 @@ noremap <Leader>h ^
 noremap <Leader>l $
 nnoremap <Leader>/ *<C-o>
 nnoremap g<Leader>/ g*<C-o>
-" hide highlight
+"highlight off
 nnoremap <silent> <Leader>nh :noh<CR>
 " 連続ペースト用
 nnoremap <Leader>p "0p<CR>

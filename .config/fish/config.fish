@@ -72,6 +72,14 @@ alias tmux='tmux -u'
 alias l='exa -hla --git'
 alias ls='exa'
 
+alias gf 'git fetch'
+alias gfa 'git fetch -a'
+alias gclone 'git clone'
+alias gstash 'git stash'
+alias gstasha 'git stash apply'
+alias gp 'git pull'
+alias gpush 'git push'
+
 ##############################################
 # neovim
 if test (uname) = "Darwin"
