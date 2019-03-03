@@ -6,6 +6,7 @@ set -x TERM screen-256color
 ##############################################
 # path
 
+set -x PATH $HOME/my_bin $PATH
 set -x PATH `yarn global bin` $PATH 
 set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 
@@ -47,10 +48,13 @@ end
 
 function fish_right_prompt -d 'Write out the right prompt'
   set -l git_dir (git rev-parse --git-dir 2> /dev/null)
+  # if test -n "$git_dir"
+  #   printf '[%s][%s@%s]' (parse_git_branch) (whoami) (hostname|cut -d . -f 1)
+  # else
+  #   printf '[%s@%s]' (whoami) (hostname|cut -d . -f 1)
+  # end
   if test -n "$git_dir"
-    printf '[%s][%s@%s]' (parse_git_branch) (whoami) (hostname|cut -d . -f 1)
-  else
-    printf '[%s@%s]' (whoami) (hostname|cut -d . -f 1)
+    printf '[%s]' (parse_git_branch)
   end
 end
 
