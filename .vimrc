@@ -49,6 +49,7 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('upamune/esa.vim')
   " git
   call dein#add('tpope/vim-fugitive')
+  call dein#add('airblade/vim-gitgutter')
   " quickfix をステータスバーに表示
   call dein#add("dannyob/quickfixstatus")
   " ag search
