@@ -47,8 +47,6 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('moznion/hateblo.vim')
   " esa.io 投稿
   call dein#add('upamune/esa.vim')
-  " Document 見る
-  call dein#add('thinca/vim-ref', {'functions': 'ref#K'})
   " git
   call dein#add('tpope/vim-fugitive')
   " quickfix をステータスバーに表示
@@ -65,11 +63,16 @@ if dein#load_state(expand('~/.vim/dein'))
   " csv
   " https://github.com/mechatroner/rainbow_csv
   call dein#add('mechatroner/rainbow_csv')
+  " snake <-> camel, :S/ 検索
+  " https://qiita.com/yuku_t/items/77a3361ff4d27bda641e
+  call dein#add ('tpope/vim-abolish')
   " }}}
   " Filer {{{
   call dein#add('cocopon/vaffle.vim')
   call dein#add('Shougo/denite.nvim')
   call dein#add('chemzqm/denite-extra')
+  call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
   " }}}
   " Window {{{
   call dein#add('simeji/winresizer')
@@ -176,10 +179,6 @@ if dein#load_state(expand('~/.vim/dein'))
   "--------------------------------------------------------------
   " 言語別
   "--------------------------------------------------------------
-  " php {{{
-  " コーディング規約チェック
-  call dein#add('stephpy/vim-php-cs-fixer', {'functions': 'PhpCsFixerFixFile'})
-  " }}}
   " markdown {{{
   " markdown ハイライト
   call dein#add('rcmdnk/vim-markdown')
@@ -211,12 +210,14 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('neovimhaskell/haskell-vim')
   " }}}
   " elm {{{
-  " 0.19に対応してなかったので
-  " call dein#add('ElmCast/elm-vim')
-  call dein#add('carmonw/elm-vim')
+  call dein#add('ElmCast/elm-vim')
+  " call dein#add('carmonw/elm-vim')
   " }}}
   " fish {{{
   call dein#add('dag/vim-fish')
+  " }}}
+  " vue {{{
+  call dein#add('posva/vim-vue')
   " }}}
 
   call dein#end()
@@ -246,7 +247,7 @@ call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
 " ag があればそれで grep
 if executable('ag')
   " file/rec
-  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
   " grep
   call denite#custom#var('grep', 'command', ['ag'])
   call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
@@ -272,8 +273,6 @@ nnoremap <silent> [denite]cg :<C-u>DeniteCursorWord grep -buffer-name=search lin
 nnoremap <silent> [denite]g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
 " resume previous buffer
 nnoremap <silent> [denite]r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
-" quickfix list
-nnoremap <silent> [denite]q :<C-u>Denite quickfix<CR>
 " quickfix list
 nnoremap <silent> [denite]q :<C-u>Denite quickfix<CR>
 " location list
@@ -334,8 +333,29 @@ augroup END
 " LanguageClient-neovim {{{
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['solargraph', 'stdio'],
+    \ 'ruby':           ['solargraph', 'stdio'],
+    \ 'css':            ['css-languageserver', '--stdio'],
+    \ 'sass':           ['css-languageserver', '--stdio'],
+    \ 'scss':           ['css-languageserver', '--stdio'],
+    \ 'less':           ['css-languageserver', '--stdio'],
+    \ 'javascript':     ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'typescript':     ['javascript-typescript-stdio'],
+    \ 'vue':            ['vls'],
     \}
+function LC_maps()
+  if has_key(g:LanguageClient_serverCommands, &filetype)
+    noremap [LanguageClient]  <Nop>
+    nmap <Leader>l [LanguageClient]
+    nnoremap [LanguageClient]h :call LanguageClient_textDocument_hover()<CR>
+    nnoremap [LanguageClient]d :call LanguageClient_textDocument_definition()<CR>
+    nnoremap [LanguageClient]m :call LanguageClient_textDocument_rename()<CR>
+    nnoremap [LanguageClient]f :call LanguageClient_textDocument_formatting()<CR>
+    nnoremap [LanguageClient]r :call LanguageClient_textDocument_references()<CR>
+  endif
+endfunction
+
+autocmd FileType * call LC_maps()
 " }}}
 " gen_tags {{{
 let g:gen_tags#ctags_auto_gen = 1
@@ -428,39 +448,9 @@ let g:watchdogs_check_BufWritePost_enable  = 1
 let g:watchdogs_check_CursorHold_enable    = 0
 call watchdogs#setup(g:quickrun_config)
 "}}}
-" vim-php-cs-fixer {{{
-nnoremap <Leader>php :<C-u>call<Space>PhpCsFixerFixFile()<CR>
-let g:php_cs_fixer_config                 = 'default'
-let g:php_cs_fixer_dry_run                = 0
-let g:php_cs_fixer_enable_default_mapping = 0
-let g:php_cs_fixer_fixers_list            = 'align_equals,align_double_arrow'
-let g:php_cs_fixer_level                  = 'symfony'
-let g:php_cs_fixer_php_path               = 'php'
-let g:php_cs_fixer_verbose                = 0
-"}}}
 " previm {{{
 au BufRead,BufNewFile *.md set filetype=markdown
 let g:previm_open_cmd = 'open -a Safari'
-"}}}
-" vim-ref {{{
-let g:ref_no_default_key_mappings = 1
-"inoremap <silent><C-k> <C-o>:call<Space>ref#K('normal')<CR><ESC>
-nnoremap <silent>K     :<C-u>call<Space>ref#K('normal')<CR>
-if dein#tap('vim-ref')
-  function! s:vim_ref_on_source() abort "{{{
-    let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
-    let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
-    let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
-  endfunction "}}}
-  execute 'autocmd MyAutoCmd User' 'dein#source#' . g:dein#name
-        \ 'call s:vim_ref_on_source()'
-endif
-"let s:hooks = neobundle#get_hooks('vim-ref')
-"function! s:hooks.on_source(bundle) abort "{{{
-"  let g:ref_cache_dir      = $HOME .'/.vim/vim-ref/cache'
-"  let g:ref_phpmanual_path = $HOME .'/.vim/vim-ref/php-chunked-xhtml'
-"  let g:ref_refe_cmd       = $HOME .'/.rbenv/shims/refe'
-"endfunction "}}}
 "}}}
 " lightline {{{
 let g:lightline = {
@@ -507,7 +497,16 @@ let g:loaded_matchparen = 1
 let g:deoplete#enable_at_startup = 1
 call deoplete#custom#var('omni', 'input_patterns', {
     \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
-    \})
+\})
+" options
+let g:deoplete#auto_complete_delay = 0
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_camel_case = 0
+let g:deoplete#enable_ignore_case = 0
+let g:deoplete#enable_refresh_always = 0
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#max_list = 10000
 " }}}
 " winresizer {{{
 " If you want to start window resize mode by `Ctrl+T`
@@ -575,6 +574,8 @@ let g:elm_setup_keybindings = 0
 " ---------------------------------------------------------------------------
 "  きほんせってい
 " ---------------------------------------------------------------------------
+set guifont=Cica:h16
+set printfont=Cica:h12
 set ambiwidth=double " ※などがずれるので
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
@@ -596,6 +597,10 @@ set clipboard+=unnamed
 
 " highway grep
 " set grepprg=hw\ --no-group\ --no-color
+
+" git commit で差分確認
+" https://qiita.com/soramugi/items/a56b570a80372994000b
+autocmd FileType gitcommit DiffGitCached | wincmd x | resize 10
 
 " インデント設定
 set tabstop=2
@@ -631,8 +636,8 @@ set diffopt=filler,vertical
 " custom keymap
 " ---------------------------------------------------------------------------
 nnoremap <Space> <Nop>
-noremap <Leader>h ^
-noremap <Leader>l $
+noremap <C-h> ^
+noremap <C-l> $
 nnoremap <Leader>/ *<C-o>
 nnoremap g<Leader>/ g*<C-o>
 "highlight off
@@ -684,6 +689,10 @@ noremap <Leader>bd :bp<bar>sp<bar>bn<bar>bd<CR>
 " ---------------------------------------------------------------------------
 " other
 " ---------------------------------------------------------------------------
+" not stop completion $ & /
+setlocal iskeyword+=$
+setlocal iskeyword+=-
+
 " tmp directory
 set directory=~/.vim/tmp
 set backupdir=~/.vim/tmp
