@@ -174,3 +174,5 @@ eval "$(direnv hook zsh)"
 [ -f ~/.zshrc.mine ] && source ~/.zshrc.mine
 
 # vim:set ft=zsh:
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
