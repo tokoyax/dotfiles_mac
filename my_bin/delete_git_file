@@ -1,0 +1,5 @@
+#! /bin/sh
+path=$(git rev-parse --show-toplevel)
+file_path="${path}/$1"
+# echo $file_path
+rm $file_path

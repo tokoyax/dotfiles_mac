@@ -15,6 +15,8 @@ ln -sf ~/dotfiles/.config/fish/functions/peco_change_directory.fish ~/.config/fi
 ln -sf ~/dotfiles/.config/fish/functions/peco_select_history.fish ~/.config/fish/functions/peco_select_history.fish
 mkdir ~/.config/alacritty
 ln -sf ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
+mkdir ~/my_bin
+ln -sf ~/dotfiles/my_bin/delete_git_file ~/my_bin/delete_git_file
 
 if test (uname) = "Linux"
   ln -sf ~/dotfiles/.xinitrc ~/.xinitrc
