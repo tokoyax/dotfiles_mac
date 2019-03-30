@@ -13,6 +13,8 @@ ln -sf ~/dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
 mkdir ~/.config/fish/functions/
 ln -sf ~/dotfiles/.config/fish/functions/peco_change_directory.fish ~/.config/fish/functions/peco_change_directory.fish
 ln -sf ~/dotfiles/.config/fish/functions/peco_select_history.fish ~/.config/fish/functions/peco_select_history.fish
+mkdir ~/.config/fish/completions/
+ln -sf ~/dotfiles/.config/fish/completions/hub.fish ~/.config/fish/completions/hub.fish
 mkdir ~/.config/alacritty
 ln -sf ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 mkdir ~/my_bin

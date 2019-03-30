@@ -18,6 +18,8 @@
   # staged diff
   diffs = diff --cached
   unstage = reset HEAD
+  pr = pull-request
+  see = browse
 [core]
   excludesfile = ~/.gitignore_global
   #editor = \"$EDITOR\"
@@ -39,4 +41,5 @@
 [push]
 	default = simple
 [ghq]
-  root = ~/src
+  root = ~/work
+  root = ~/sandbox

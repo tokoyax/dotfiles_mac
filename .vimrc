@@ -50,6 +50,12 @@ if dein#load_state(expand('~/.vim/dein'))
   " git
   call dein#add('tpope/vim-fugitive')
   call dein#add('airblade/vim-gitgutter')
+  " https://rhysd.hatenablog.com/entry/2019/03/10/230119
+  call dein#add('rhysd/git-messenger.vim', {
+              \   'lazy' : 1,
+              \   'on_cmd' : 'GitMessenger',
+              \   'on_map' : '<Plug>(git-messenger)',
+              \ })
   " quickfix をステータスバーに表示
   call dein#add("dannyob/quickfixstatus")
   " ag search
@@ -105,8 +111,7 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " Edit {{{
   " 括弧自動閉じ
-  call dein#add("kana/vim-smartinput")
-  call dein#add("cohama/vim-smartinput-endwise")
+  call dein#add('tpope/vim-endwise')
   " 文字を囲んだり
   call dein#add('tpope/vim-surround')
   " HTMLタグを素早く書く
@@ -123,6 +128,8 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('AndrewRadev/splitjoin.vim')
   " surround.vim などを . でリピートできるように
   call dein#add('tpope/vim-repeat')
+  " fast fold
+  call dein#add('Konfekt/FastFold')
   " }}}
   " Move {{{
   " 対応する括弧に移動
@@ -219,6 +226,7 @@ if dein#load_state(expand('~/.vim/dein'))
   " }}}
   " vue {{{
   call dein#add('posva/vim-vue')
+  call dein#add('digitaltoad/vim-pug')
   " }}}
 
   call dein#end()
@@ -344,19 +352,13 @@ let g:LanguageClient_serverCommands = {
     \ 'typescript':     ['javascript-typescript-stdio'],
     \ 'vue':            ['vls'],
     \}
-function LC_maps()
-  if has_key(g:LanguageClient_serverCommands, &filetype)
-    noremap [LanguageClient]  <Nop>
-    nmap <Leader>l [LanguageClient]
-    nnoremap [LanguageClient]h :call LanguageClient_textDocument_hover()<CR>
-    nnoremap [LanguageClient]d :call LanguageClient_textDocument_definition()<CR>
-    nnoremap [LanguageClient]m :call LanguageClient_textDocument_rename()<CR>
-    nnoremap [LanguageClient]f :call LanguageClient_textDocument_formatting()<CR>
-    nnoremap [LanguageClient]r :call LanguageClient_textDocument_references()<CR>
-  endif
-endfunction
-
-autocmd FileType * call LC_maps()
+noremap [LanguageClient]  <Nop>
+nmap <Leader>l [LanguageClient]
+nnoremap [LanguageClient]h :call LanguageClient_textDocument_hover()<CR>
+nnoremap [LanguageClient]d :call LanguageClient_textDocument_definition()<CR>
+nnoremap [LanguageClient]m :call LanguageClient_textDocument_rename()<CR>
+nnoremap [LanguageClient]f :call LanguageClient_textDocument_formatting()<CR>
+nnoremap [LanguageClient]r :call LanguageClient_textDocument_references()<CR>
 " }}}
 " gen_tags {{{
 let g:gen_tags#ctags_auto_gen = 1
@@ -394,9 +396,6 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 " }}}
-" vim-smartinput-endwise {{{
-call smartinput_endwise#define_default_rules()
-"}}}
 " emmet-vim {{{
 " <C-e>, で発動
 let g:user_emmet_leader_key = '<C-e>'
@@ -529,13 +528,18 @@ let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_set_highlights = 0
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+let g:ale_set_loclist = 1
+let g:ale_set_quickfix = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ }
+let g:ale_fixers = {}
+let g:ale_fixers['javascript'] = ['prettier', 'eslint']
+let g:ale_fixers['vue'] = ['prettier', 'eslint']
+let g:ale_fix_on_save = 1
+let g:ale_javascript_prettier_use_local_config = 1
 " }}}
 " vim-test {{{
 let test#strategy = "neovim"
@@ -570,6 +574,13 @@ nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
 " }}}
 " elm-vim {{{
 let g:elm_setup_keybindings = 0
+" }}}
+" git-messenger {{{
+nmap <Leader>gm <Plug>(git-messenger)
+let g:git_messenger_close_on_cursor_moved = 1
+let g:git_messenger_no_default_mappings = 1
+let g:git_messenger_into_popup_after_show = 1
+let g:git_messenger_always_into_popup = 1
 " }}}
 
 " ---------------------------------------------------------------------------
@@ -716,17 +727,18 @@ let g:rsenseHome = '/usr/local/bin/rsense'
 let g:sql_type_default='mysql'
 
 " 折りたたみ設定
-set foldmethod=syntax
-set foldlevel=1
-set foldnestmax=2
-autocmd InsertEnter * if !exists('w:last_fdm')
-            \| let w:last_fdm=&foldmethod
-            \| setlocal foldmethod=manual
-            \| endif
-autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
-            \| let &l:foldmethod=w:last_fdm
-            \| unlet w:last_fdm
-            \| endif
+" ファイルをオープンするとき重いので無効に
+" set foldmethod=syntax
+" set foldlevel=1
+" set foldnestmax=2
+" autocmd InsertEnter * if !exists('w:last_fdm')
+"             \| let w:last_fdm=&foldmethod
+"             \| setlocal foldmethod=manual
+"             \| endif
+" autocmd InsertLeave,WinLeave * if exists('w:last_fdm')
+"             \| let &l:foldmethod=w:last_fdm
+"             \| unlet w:last_fdm
+"             \| endif
 
 if has ("unix") && !has("mac")
   " clipboard settings

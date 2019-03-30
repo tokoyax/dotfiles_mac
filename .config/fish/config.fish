@@ -16,10 +16,10 @@ end
 
 ##############################################
 # key binding
-fish_vi_key_bindings
 function fish_user_key_bindings
   bind \cr peco_select_history # Bind for peco select history to Ctrl+R
   bind \cf peco_change_directory # Bind for peco change directory to Ctrl+F
+  fish_vi_key_bindings insert
 end
 
 ##############################################
@@ -108,6 +108,10 @@ eval (direnv hook fish | source)
 ##############################################
 # start ssh-agent
 eval (ssh-agent -c) > /dev/null
+
+##############################################
+# alias hub
+eval (hub alias -s) > /dev/null
 
 ##############################################
 # exit hook
