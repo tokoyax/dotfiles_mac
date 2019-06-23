@@ -13,10 +13,13 @@ ln -sf ~/dotfiles/.config/fish/config.fish ~/.config/fish/config.fish
 mkdir ~/.config/fish/functions/
 ln -sf ~/dotfiles/.config/fish/functions/peco_change_directory.fish ~/.config/fish/functions/peco_change_directory.fish
 ln -sf ~/dotfiles/.config/fish/functions/peco_select_history.fish ~/.config/fish/functions/peco_select_history.fish
+ln -sf ~/dotfiles/.config/fish/functions/peco_switch_tmux_session.fish ~/.config/fish/functions/peco_switch_tmux_session.fish
 mkdir ~/.config/fish/completions/
 ln -sf ~/dotfiles/.config/fish/completions/hub.fish ~/.config/fish/completions/hub.fish
 mkdir ~/.config/alacritty
 ln -sf ~/dotfiles/.config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
+mkdir ~/.config/peco
+ln -sf ~/dotfiles/.config/peco/config.json ~/.config/peco/config.json
 mkdir ~/my_bin
 ln -sf ~/dotfiles/my_bin/delete_git_file ~/my_bin/delete_git_file
 

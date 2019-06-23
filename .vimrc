@@ -6,16 +6,16 @@ set modelines=3
 
 let g:mapleader = "\<Space>"
 
+if &compatible
+  set nocompatible
+endif
+
 augroup MyAutoCmd
   autocmd!
 augroup END
 
 " Plugins {{{
 filetype plugin indent on
-syntax enable
-if &compatible
-  set nocompatible
-endif
 set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
 if dein#load_state(expand('~/.vim/dein'))
@@ -89,9 +89,13 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('w0ng/vim-hybrid')
   " }}}
   " Completion {{{
-  call dein#add('autozimu/LanguageClient-neovim', {
-    \ 'rev': 'next',
-    \ 'build': 'bash install.sh',
+  " call dein#add('autozimu/LanguageClient-neovim', {
+  "   \ 'rev': 'next',
+  "   \ 'build': 'bash install.sh',
+  "   \ })
+  call dein#add('neoclide/coc.nvim', {
+    \ 'merge': 0,
+    \ 'branch': 'release'
     \ })
   call dein#add('Shougo/deoplete.nvim', {
     \ 'do': ':UpdateRemotePlugins'
@@ -105,9 +109,9 @@ if dein#load_state(expand('~/.vim/dein'))
   call dein#add('eagletmt/neco-ghc')
   "}}}
   " Tags {{{
-  call dein#add('jsfaint/gen_tags.vim')
-  call dein#add('ozelentok/denite-gtags')
-  call dein#add('vim-scripts/gtags.vim')
+  " call dein#add('jsfaint/gen_tags.vim')
+  " call dein#add('ozelentok/denite-gtags')
+  " call dein#add('vim-scripts/gtags.vim')
   " }}}
   " Edit {{{
   " 括弧自動閉じ
@@ -242,21 +246,50 @@ endif
 "  ぷらぎんせってぃんぐ
 " ---------------------------------------------------------------------------
 " denite.vim {{{
-call denite#custom#option('_', {
-      \ 'prompt': '>',
-      \ 'highlight_matched_char': 'Underlined',
-      \})
-" denite/insert モードのときは，C- で移動できるようにする
-call denite#custom#map('insert', "<C-j>", '<denite:move_to_next_line>')
-call denite#custom#map('insert', "<C-k>", '<denite:move_to_previous_line>')
-" tabopen や vsplit のキーバインドを割り当て
-call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
-call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
-call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
+" Define mappings
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+        \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> <C-m>
+        \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> v
+        \ denite#do_map('do_action', 'vsplit')
+  nnoremap <silent><buffer><expr> t
+        \ denite#do_map('do_action', 'tabopen')
+  nnoremap <silent><buffer><expr> d
+        \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+        \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+        \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> <C-c>
+        \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+        \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+        \ denite#do_map('toggle_select').'j'
+endfunction
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+endfunction
+
+" Change denite default options
+call denite#custom#option('default', {
+    \ 'split': 'floating'
+    \ })
+
+call denite#custom#option('default', {
+    \ 'prompt': '>',
+    \ 'highlight_matched_char': 'Underlined'
+    \ })
+
 " ag があればそれで grep
 if executable('ag')
   " file/rec
-  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
+  call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
   " grep
   call denite#custom#var('grep', 'command', ['ag'])
   call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
@@ -266,36 +299,32 @@ if executable('ag')
   call denite#custom#var('grep', 'final_opts', [])
 endif
 
-nnoremap [denite] <Nop>
-nmap <Leader>d [denite]
 " ファイル検索
-nnoremap <silent> [denite]f :<C-u>DeniteProjectDir file_rec<CR>
-" ファイル検索(バッファ基準)
-nnoremap <silent> [denite]d :<C-u>DeniteBufferDir file_rec<CR>
+nnoremap <silent> <Leader>f :<C-u>DeniteProjectDir file/rec<CR>
 " バッファリスト
-nnoremap <silent> [denite]b :<C-u>Denite buffer<CR>
+nnoremap <silent> <Leader>b :<C-u>Denite buffer<CR>
 " MRU
-nnoremap <silent> [denite]m :<C-u>Denite file_old<CR>
+nnoremap <silent> <Leader>m :<C-u>Denite file/old<CR>
 " カーソル以下の単語をgrep
-nnoremap <silent> [denite]cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+nnoremap <silent> <Leader>cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
 " 普通にgrep
-nnoremap <silent> [denite]g :<C-u>Denite -buffer-name=search -mode=insert grep<CR>
+nnoremap <silent> <Leader>g :<C-u>Denite -buffer-name=search grep<CR>
 " resume previous buffer
-nnoremap <silent> [denite]r :<C-u>Denite -resume -buffer-name=search -mode=normal<CR>
+nnoremap <silent> <Leader>r :<C-u>Denite -resume -buffer-name=search<CR>
 " quickfix list
-nnoremap <silent> [denite]q :<C-u>Denite quickfix<CR>
+nnoremap <silent> <Leader>q :<C-u>Denite quickfix<CR>
 " location list
-nnoremap <silent> [denite]l :<C-u>Denite location_list<CR>
-" location list
-nnoremap <silent> [denite]h :<C-u>Denite history<CR>
+nnoremap <silent> <Leader>l :<C-u>Denite location_list<CR>
+" history
+nnoremap <silent> <Leader>h :<C-u>Denite command_history<CR>
 " customize ignore globs
 call denite#custom#source(
-      \ 'file_rec',
-      \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
+      \ 'file/rec',
+      \ 'matchers', ['matcher/fuzzy', 'matcher/ignore_globs', 'matcher/cpsm', 'matcher/project_files'])
 call denite#custom#source(
-      \ 'file_old',
-      \ 'matchers', ['matcher_fuzzy', 'matcher_ignore_globs', 'matcher_cpsm', 'matcher_project_files'])
-call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+      \ 'file/old',
+      \ 'matchers', ['matcher/fuzzy', 'matcher/ignore_globs', 'matcher/cpsm', 'matcher/project_files'])
+call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
       \ [
       \ '.git/', 'build/', '__pycache__/',
       \ 'node_modules/',
@@ -303,7 +332,7 @@ call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
       \ '*.min.*',
       \ 'img/', 'fonts/'])
 " grepの結果のファイル名でも絞りこめるようにする
-call denite#custom#source('grep', 'converters', ['converter_abbr_word'])
+call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
 " qfreplace と 連携
 " https://qiita.com/hrsh7th@github/items/303d46ba13532c502828
 if dein#tap('denite.nvim') && dein#tap('vim-qfreplace')
@@ -340,40 +369,38 @@ augroup vimrc_vaffle
 augroup END
 " }}}
 " LanguageClient-neovim {{{
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_serverCommands = {
-    \ 'ruby':           ['solargraph', 'stdio'],
-    \ 'css':            ['css-languageserver', '--stdio'],
-    \ 'sass':           ['css-languageserver', '--stdio'],
-    \ 'scss':           ['css-languageserver', '--stdio'],
-    \ 'less':           ['css-languageserver', '--stdio'],
-    \ 'javascript':     ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'typescript':     ['javascript-typescript-stdio'],
-    \ 'vue':            ['vls'],
-    \}
-noremap [LanguageClient]  <Nop>
-nmap <Leader>l [LanguageClient]
-nnoremap [LanguageClient]h :call LanguageClient_textDocument_hover()<CR>
-nnoremap [LanguageClient]d :call LanguageClient_textDocument_definition()<CR>
-nnoremap [LanguageClient]m :call LanguageClient_textDocument_rename()<CR>
-nnoremap [LanguageClient]f :call LanguageClient_textDocument_formatting()<CR>
-nnoremap [LanguageClient]r :call LanguageClient_textDocument_references()<CR>
+" let g:LanguageClient_autoStart = 1
+" let g:LanguageClient_serverCommands = {
+"     \ 'ruby':           ['solargraph', 'stdio'],
+"     \ 'css':            ['css-languageserver', '--stdio'],
+"     \ 'sass':           ['css-languageserver', '--stdio'],
+"     \ 'scss':           ['css-languageserver', '--stdio'],
+"     \ 'less':           ['css-languageserver', '--stdio'],
+"     \ 'javascript':     ['javascript-typescript-stdio'],
+"     \ 'vue':            ['vls'],
+"     \}
+" noremap [LanguageClient]  <Nop>
+" nmap <Leader>l [LanguageClient]
+" nnoremap [LanguageClient]h :call LanguageClient_textDocument_hover()<CR>
+" nnoremap [LanguageClient]d :call LanguageClient_textDocument_definition()<CR>
+" nnoremap [LanguageClient]m :call LanguageClient_textDocument_rename()<CR>
+" nnoremap [LanguageClient]f :call LanguageClient_textDocument_formatting()<CR>
+" nnoremap [LanguageClient]r :call LanguageClient_textDocument_references()<CR>
 " }}}
 " gen_tags {{{
-let g:gen_tags#ctags_auto_gen = 1
-let g:gen_tags#gtags_auto_gen = 1
-let g:gen_tags#blacklist = ['$HOME']
-let g:gen_tags#status_line = 1
-autocmd User GenTags#CtagsLoaded echo "Ctags Loaded."
-autocmd User GenTags#GtagsLoaded echo "Gtags Loaded."
-" }}}
-" denite-gtags {{{
-noremap [denite-gtags]  <Nop>
-nmap <Leader>t [denite-gtags]
-nnoremap [denite-gtags]d :<C-u>DeniteCursorWord -buffer-name=gtags_def -mode=normal gtags_def<CR>
-nnoremap [denite-gtags]r :<C-u>DeniteCursorWord -buffer-name=gtags_ref -mode=normal gtags_ref<CR>
-nnoremap [denite-gtags]c :<C-u>DeniteCursorWord -buffer-name=gtags_context -mode=normal gtags_context<CR>
+" let g:gen_tags#ctags_auto_gen = 1
+" let g:gen_tags#gtags_auto_gen = 1
+" let g:gen_tags#blacklist = ['$HOME']
+" let g:gen_tags#status_line = 1
+" autocmd User GenTags#CtagsLoaded echo "Ctags Loaded."
+" autocmd User GenTags#GtagsLoaded echo "Gtags Loaded."
+" " }}}
+" " denite-gtags {{{
+" noremap [denite-gtags]  <Nop>
+" nmap <Leader>t [denite-gtags]
+" nnoremap [denite-gtags]d :<C-u>DeniteCursorWord -buffer-name=gtags_def -mode=normal gtags_def<CR>
+" nnoremap [denite-gtags]r :<C-u>DeniteCursorWord -buffer-name=gtags_ref -mode=normal gtags_ref<CR>
+" nnoremap [denite-gtags]c :<C-u>DeniteCursorWord -buffer-name=gtags_context -mode=normal gtags_context<CR>
 " }}}
 " neosnippet {{{
 " Plugin key-mappings.
@@ -538,7 +565,7 @@ let g:ale_linters = {
 let g:ale_fixers = {}
 let g:ale_fixers['javascript'] = ['prettier', 'eslint']
 let g:ale_fixers['vue'] = ['prettier', 'eslint']
-let g:ale_fix_on_save = 1
+let g:ale_fix_on_save = 0
 let g:ale_javascript_prettier_use_local_config = 1
 " }}}
 " vim-test {{{
@@ -591,6 +618,7 @@ set printfont=Cica:h12
 set ambiwidth=double " ※などがずれるので
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
+autocmd FileType vue syntax sync fromstart
 set termguicolors
 let g:hybrid_custom_term_colors = 1
 let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.

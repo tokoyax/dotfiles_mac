@@ -8,6 +8,7 @@
 .sass-cache
 .envrc
 .unison*
+.pryrc
 GPATH
 GRTAGS
 GTAGS

@@ -24,6 +24,7 @@
   excludesfile = ~/.gitignore_global
   #editor = \"$EDITOR\"
   editor = "/usr/local/bin/nvim"
+	attributesfile = /Users/tokoyax/.gitattributes
 [difftool "sourcetree"]
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path = 
