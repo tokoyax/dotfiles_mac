@@ -14,7 +14,9 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-" Plugins {{{
+" ---------------------------------------------------------------------------
+"  plugin settings
+" ---------------------------------------------------------------------------
 filetype plugin indent on
 set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
 
@@ -41,7 +43,6 @@ endif
 if dein#check_install()
   call dein#install()
 endif
-" }}}
 
 " ---------------------------------------------------------------------------
 "  basic settings
