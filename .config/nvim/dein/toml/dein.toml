@@ -1,0 +1,326 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
+
+[[plugins]] # カーソル位置のコンテキストのftを判定するライブラリ
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+hook_add = '''
+  " Plugin key-mappings.
+  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+  imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+  smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+  xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+  " SuperTab like snippets behavior.
+  " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+  "imap <expr><TAB>
+  " \ pumvisible() ? "\<C-n>" :
+  " \ neosnippet#expandable_or_jumpable() ?
+  " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+  smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+  \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+  " For conceal markers.
+  if has('conceal')
+    set conceallevel=2 concealcursor=niv
+  endif
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'nixprime/cpsm'
+build = 'env PY3=ON ./install.sh'
+
+[[plugins]]
+repo = 'Shougo/vimproc'
+build = '''
+  {
+    'windows': 'make -f make_mingw32.mak',
+    'cygwin':  'make -f make_cygwin.mak',
+    'mac':     'make -f make_mac.mak',
+    'unix':    'make -f make_unix.mak',
+  }
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'dannyob/quickfixstatus'
+
+[[plugins]]
+repo = 'rking/ag.vim'
+
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+
+[[plugins]]
+repo = 'tpope/vim-abolish'
+
+[[plugins]]
+repo = 'cocopon/vaffle.vim'
+hook_add = '''
+  nnoremap <silent> <C-f> :<C-u>Vaffle %:p:h<CR>
+  let g:vaffle_show_hidden_files = 1
+  function! s:customize_vaffle_mappings() abort
+    " Customize key mappings here
+    nmap <buffer> v <Plug>(vaffle-open-selected-split)
+    nmap <buffer> s <Plug>(vaffle-open-selected-vsplit)
+  endfunction
+  augroup vimrc_vaffle
+    autocmd!
+    autocmd FileType vaffle call s:customize_vaffle_mappings()
+  augroup END
+'''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add = '''
+  " Define mappings
+  autocmd FileType denite call s:denite_my_settings()
+  function! s:denite_my_settings() abort
+    nnoremap <silent><buffer><expr> <CR>
+          \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> <C-m>
+          \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> v
+          \ denite#do_map('do_action', 'vsplit')
+    nnoremap <silent><buffer><expr> t
+          \ denite#do_map('do_action', 'tabopen')
+    nnoremap <silent><buffer><expr> d
+          \ denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> p
+          \ denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q
+          \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> <C-c>
+          \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i
+          \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> <Space>
+          \ denite#do_map('toggle_select').'j'
+  endfunction
+
+  autocmd FileType denite-filter call s:denite_filter_my_settings()
+  function! s:denite_filter_my_settings() abort
+    imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+  endfunction
+
+  " Change denite default options
+  call denite#custom#option('default', {
+      \ 'split': 'floating'
+      \ })
+
+  call denite#custom#option('default', {
+      \ 'prompt': '>',
+      \ 'highlight_matched_char': 'Underlined'
+      \ })
+
+  " ag があればそれで grep
+  if executable('ag')
+    " file/rec
+    call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
+    " grep
+    call denite#custom#var('grep', 'command', ['ag'])
+    call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', [])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+  endif
+
+  " ファイル検索
+  nnoremap <silent> <Leader>f :<C-u>DeniteProjectDir file/rec<CR>
+  " バッファリスト
+  nnoremap <silent> <Leader>b :<C-u>Denite buffer<CR>
+  " MRU
+  nnoremap <silent> <Leader>m :<C-u>Denite file/old<CR>
+  " カーソル以下の単語をgrep
+  nnoremap <silent> <Leader>cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+  " 普通にgrep
+  nnoremap <silent> <Leader>g :<C-u>Denite -buffer-name=search grep<CR>
+  " resume previous buffer
+  nnoremap <silent> <Leader>r :<C-u>Denite -resume -buffer-name=search<CR>
+  " quickfix list
+  nnoremap <silent> <Leader>q :<C-u>Denite quickfix<CR>
+  " location list
+  nnoremap <silent> <Leader>l :<C-u>Denite location_list<CR>
+  " history
+  nnoremap <silent> <Leader>h :<C-u>Denite command_history<CR>
+  " customize ignore globs
+  call denite#custom#source(
+        \ 'file/rec',
+        \ 'matchers', ['matcher/fuzzy', 'matcher/ignore_globs', 'matcher/cpsm', 'matcher/project_files'])
+  call denite#custom#source(
+        \ 'file/old',
+        \ 'matchers', ['matcher/fuzzy', 'matcher/ignore_globs', 'matcher/cpsm', 'matcher/project_files'])
+  call denite#custom#filter('matcher/ignore_globs', 'ignore_globs',
+        \ [
+        \ '.git/', 'build/', '__pycache__/',
+        \ 'node_modules/',
+        \ 'images/', '*.o', '*.make',
+        \ '*.min.*',
+        \ 'img/', 'fonts/'])
+  " grepの結果のファイル名でも絞りこめるようにする
+  call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
+  " qfreplace と 連携
+  " https://qiita.com/hrsh7th@github/items/303d46ba13532c502828
+  if dein#tap('denite.nvim') && dein#tap('vim-qfreplace')
+    function! MyDeniteReplace(context)
+      let qflist = []
+      for target in a:context['targets']
+        if !has_key(target, 'action__path') | continue | endif
+        if !has_key(target, 'action__line') | continue | endif
+        if !has_key(target, 'action__text') | continue | endif
+
+        call add(qflist, {
+              \ 'filename': target['action__path'],
+              \ 'lnum': target['action__line'],
+              \ 'text': target['action__text']
+              \ })
+      endfor
+      call setqflist(qflist)
+      call qfreplace#start('')
+    endfunction
+    call denite#custom#action('file', 'qfreplace', function('MyDeniteReplace'))
+  endif
+'''
+
+[[plugins]]
+repo = 'chemzqm/denite-extra'
+
+[[plugins]]
+repo = 'junegunn/fzf'
+build = './install --all'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
+
+[[plugins]]
+repo = 'simeji/winresizer'
+hook_add = '''
+  " If you want to start window resize mode by `Ctrl+T`
+  let g:winresizer_start_key = '<C-T>'
+  " If you cancel and quit window resize mode by `z` (keycode 122)
+  let g:winresizer_keycode_cancel = 122
+'''
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+merged = 0
+
+[[plugins]]
+repo = 'tpope/vim-endwise'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]] # surround.vim などを . でリピートできるように
+repo = 'tpope/vim-repeat'
+
+[[plugins]]
+repo = 'AndrewRadev/splitjoin.vim'
+hook_add = '''
+  nnoremap <silent> <Leader>sjj :SplitjoinJoin<cr>
+  nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
+'''
+
+[[plugins]]
+repo = 'Konfekt/FastFold'
+
+[[plugins]]
+repo = 'Konfekt/FastFold'
+
+[[plugins]]
+repo = 'vim-scripts/matchit.zip'
+
+[[plugins]]
+repo = 'rhysd/clever-f.vim'
+hook_add = '''
+  let g:clever_f_ignore_case = 1
+  let g:clever_f_use_migemo = 1
+  let g:clever_f_chars_match_any_signs = ';'
+'''
+
+[[plugins]]
+repo = 'vim-scripts/camelcasemotion'
+hook_add = '''
+  let g:clever_f_ignore_case = 1
+  let g:clever_f_use_migemo = 1
+  let g:clever_f_chars_match_any_signs = ';'
+'''
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+hook_add = '''
+  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+  vmap <Enter> <Plug>(EasyAlign)
+  " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+  nmap ga <Plug>(EasyAlign)
+'''
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+  " slim の syntax が効かなくなるため OFF
+  " let g:indentLine_faster = 1
+  let g:indentLine_color_term = 239
+  let g:indentLine_color_gui = '#708090'
+  let g:indentLine_char = '|'
+'''
+
+[[plugins]]
+repo = 'cohama/vim-hier'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+  let g:lightline = {
+        \ 'colorscheme': 'hybrid',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'fugitive': 'LightlineFugitive'
+        \ }
+    \ }
+  function! LightlineFugitive()
+    return exists('*fugitive#head') ? fugitive#head() : ''
+  endfunction
+'''
+
+[[plugins]]
+repo = 'cocopon/lightline-hybrid.vim'
+
+[[plugins]]
+repo = 'itchyny/vim-parenmatch'
+hook_add = '''
+  let g:loaded_matchparen = 1
+'''
+
+[[plugins]] # tmux 用のなにか
+repo = 'tpope/vim-obsession'
+
+[[plugins]]
+repo = 'tpope/vim-obsession'
