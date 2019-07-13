@@ -98,10 +98,12 @@ hook_add = '''
 # Markdown
 [[plugins]]
 repo = 'rcmdnk/vim-markdown'
+on_ft = 'markdown'
 
 # HTML
 [[plugins]]
 repo = 'mattn/emmet-vim'
+on_ft = 'html'
 hook_add = '''
   " <C-e>, で発動
   let g:user_emmet_leader_key = '<C-e>'
@@ -120,28 +122,44 @@ hook_add = '''
 # JavaScript
 [[plugins]]
 repo = 'pangloss/vim-javascript'
+on_ft = 'javascript'
+
+# VueJS
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue', 'pug']
+
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+on_ft = ['vue', 'pug']
 
 # JSX
 [[plugins]]
 repo = 'mxw/vim-jsx'
+on_ft = 'jsx'
 
 # CoffeeScript
 [[plugins]]
 repo = 'kchmck/vim-coffee-script'
+on_ft = 'coffee'
 
  # Elixir
 [[plugins]]
 repo = 'elixir-lang/vim-elixir'
+on_ft = 'elixir'
 
 # Ruby
 [[plugins]]
 repo = 'tpope/vim-rails'
+on_ft = 'ruby'
 
 [[plugins]]
 repo = 'tpope/vim-dispatch'
+on_ft = 'ruby'
 
 [[plugins]]
 repo = 'janko-m/vim-test'
+on_ft = 'ruby'
 hook_add = '''
   let test#strategy = "neovim"
   let test#ruby#rspec#executable = 'rspec'
@@ -169,24 +187,30 @@ hook_add = '''
 
 [[plugins]]
 repo = 'vim-ruby/vim-ruby'
+on_ft = 'ruby'
 
 [[plugins]]
 repo = 'noprompt/vim-yardoc'
+on_ft = 'ruby'
 
 # Slim
 [[plugins]]
 repo = 'slim-template/vim-slim'
+on_ft = 'slim'
 
 # Haskell
 [[plugins]]
 repo = 'nbouscal/vim-stylish-haskell'
+on_ft = 'haskell'
 
 [[plugins]]
 repo = 'neovimhaskell/haskell-vim'
+on_ft = 'haskell'
 
 # Elm
 [[plugins]]
 repo = 'ElmCast/elm-vim'
+on_ft = 'elm'
 hook_add = '''
   let g:elm_setup_keybindings = 0
 '''
@@ -194,18 +218,13 @@ hook_add = '''
 # fish
 [[plugins]]
 repo = 'dag/vim-fish'
-
-# VueJS
-[[plugins]]
-repo = 'posva/vim-vue'
-
-[[plugins]]
-repo = 'digitaltoad/vim-pug'
+on_ft = 'fish'
 
 # CSV
 [[plugins]]
 # https://github.com/mechatroner/rainbow_csv
 repo = 'mechatroner/rainbow_csv'
+on_ft = 'csv'
 
 # Toml
 [[plugins]]
