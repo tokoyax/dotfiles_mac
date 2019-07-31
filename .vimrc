@@ -180,7 +180,6 @@ set tags+=.git/tags
 " Ruby settings {{{
 " hoge? が1個の単語として認識されるようにする
 autocmd FileType ruby setl iskeyword+=?
-let g:rsenseHome = '/usr/local/bin/rsense'
 " }}}
 " SQL syntax setting
 let g:sql_type_default='mysql'

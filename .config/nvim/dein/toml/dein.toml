@@ -7,6 +7,21 @@ depends = ['context_filetype.vim']
 
 [[plugins]] # カーソル位置のコンテキストのftを判定するライブラリ
 repo = 'Shougo/context_filetype.vim'
+hook_add = '''
+" filetype=vim 以外の setfiletype を無効にする
+" * は全ての filetype に適用する
+let g:precious_enable_switchers = {
+  \ "*" : {
+    \ "setfiletype" : 0
+      \ },
+  \ "toml" : {
+    \ "setfiletype" : 1
+      \ },
+  \ "vim" : {
+    \ "setfiletype" : 1
+      \ },
+  \}
+'''
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
@@ -144,11 +159,11 @@ hook_add = '''
   endif
 
   " ファイル検索
-  nnoremap <silent> <Leader>f :<C-u>DeniteProjectDir file/rec<CR>
+  nnoremap <silent> <Leader>f :<C-u>DeniteProjectDir file/rec -start-filter<CR>
   " バッファリスト
-  nnoremap <silent> <Leader>b :<C-u>Denite buffer<CR>
+  nnoremap <silent> <Leader>b :<C-u>Denite buffer -start-filter<CR>
   " MRU
-  nnoremap <silent> <Leader>m :<C-u>Denite file/old<CR>
+  nnoremap <silent> <Leader>m :<C-u>Denite file/old -start-filter<CR>
   " カーソル以下の単語をgrep
   nnoremap <silent> <Leader>cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
   " 普通にgrep
@@ -329,9 +344,6 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" renmae
-nmap <leader>rn <Plug>(coc-rename)
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
