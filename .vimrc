@@ -68,6 +68,7 @@ set laststatus=2
 set visualbell t_vb=
 set ignorecase
 set smartcase
+set nofixeol " 自動でファイル末尾の改行を加えるのをやめる
 
 " yank したら * レジスタにもコピー
 set clipboard+=unnamed

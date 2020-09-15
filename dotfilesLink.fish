@@ -32,6 +32,11 @@ ln -sf ~/dotfiles/.config/nvim/dein/toml/dein.toml ~/.config/nvim/dein/toml/dein
 ln -sf ~/dotfiles/.config/nvim/dein/toml/dein_linux.toml ~/.config/nvim/dein/toml/dein_linux.toml
 ln -sf ~/dotfiles/.config/nvim/dein/toml/dein_lazy.toml ~/.config/nvim/dein/toml/dein_lazy.toml
 
+mkdir ~/.config/karabiner/
+mkdir ~/.config/karabiner/assets/
+mkdir ~/.config/karabiner/assets/complex_modifications/
+ln -sf ~/dotfiles/.config/karabiner/assets/complex_modifications/change_eucalyn.json ~/.config/karabiner/assets/complex_modifications/change_eucalyn.json
+
 mkdir ~/my_bin
 ln -sf ~/dotfiles/my_bin/delete_git_file ~/my_bin/delete_git_file
 

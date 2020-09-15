@@ -159,23 +159,23 @@ hook_add = '''
   endif
 
   " ファイル検索
-  nnoremap <silent> <Leader>f :<C-u>DeniteProjectDir file/rec -start-filter<CR>
+  nnoremap <silent> <Leader>df :<C-u>DeniteProjectDir file/rec -start-filter<CR>
   " バッファリスト
-  nnoremap <silent> <Leader>b :<C-u>Denite buffer -start-filter<CR>
+  nnoremap <silent> <Leader>db :<C-u>Denite buffer<CR>
   " MRU
-  nnoremap <silent> <Leader>m :<C-u>Denite file/old -start-filter<CR>
+  nnoremap <silent> <Leader>dm :<C-u>Denite file/old<CR>
   " カーソル以下の単語をgrep
-  nnoremap <silent> <Leader>cg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
+  nnoremap <silent> <Leader>dcg :<C-u>DeniteCursorWord grep -buffer-name=search line<CR><C-R><C-W><CR>
   " 普通にgrep
-  nnoremap <silent> <Leader>g :<C-u>Denite -buffer-name=search grep<CR>
+  nnoremap <silent> <Leader>dg :<C-u>Denite -buffer-name=search grep<CR>
   " resume previous buffer
-  nnoremap <silent> <Leader>r :<C-u>Denite -resume -buffer-name=search<CR>
+  nnoremap <silent> <Leader>dr :<C-u>Denite -resume -buffer-name=search<CR>
   " quickfix list
-  nnoremap <silent> <Leader>q :<C-u>Denite quickfix<CR>
+  nnoremap <silent> <Leader>dq :<C-u>Denite quickfix<CR>
   " location list
-  nnoremap <silent> <Leader>l :<C-u>Denite location_list<CR>
+  nnoremap <silent> <Leader>dl :<C-u>Denite location_list<CR>
   " history
-  nnoremap <silent> <Leader>h :<C-u>Denite command_history<CR>
+  nnoremap <silent> <Leader>dh :<C-u>Denite command_history<CR>
   " customize ignore globs
   call denite#custom#source(
         \ 'file/rec',
@@ -332,9 +332,9 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -346,7 +346,7 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Using CocList
 " " Show all diagnostics
@@ -365,6 +365,14 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 " nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " " Resume latest coc list
 " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+'''
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+  let g:ale_fixers = {
+  \   'ruby': ['rubocop'],
+  \}
 '''
 
 [[plugins]]
@@ -437,6 +445,7 @@ hook_add = '''
         \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
         \ },
         \ 'component_function': {
+        \   'cocstatus': 'coc#status',
         \   'fugitive': 'LightlineFugitive'
         \ }
     \ }
@@ -456,3 +465,33 @@ hook_add = '''
 
 [[plugins]] # tmux 用のなにか
 repo = 'tpope/vim-obsession'
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+hook_add = '''
+nnoremap <leader>tt :TagbarToggle<CR>
+" Elm
+let g:tagbar_type_elm = {
+      \ 'kinds' : [
+      \ 'f:function:0:0',
+      \ 'm:modules:0:0',
+      \ 'i:imports:1:0',
+      \ 't:types:1:0',
+      \ 'a:type aliases:0:0',
+      \ 'c:type constructors:0:0',
+      \ 'p:ports:0:0',
+      \ 's:functions:0:0',
+      \ ]
+      \}
+" Ruby
+let g:tagbar_type_ruby = {
+    \ 'kinds' : [
+        \ 'm:modules',
+        \ 'c:classes',
+        \ 'd:describes',
+        \ 'C:contexts',
+        \ 'f:methods',
+        \ 'F:singleton methods'
+    \ ]
+    \ }
+'''

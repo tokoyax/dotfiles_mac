@@ -9,6 +9,7 @@ set -x TERM screen-256color
 set -x PATH $HOME/my_bin $PATH
 set -x PATH `yarn global bin` $PATH 
 set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
+set -x PATH /usr/local/opt/python/libexec/bin /usr/local/lib/python3.7/site-packages $PATH
 
 if test (uname) = "Darwin"
   eval (rbenv init - | source)
@@ -70,6 +71,13 @@ end
 ##############################################
 # alias
 alias fig='docker-compose'
+alias fige='docker-compose exec'
+alias figr='docker-compose run --rm'
+alias figup='docker-compose up -d'
+alias figst='docker-compose stop'
+alias figre='docker-compose restart'
+alias figps='docker-compose ps'
+
 if test (uname) = "Darwin"
   alias rmt='rmtrash'
 end
@@ -78,13 +86,17 @@ alias tmux='tmux -u'
 alias l='exa -hla --git'
 alias ls='exa'
 
-alias gf 'git fetch'
-alias gfa 'git fetch -a'
+alias gf 'git fetch --prune'
+alias gfa 'git fetch -a --prune'
 alias gclone 'git clone'
 alias gstash 'git stash'
 alias gstasha 'git stash apply'
 alias gp 'git pull'
-alias gpush 'git push'
+alias gpu 'git push'
+alias gs 'git switch'
+alias gsc 'git switch -c'
+alias gr 'git restore'
+alias grs 'git restore --source'
 
 ##############################################
 # neovim
@@ -114,6 +126,12 @@ eval (ssh-agent -c) > /dev/null
 ##############################################
 # alias hub
 eval (hub alias -s) > /dev/null
+
+##############################################
+# thefuck
+# https://github.com/nvbn/thefuck/wiki/Shell-aliases
+thefuck --alias | source 
+set -x THEFUCK_OVERRIDDEN_ALIASES 'docker-compose'
 
 ##############################################
 # exit hook

@@ -44,3 +44,5 @@
 [ghq]
   root = ~/work
   root = ~/sandbox
+[pr-release]
+	token = a489fa44068eaf135046bac19a5dd9fb436102c2
