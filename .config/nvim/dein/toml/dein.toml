@@ -497,10 +497,11 @@ let g:tagbar_type_ruby = {
 '''
 
 [[plugins]]
-repo = 'bfredl/nvim-miniyank'
+repo = 'lambdalisue/pastefix.vim'
 hook_add = '''
-  map p <Plug>(miniyank-autoput)
-  map P <Plug>(miniyank-autoPut)
+  let g:pastefix_no_default_mappings = 1
+  nnoremap <silent><expr> p pastefix#put("p")
+  nnoremap <silent><expr> P pastefix#put("P")
 '''
 
 [[plugins]]
