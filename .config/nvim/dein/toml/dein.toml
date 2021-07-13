@@ -91,10 +91,15 @@ repo = 'cocopon/vaffle.vim'
 hook_add = '''
   nnoremap <silent> <C-f> :<C-u>Vaffle %:p:h<CR>
   let g:vaffle_show_hidden_files = 1
+  let g:vaffle_force_delete = 1
+  let g:vaffle_open_selected_split_position = 'rightbelow'
+  let g:vaffle_open_selected_vsplit_position = 'rightbelow'
   function! s:customize_vaffle_mappings() abort
     " Customize key mappings here
-    nmap <buffer> v <Plug>(vaffle-open-selected-split)
-    nmap <buffer> s <Plug>(vaffle-open-selected-vsplit)
+    nmap <buffer> s <Plug>(vaffle-open-selected-split)
+    nmap <buffer> v <Plug>(vaffle-open-selected-vsplit)
+    nmap <buffer> M <Plug>(vaffle-toggle-current)
+    vmap <buffer> M <Plug>(vaffle-toggle-current)
   endfunction
   augroup vimrc_vaffle
     autocmd!
@@ -494,6 +499,32 @@ let g:tagbar_type_ruby = {
         \ 'F:singleton methods'
     \ ]
     \ }
+let g:tagbar_type_markdown = {
+  \ 'ctagstype'	: 'markdown',
+  \ 'kinds'		: [
+    \ 'c:chapter:0:1',
+    \ 's:section:0:1',
+    \ 'S:subsection:0:1',
+    \ 't:subsubsection:0:1',
+    \ 'T:l4subsection:0:1',
+    \ 'u:l5subsection:0:1',
+  \ ],
+  \ 'sro'			: '""',
+  \ 'kind2scope'	: {
+    \ 'c' : 'chapter',
+    \ 's' : 'section',
+    \ 'S' : 'subsection',
+    \ 't' : 'subsubsection',
+    \ 'T' : 'l4subsection',
+  \ },
+  \ 'scope2kind'	: {
+    \ 'chapter' : 'c',
+    \ 'section' : 's',
+    \ 'subsection' : 'S',
+    \ 'subsubsection' : 't',
+    \ 'l4subsection' : 'T',
+  \ },
+\ }
 '''
 
 [[plugins]]

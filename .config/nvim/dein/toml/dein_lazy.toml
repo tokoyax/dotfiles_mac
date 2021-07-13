@@ -2,7 +2,7 @@
 repo = 'kannokanno/previm'
 hook_add = '''
   au BufRead,BufNewFile *.md set filetype=markdown
-  let g:previm_open_cmd = 'open -a Safari'
+  let g:previm_open_cmd = 'open -a Google\ Chrome'
 '''
 
 [[plugins]] # DashでDocument検索
@@ -13,10 +13,6 @@ hook_add = '''
 
 [[plugins]] # URL開く
 repo = 'tyru/open-browser.vim'
-hook_add = '''
-  au BufRead,BufNewFile *.md set filetype=markdown
-  let g:previm_open_cmd = 'open -a Safari'
-'''
 
 [[plugins]] # API叩く
 repo = 'mattn/webapi-vim'
@@ -226,6 +222,10 @@ on_ft = 'haskell'
 repo = 'andys8/vim-elm-syntax'
 on_ft = 'elm'
 
+# PureScript
+[[plugins]]
+repo = 'purescript-contrib/purescript-vim'
+on_ft = 'purescript'
 
 # fish
 [[plugins]]
@@ -247,3 +247,19 @@ on_ft = 'toml'
 [[plugins]]
 repo = 'elzr/vim-json'
 on_ft = 'json'
+
+# Dart
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
+on_ft = 'dart'
+
+# Flutter
+[[plugins]]
+repo = 'thosakwe/vim-flutter'
+on_ft = 'dart'
+hook_add = '''
+  nnoremap <leader>fa :FlutterRun<cr>
+  nnoremap <leader>fq :FlutterQuit<cr>
+  nnoremap <leader>fr :FlutterHotReload<cr>
+  nnoremap <leader>fR :FlutterHotRestart<cr>
+'''

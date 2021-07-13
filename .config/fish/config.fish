@@ -6,8 +6,9 @@ set -x TERM screen-256color
 ##############################################
 # path
 
-set -x PATH $HOME/my_bin $PATH
-set -x PATH `yarn global bin` $PATH 
+set -x PATH $HOME/my_bin $HOME/.nimble/bin $PATH
+set -x PATH $HOME/.pub-cache/bin $PATH
+set -x PATH `yarn global bin` $PATH
 set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
 set -x PATH /usr/local/opt/python/libexec/bin /usr/local/lib/python3.7/site-packages $PATH
 
@@ -70,13 +71,13 @@ end
 
 ##############################################
 # alias
-alias fig='docker-compose'
-alias fige='docker-compose exec'
-alias figr='docker-compose run --rm'
-alias figup='docker-compose up -d'
-alias figst='docker-compose stop'
-alias figre='docker-compose restart'
-alias figps='docker-compose ps'
+alias fig='docker compose'
+alias fige='docker compose exec'
+alias figr='docker compose run --rm'
+alias figup='docker compose up -d'
+alias figst='docker compose stop'
+alias figre='docker compose restart'
+alias figps='docker compose ps'
 
 if test (uname) = "Darwin"
   alias rmt='rmtrash'

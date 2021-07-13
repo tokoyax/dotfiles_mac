@@ -49,7 +49,7 @@ endif
 " ---------------------------------------------------------------------------
 set guifont=Cica:h16
 set printfont=Cica:h12
-set ambiwidth=double " ※などがずれるので
+set ambiwidth=single " https://qiita.com/tomonic-x/items/601343ec3e5f6bd59c0d
 syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 autocmd FileType vue syntax sync fromstart
