@@ -93,19 +93,19 @@ scrolling:
 font:
   # Normal (roman) font face
   normal:
-    family: Illusion N
+    family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Regular
 
   # Bold font face
   bold:
-    family: Illusion N
+    family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Bold
 
   # Italic font face
   italic:
-    family: Illusion N
+    family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Italic
 
