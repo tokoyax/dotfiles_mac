@@ -93,18 +93,21 @@ scrolling:
 font:
   # Normal (roman) font face
   normal:
+    #family: Illusion N
     family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Regular
 
   # Bold font face
   bold:
+    # family: Illusion N
     family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Bold
 
   # Italic font face
   italic:
+    # family: Illusion N
     family: HackGenNerd Console
     # The `style` can be specified to pick a specific face.
     #style: Italic
@@ -227,7 +230,7 @@ colors:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 1.0
+background_opacity: 0.99
 
 #selection:
   # This string contains all characters that are used as separators for "semantic words" in Alacritty.

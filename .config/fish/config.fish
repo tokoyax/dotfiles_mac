@@ -5,15 +5,35 @@ set -x TERM screen-256color
 
 ##############################################
 # path
-
-set -x PATH $HOME/my_bin $HOME/.nimble/bin $PATH
-set -x PATH $HOME/.pub-cache/bin $PATH
-set -x PATH `yarn global bin` $PATH
-set -x PATH $PATH /usr/local/bin /usr/bin /bin /usr/sbin /sbin
-set -x PATH /usr/local/opt/python/libexec/bin /usr/local/lib/python3.7/site-packages $PATH
+# see https://fishshell.com/docs/current/cmds/fish_add_path.html
+fish_add_path /usr/local/bin /usr/bin /bin /usr/sbin /sbin
+fish_add_path `yarn global bin`
+fish_add_path /usr/local/opt/python/libexec/bin
+fish_add_path /usr/local/lib/python3.7/site-packages
+fish_add_path $HOME/.cargo/bin
+fish_add_path $HOME/.pub-cache/bin
+fish_add_path $HOME/.nimble/bin
+fish_add_path $HOME/my_bin
 
 if test (uname) = "Darwin"
-  eval (rbenv init - | source)
+  # eval (rbenv init - | source)
+  # fish_add_path にしないと shims が無限に増えていくため
+  # rbenv init - した際の動的なpathに対応していないので環境変わった場合に修正しないとだめかも
+  fish_add_path '/Users/tokoyax/.rbenv/shims'
+  set -gx RBENV_SHELL fish
+  source '/usr/local/Cellar/rbenv/HEAD-4e92322/libexec/../completions/rbenv.fish'
+  command rbenv rehash 2>/dev/null
+  function rbenv
+    set command $argv[1]
+    set -e argv[1]
+
+    switch "$command"
+    case rehash shell
+      source (rbenv "sh-$command" $argv|psub)
+    case '*'
+      command rbenv "$command" $argv
+    end
+  end
 end
 
 ##############################################
@@ -132,7 +152,7 @@ eval (hub alias -s) > /dev/null
 # thefuck
 # https://github.com/nvbn/thefuck/wiki/Shell-aliases
 thefuck --alias | source 
-set -x THEFUCK_OVERRIDDEN_ALIASES 'docker-compose'
+set -x THEFUCK_OVERRIDDEN_ALIASES 'docker compose'
 
 ##############################################
 # exit hook

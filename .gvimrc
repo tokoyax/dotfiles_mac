@@ -1,8 +1,17 @@
-" ウィンドウの縦幅
-set lines=55
-" ウィンドウの横幅
-set columns=180
-" カラースキーム
-colorscheme solarized
-" ダーク系のカラースキームを使う
-set background=dark
+" display & information
+set lines=25        " typical
+set columns=90      " margin for 'number' and 'foldcolumn'
+set cmdheight=1     " MacVim $VIM/gvimrc overwrites my .vimrc settings
+set guioptions=c    " show no GUI components
+
+" no way to use a mouse
+set mouse=
+set nomousefocus
+set mousehide
+
+set guifont=HackGenNerd_Console:h16
+
+" turn off disabling IM at entering input mode
+if exists('&imdisableactivate')
+    set noimdisableactivate
+endif

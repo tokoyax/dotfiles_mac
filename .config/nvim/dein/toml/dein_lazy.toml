@@ -1,3 +1,6 @@
+[[plugins]] # copilot
+repo = 'github/copilot.vim'
+
 [[plugins]] # markdown の プレビュー
 repo = 'kannokanno/previm'
 hook_add = '''
@@ -99,9 +102,9 @@ on_ft = 'markdown'
 # HTML
 [[plugins]]
 repo = 'mattn/emmet-vim'
-on_ft = 'html'
+on_ft = ['html', 'eruby', 'jsx']
 hook_add = '''
-  " <C-e>, で発動
+  " <C-e>,(カンマ) で発動
   let g:user_emmet_leader_key = '<C-e>'
   let g:use_emmet_complete_tag = 1
   let g:user_emmet_settings = {

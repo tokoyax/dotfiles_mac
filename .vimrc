@@ -47,7 +47,6 @@ endif
 " ---------------------------------------------------------------------------
 "  basic settings
 " ---------------------------------------------------------------------------
-set guifont=Cica:h16
 set printfont=Cica:h12
 set ambiwidth=single " https://qiita.com/tomonic-x/items/601343ec3e5f6bd59c0d
 syntax enable
@@ -93,6 +92,7 @@ augroup vimrc
   autocmd! FileType css     setlocal shiftwidth=4 tabstop=4 softtabstop=4
   autocmd! FileType elm     setlocal shiftwidth=4 tabstop=4 softtabstop=4
   autocmd! FileType haskell setlocal shiftwidth=4 tabstop=4 softtabstop=4
+  autocmd! FileType markdown setlocal shiftwidth=4 tabstop=4 softtabstop=4
 augroup END
 set autoindent
 set smartindent
