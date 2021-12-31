@@ -1,7 +1,7 @@
 ##############################################
 # environment variables
 set -x LANG ja_JP.UTF-8
-set -x TERM screen-256color
+# set -x TERM screen-256color
 
 ##############################################
 # path
@@ -40,10 +40,10 @@ end
 # key binding
 function fish_user_key_bindings
   fish_default_key_bindings -M insert
-  fish_vi_key_bindings
-  bind \cr peco_select_history # Bind for peco select history to Ctrl+R
-  bind \cf peco_change_directory # Bind for peco change directory to Ctrl+F
-  bind \cs peco_switch_tmux_session
+  fish_vi_key_bindings --no-erase insert
+  bind -M insert \cr peco_select_history # Bind for peco select history to Ctrl+R
+  bind -M insert \cf peco_change_directory # Bind for peco change directory to Ctrl+F
+  bind -M insert \cs peco_switch_tmux_session
 end
 
 ##############################################
@@ -91,6 +91,7 @@ end
 
 ##############################################
 # alias
+alias reload_fish_config='source ~/.config/fish/config.fish'
 alias fig='docker compose'
 alias fige='docker compose exec'
 alias figr='docker compose run --rm'
@@ -98,6 +99,11 @@ alias figup='docker compose up -d'
 alias figst='docker compose stop'
 alias figre='docker compose restart'
 alias figps='docker compose ps'
+alias figrm='docker compose rm -f'
+alias figrmall='docker compose rm -f --all'
+alias figlog='docker compose logs -f'
+alias figlogsall='docker compose logs -f --tail=all'
+alias dox='docker exec -it (docker ps --format "{{.Names}}" | peco) bash'
 
 if test (uname) = "Darwin"
   alias rmt='rmtrash'

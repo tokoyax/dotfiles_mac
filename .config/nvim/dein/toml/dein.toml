@@ -1,6 +1,9 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
+[[plugins]] # copilot
+repo = 'github/copilot.vim'
+
 [[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
 repo = 'osyo-manga/vim-precious'
 depends = ['context_filetype.vim']
@@ -439,6 +442,13 @@ hook_add = '''
 
 [[plugins]]
 repo = 'cohama/vim-hier'
+
+[[plugins]]
+repo = 'aereal/vim-colors-japanesque'
+
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'

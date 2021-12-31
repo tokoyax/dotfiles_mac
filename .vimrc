@@ -54,11 +54,12 @@ autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 autocmd FileType vue syntax sync fromstart
 autocmd FileType json syntax match Comment +\/\/.\+$+ " for jsonc
 set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-let g:hybrid_custom_term_colors = 1
-let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-colorscheme hybrid
+" $TERMがxterm以外のときは以下を設定する必要がある。
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " 文字色
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum" " 背景色
+" let g:hybrid_custom_term_colors = 1
+" let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+colorscheme iceberg
 set background=dark    "または light
 set nonumber
 set title

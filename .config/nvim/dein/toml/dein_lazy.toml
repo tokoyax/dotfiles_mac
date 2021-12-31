@@ -1,6 +1,3 @@
-[[plugins]] # copilot
-repo = 'github/copilot.vim'
-
 [[plugins]] # markdown の プレビュー
 repo = 'kannokanno/previm'
 hook_add = '''
