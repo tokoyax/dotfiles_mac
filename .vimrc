@@ -53,6 +53,7 @@ syntax enable
 autocmd FileType jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 autocmd FileType vue syntax sync fromstart
 autocmd FileType json syntax match Comment +\/\/.\+$+ " for jsonc
+autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 set termguicolors
 " $TERMがxterm以外のときは以下を設定する必要がある。
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum" " 文字色
