@@ -3,6 +3,10 @@ repo = 'Shougo/dein.vim'
 
 [[plugins]] # copilot
 repo = 'github/copilot.vim'
+hook_add = '''
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+'''
 
 [[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
 repo = 'osyo-manga/vim-precious'
@@ -90,25 +94,13 @@ repo = 'tomtom/tcomment_vim'
 repo = 'tpope/vim-abolish'
 
 [[plugins]]
-repo = 'cocopon/vaffle.vim'
+repo = 'mattn/vim-molder'
 hook_add = '''
-  nnoremap <silent> <C-f> :<C-u>Vaffle %:p:h<CR>
-  let g:vaffle_show_hidden_files = 1
-  let g:vaffle_force_delete = 1
-  let g:vaffle_open_selected_split_position = 'rightbelow'
-  let g:vaffle_open_selected_vsplit_position = 'rightbelow'
-  function! s:customize_vaffle_mappings() abort
-    " Customize key mappings here
-    nmap <buffer> s <Plug>(vaffle-open-selected-split)
-    nmap <buffer> v <Plug>(vaffle-open-selected-vsplit)
-    nmap <buffer> M <Plug>(vaffle-toggle-current)
-    vmap <buffer> M <Plug>(vaffle-toggle-current)
-  endfunction
-  augroup vimrc_vaffle
-    autocmd!
-    autocmd FileType vaffle call s:customize_vaffle_mappings()
-  augroup END
+  let g:molder_show_hidden = 1
 '''
+
+[[plugins]]
+repo = 'mattn/vim-molder-operations'
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
@@ -225,15 +217,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'chemzqm/denite-extra'
-
-[[plugins]]
-repo = 'junegunn/fzf'
-build = './install --all'
-merged = 0
-
-[[plugins]]
-repo = 'junegunn/fzf.vim'
-depends = 'fzf'
 
 [[plugins]]
 repo = 'simeji/winresizer'
@@ -445,7 +428,6 @@ repo = 'cohama/vim-hier'
 
 [[plugins]]
 repo = 'aereal/vim-colors-japanesque'
-
 
 [[plugins]]
 repo = 'cocopon/iceberg.vim'
