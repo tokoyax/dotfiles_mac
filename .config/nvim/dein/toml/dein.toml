@@ -236,6 +236,7 @@ hook_add = '''
 call ddc#custom#patch_global('sources',
   \ [
     \ 'vim-lsp',
+    \ 'neosnippet',
     \ 'around'
   \ ])
 
@@ -251,6 +252,10 @@ call ddc#custom#patch_global('sourceOptions', {
   \ 'vim-lsp': {
   \   'mark': 'lsp',
   \   'forceCompletionPattern': '\.\w*|:\w*|->\w*'
+  \ },
+  \ 'neosnippet': {
+  \   'mark': 'neosnippet',
+  \   'dup': v:true
   \ }
 \ })
 " Change source options
