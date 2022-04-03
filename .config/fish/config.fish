@@ -1,6 +1,7 @@
 ##############################################
 # environment variables
 set -x LANG ja_JP.UTF-8
+set -x DENO_INSTALL $HOME/.deno
 # set -x TERM screen-256color
 
 ##############################################
@@ -13,6 +14,7 @@ fish_add_path /usr/local/lib/python3.7/site-packages
 fish_add_path $HOME/.cargo/bin
 fish_add_path $HOME/.pub-cache/bin
 fish_add_path $HOME/.nimble/bin
+fish_add_path $DENO_INSTALL/bin
 fish_add_path $HOME/my_bin
 
 if test (uname) = "Darwin"
@@ -21,7 +23,7 @@ if test (uname) = "Darwin"
   # rbenv init - した際の動的なpathに対応していないので環境変わった場合に修正しないとだめかも
   fish_add_path '/Users/tokoyax/.rbenv/shims'
   set -gx RBENV_SHELL fish
-  source '/usr/local/Cellar/rbenv/HEAD-4e92322/libexec/../completions/rbenv.fish'
+  # source '/usr/local/Cellar/rbenv/HEAD-4e92322/libexec/../completions/rbenv.fish'
   command rbenv rehash 2>/dev/null
   function rbenv
     set command $argv[1]
@@ -92,17 +94,17 @@ end
 ##############################################
 # alias
 alias reload_fish_config='source ~/.config/fish/config.fish'
-alias fig='docker compose'
-alias fige='docker compose exec'
-alias figr='docker compose run --rm'
-alias figup='docker compose up -d'
-alias figst='docker compose stop'
-alias figre='docker compose restart'
-alias figps='docker compose ps'
-alias figrm='docker compose rm -f'
-alias figrmall='docker compose rm -f --all'
-alias figlog='docker compose logs -f'
-alias figlogsall='docker compose logs -f --tail=all'
+alias dc='docker compose'
+alias dce='docker compose exec'
+alias dcr='docker compose run --rm'
+alias dcup='docker compose up -d'
+alias dcst='docker compose stop'
+alias dcre='docker compose restart'
+alias dcps='docker compose ps'
+alias dcrm='docker compose rm -f'
+alias dcrmall='docker compose rm -f --all'
+alias dclog='docker compose logs -f'
+alias dclogsall='docker compose logs -f --tail=all'
 alias dox='docker exec -it (docker ps --format "{{.Names}}" | peco) bash'
 
 if test (uname) = "Darwin"

@@ -1,12 +1,9 @@
+# =====================
+# plugin manager
+# =====================
+
 [[plugins]]
 repo = 'Shougo/dein.vim'
-
-[[plugins]] # copilot
-repo = 'github/copilot.vim'
-hook_add = '''
-imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
-let g:copilot_no_tab_map = v:true
-'''
 
 [[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
 repo = 'osyo-manga/vim-precious'
@@ -76,31 +73,10 @@ build = '''
 '''
 
 [[plugins]]
-repo = 'tpope/vim-fugitive'
-
-[[plugins]]
-repo = 'airblade/vim-gitgutter'
-
-[[plugins]]
-repo = 'dannyob/quickfixstatus'
-
-[[plugins]]
 repo = 'rking/ag.vim'
 
 [[plugins]]
-repo = 'tomtom/tcomment_vim'
-
-[[plugins]]
 repo = 'tpope/vim-abolish'
-
-[[plugins]]
-repo = 'mattn/vim-molder'
-hook_add = '''
-  let g:molder_show_hidden = 1
-'''
-
-[[plugins]]
-repo = 'mattn/vim-molder-operations'
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
@@ -159,7 +135,10 @@ hook_add = '''
   endif
 
   " ファイル検索
-  nnoremap <silent> <Leader>df :<C-u>DeniteProjectDir file/rec -start-filter<CR>
+  call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+  call denite#custom#var('file/rec/git', 'command', ['git', 'ls-files', '-co', '--exclude-standard'])
+  nnoremap <silent> <Leader>df :<C-u>Denite `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
+  "nnoremap <silent> <Leader>df :<C-u>DeniteProjectDir file/rec -start-filter<CR>
   " バッファリスト
   nnoremap <silent> <Leader>db :<C-u>Denite buffer<CR>
   " MRU
@@ -218,6 +197,179 @@ hook_add = '''
 [[plugins]]
 repo = 'chemzqm/denite-extra'
 
+# =====================
+# LSP
+# =====================
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+hook_add = '''
+  " Remap keys for gotos
+  nmap gd <plug>(lsp-definition)
+  nmap gy <Plug>(lsp-type-definition)
+  nmap gi <Plug>(lsp-implementation)
+  nmap gr <Plug>(lsp-references)
+'''
+
+[[plugins]]
+repo = 'mattn/vim-lsp-settings'
+hook_add = '''
+let g:lsp_settings_filetype_ruby = 'solargraph'
+'''
+
+# =====================
+# completion
+# =====================
+
+[[plugins]] # copilot
+repo = 'github/copilot.vim'
+hook_add = '''
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+'''
+
+# https://note.com/dd_techblog/n/n97f2b6ca09d8
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+hook_add = '''
+" Customize global settings
+" https://github.com/Shougo/ddc-around
+call ddc#custom#patch_global('sources',
+  \ [
+    \ 'vim-lsp',
+    \ 'around'
+  \ ])
+
+" Change source options
+call ddc#custom#patch_global('sourceOptions', {
+  \ '_': {
+  \   'matchers': ['matcher_head'],
+  \   'sorters': ['sorter_rank']
+  \ },
+  \ 'around': {
+  \   'mark': 'around',
+  \ },
+  \ 'vim-lsp': {
+  \   'mark': 'lsp',
+  \   'forceCompletionPattern': '\.\w*|:\w*|->\w*'
+  \ }
+\ })
+" Change source options
+call ddc#custom#patch_global('sourceParams', {
+  \ 'around': {
+  \   'maxSize': 500,
+  \ },
+  \ 'vim-lsp': {
+  \   'maxSize': 500,
+  \   'kindLabels': { 'Class': 'c' }
+  \ }
+\ })
+" Change completion menu
+call ddc#custom#patch_global('completionMenu', 'pum.vim')
+
+" Mappings
+
+inoremap <silent><expr> <TAB>
+      \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+      \ (col('.') <= 1 <Bar><Bar> getline('.')[col('.') - 2] =~# '\s') ?
+      \ '<TAB>' : ddc#manual_complete()
+inoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
+inoremap <C-n>   <Cmd>call pum#map#select_relative(+1)<CR>
+inoremap <C-p>   <Cmd>call pum#map#select_relative(-1)<CR>
+inoremap <C-y>   <Cmd>call pum#map#confirm()<CR>
+inoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
+
+call ddc#custom#patch_global('autoCompleteEvents', [
+    \ 'InsertEnter', 'TextChangedI', 'TextChangedP',
+    \ 'CmdlineEnter', 'CmdlineChanged',
+    \ ])
+
+nnoremap :       <Cmd>call CommandlinePre()<CR>:
+
+function! CommandlinePre() abort
+  " Note: It disables default command line completion!
+  cnoremap <expr> <Tab>
+  \ pum#visible() ? '<Cmd>call pum#map#insert_relative(+1)<CR>' :
+  \ ddc#manual_complete()
+  cnoremap <S-Tab> <Cmd>call pum#map#insert_relative(-1)<CR>
+  cnoremap <C-y>   <Cmd>call pum#map#confirm()<CR>
+  cnoremap <C-e>   <Cmd>call pum#map#cancel()<CR>
+
+  " Overwrite sources
+  let s:prev_buffer_config = ddc#custom#get_buffer()
+  call ddc#custom#patch_buffer('sources',
+          \ ['cmdline', 'cmdline-history', 'around'])
+
+  autocmd User DDCCmdlineLeave ++once call CommandlinePost()
+
+  " Enable command line completion
+  call ddc#enable_cmdline_completion()
+  call ddc#enable()
+endfunction
+function! CommandlinePost() abort
+  " Restore sources
+  call ddc#custom#set_buffer(s:prev_buffer_config)
+  cunmap <Tab>
+endfunction
+
+" Use ddc.
+call ddc#enable()
+'''
+
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+
+# ポップアップウィンドウを表示する
+[[plugins]]
+repo = 'Shougo/pum.vim'
+
+# カーソル周辺の既出単語を補完するsource
+[[plugins]]
+repo = 'Shougo/ddc-around'
+
+# ファイル名を補完するsource
+[[plugins]]
+repo = 'LumaKernel/ddc-file'
+
+# nvim-lsp source
+# これはneovim 組み込みのLSPクライアント用のsource
+# [[plugins]]
+# repo = 'Shougo/ddc-nvim-lsp'
+
+# vim-lsp source
+[[plugins]]
+repo = 'shun/ddc-vim-lsp'
+
+# 入力中の単語を補完の対象にするfilter
+[[plugins]]
+repo = 'Shougo/ddc-matcher_head'
+
+# 補完候補を適切にソートするfilter
+[[plugins]]
+repo = 'Shougo/ddc-sorter_rank'
+
+# 補完候補の重複を防ぐためのfilter
+[[plugins]]
+repo = 'Shougo/ddc-converter_remove_overlap'
+
+# 補完候補のドキュメントをhover表示
+[[plugins]]
+repo = 'matsui54/denops-popup-preview.vim'
+hook_add = '''
+call popup_preview#enable()
+'''
+
+# シグネチャーのヘルプを表示
+[[plugins]]
+repo = 'matsui54/denops-signature_help'
+hook_add = '''
+let g:lsp_signature_help_enabled = 0
+
+call signature_help#enable()
+'''
+
+# =====================
+# window
+# =====================
 [[plugins]]
 repo = 'simeji/winresizer'
 hook_add = '''
@@ -227,146 +379,82 @@ hook_add = '''
   let g:winresizer_keycode_cancel = 122
 '''
 
-[[plugins]]
-repo = 'w0ng/vim-hybrid'
+[[plugins]] # quickfixの情報をステータスバーに表示する
+repo = 'dannyob/quickfixstatus'
 
+# =====================
+# filer
+# =====================
 [[plugins]]
-repo = 'neoclide/coc.nvim'
-rev = 'release'
-merged = 0
+repo = 'mattn/vim-molder'
 hook_add = '''
-" if hidden is not set, TextEdit might fail.
-set hidden
-
-" Some servers have issues with backup files, see #649
-set nobackup
-set nowritebackup
-
-" Better display for messages
-set cmdheight=2
-
-" You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
-
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
-
-" always show signcolumns
-set signcolumn=yes
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-xmap <leader>cf  <Plug>(coc-format-selected)
-nmap <leader>cf  <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-" nmap <silent> <TAB> <Plug>(coc-range-select)
-" xmap <silent> <TAB> <Plug>(coc-range-select)
-" xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
-" " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-" " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-" " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-" " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" " Do default action for previous item.
-" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" " Resume latest coc list
-" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+  let g:molder_show_hidden = 1
 '''
 
 [[plugins]]
-repo = 'w0rp/ale'
+repo = 'mattn/vim-molder-operations'
+
+# =====================
+# fuzzy finder
+# =====================
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
-  let g:ale_fixers = {
-  \   'ruby': ['rubocop'],
-  \}
+  let g:ctrlp_working_path_mode = 'ra'
+  let g:ctrlp_show_hidden = 1
+'''
+
+# =====================
+# appearance
+# =====================
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+  " slim の syntax が効かなくなるため OFF
+  " let g:indentLine_faster = 1
+  let g:indentLine_color_term = 239
+  let g:indentLine_color_gui = '#708090'
+  let g:indentLine_char = '|'
 '''
 
 [[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+  let g:lightline = {
+        \ 'colorscheme': 'iceberg',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'cocstatus': 'coc#status',
+        \   'fugitive': 'LightlineFugitive'
+        \ }
+    \ }
+  function! LightlineFugitive()
+    return exists('*fugitive#head') ? fugitive#head() : ''
+  endfunction
+'''
+
+[[plugins]]
+repo = 'cocopon/iceberg.vim'
+
+[[plugins]]
+repo = 'itchyny/vim-parenmatch'
+hook_add = '''
+  let g:loaded_matchparen = 1
+'''
+
+# =====================
+# move
+# =====================
+[[plugins]] # %でのカーソルマッチング拡張
+repo = 'vim-scripts/matchit.zip'
+
+# =====================
+# edit
+# =====================
+[[plugins]] # 自動カッコ閉じ
 repo = 'tpope/vim-endwise'
 
 [[plugins]]
@@ -375,26 +463,30 @@ repo = 'tpope/vim-surround'
 [[plugins]] # surround.vim などを . でリピートできるように
 repo = 'tpope/vim-repeat'
 
-[[plugins]]
+[[plugins]] # do ~ end <-> { ~ }
 repo = 'AndrewRadev/splitjoin.vim'
 hook_add = '''
   nnoremap <silent> <Leader>sjj :SplitjoinJoin<cr>
   nnoremap <silent> <Leader>sjs :SplitjoinSplit<cr>
 '''
 
+[[plugins]] # コメントトグル
+repo = 'tomtom/tcomment_vim'
+
+# =====================
+# Git
+# =====================
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+# =====================
+# other
+# =====================
 [[plugins]]
 repo = 'Konfekt/FastFold'
-
-[[plugins]]
-repo = 'vim-scripts/matchit.zip'
-
-[[plugins]]
-repo = 'rhysd/clever-f.vim'
-hook_add = '''
-  let g:clever_f_ignore_case = 1
-  let g:clever_f_use_migemo = 1
-  let g:clever_f_chars_match_any_signs = ';'
-'''
 
 [[plugins]]
 repo = 'vim-scripts/camelcasemotion'
@@ -411,53 +503,6 @@ hook_add = '''
   vmap <Enter> <Plug>(EasyAlign)
   " Start interactive EasyAlign for a motion/text object (e.g. gaip)
   nmap ga <Plug>(EasyAlign)
-'''
-
-[[plugins]]
-repo = 'Yggdroot/indentLine'
-hook_add = '''
-  " slim の syntax が効かなくなるため OFF
-  " let g:indentLine_faster = 1
-  let g:indentLine_color_term = 239
-  let g:indentLine_color_gui = '#708090'
-  let g:indentLine_char = '|'
-'''
-
-[[plugins]]
-repo = 'cohama/vim-hier'
-
-[[plugins]]
-repo = 'aereal/vim-colors-japanesque'
-
-[[plugins]]
-repo = 'cocopon/iceberg.vim'
-
-[[plugins]]
-repo = 'itchyny/lightline.vim'
-hook_add = '''
-  let g:lightline = {
-        \ 'colorscheme': 'hybrid',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
-        \ },
-        \ 'component_function': {
-        \   'cocstatus': 'coc#status',
-        \   'fugitive': 'LightlineFugitive'
-        \ }
-    \ }
-  function! LightlineFugitive()
-    return exists('*fugitive#head') ? fugitive#head() : ''
-  endfunction
-'''
-
-[[plugins]]
-repo = 'cocopon/lightline-hybrid.vim'
-
-[[plugins]]
-repo = 'itchyny/vim-parenmatch'
-hook_add = '''
-  let g:loaded_matchparen = 1
 '''
 
 [[plugins]] # tmux 用のなにか
@@ -624,7 +669,7 @@ let g:memolist_prompt_categories = 1
 " let g:memolist_vimfiler = 0
 
 " use fzf (default 0)
-let g:memolist_fzf = 1
+" let g:memolist_fzf = 1
 
 " remove filename prefix (default 0)
 " let g:memolist_filename_prefix_none = 0

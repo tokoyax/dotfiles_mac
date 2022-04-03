@@ -208,15 +208,6 @@ on_ft = 'haskell'
 repo = 'neovimhaskell/haskell-vim'
 on_ft = 'haskell'
 
-# Elm
-# [[plugins]]
-# repo = 'ElmCast/elm-vim'
-# on_ft = 'elm'
-# hook_add = '''
-#   echo 'sourced elm-vim'
-#   let g:elm_setup_keybindings = 0
-# '''
-
 # Elm syntax highlight
 [[plugins]]
 repo = 'andys8/vim-elm-syntax'
@@ -237,11 +228,6 @@ on_ft = 'fish'
 # https://github.com/mechatroner/rainbow_csv
 repo = 'mechatroner/rainbow_csv'
 on_ft = 'csv'
-
-# Toml
-[[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
 
 # JSON
 [[plugins]]
