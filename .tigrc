@@ -3,7 +3,7 @@ bind main O @tosa %(commit)
 bind blame O @tosa %(commit)
 bind status D @delete_git_file %(file)
 
-color default           250             234
+# color default           250             234
 color 'Author '         15              default
 color 'Commit: '        242             default
 color 'Merge: '         45              default
