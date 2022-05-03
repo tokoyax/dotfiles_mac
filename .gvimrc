@@ -11,6 +11,8 @@ set mousehide
 
 set guifont=HackGenNerd_Console:h16
 
+colorscheme iceberg
+
 " turn off disabling IM at entering input mode
 if exists('&imdisableactivate')
     set noimdisableactivate

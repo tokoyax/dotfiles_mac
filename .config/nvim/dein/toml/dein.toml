@@ -141,6 +141,7 @@ hook_add = '''
         \ 'node_modules/',
         \ 'images/', '*.o', '*.make',
         \ '*.min.*',
+        \ 'tmp/',
         \ 'img/', 'fonts/'])
   " grepの結果のファイル名でも絞りこめるようにする
   call denite#custom#source('grep', 'converters', ['converter/abbr_word'])
@@ -294,6 +295,9 @@ repo = 'vim-denops/denops.vim'
 # ポップアップウィンドウを表示する
 [[plugins]]
 repo = 'Shougo/pum.vim'
+hook_add = '''
+autocmd User PumCompleteDone call vsnip_integ#on_complete_done(g:pum#completed_item)
+'''
 
 # カーソル周辺の既出単語を補完するsource
 [[plugins]]
@@ -398,6 +402,7 @@ repo = 'dannyob/quickfixstatus'
 repo = 'mattn/vim-molder'
 hook_add = '''
   let g:molder_show_hidden = 1
+  nnoremap <C-f> :e %:h<cr>
 '''
 
 [[plugins]]
